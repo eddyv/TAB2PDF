@@ -68,6 +68,8 @@ public class App {
         	
         	for (int i = 0; i < 6; ++i) {
         		lines[i] = sc.nextLine();
+        		
+        		System.out.println(lines[i]);
         	}
         	
         	for (int i = 0; i < 6; ++i) {
@@ -75,6 +77,7 @@ public class App {
         		float currX = BEGINX;
         		
         		String[] segments = lines[i].split("(\\|)|(\\|\\|)");
+
         		for (int j = 0; j < segments.length; ++j) {
         			
         			if (i == 0) {
@@ -130,5 +133,11 @@ public class App {
 		cb.moveTo(x, SIZEY - y);
         cb.lineTo(x, SIZEY - (y + length));
         cb.stroke();
+	}
+	
+	public void createCircle(PdfWriter writer, float x, float y, float length){
+		PdfContentByte cb = writer.getDirectContent();
+		cb.circle(x + 2f, SIZEY - y, 1);
+		cb.fillStroke();
 	}
 }
