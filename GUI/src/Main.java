@@ -19,7 +19,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.filechooser.FileFilter;
 
-public class Main extends JFrame{
+public class Main {
 	static JMenuItem open;
 	static JMenuItem exit;
 	static JMenuItem convert;
