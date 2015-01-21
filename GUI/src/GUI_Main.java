@@ -12,6 +12,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.JSplitPane;
+import javax.swing.JPanel;
 
 
 public class GUI_Main {
@@ -56,6 +58,23 @@ public class GUI_Main {
 		lblTemp.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTemp.setBounds(326, 11, 161, 14);
 		frmTabpdf.getContentPane().add(lblTemp);
+		
+		JSplitPane splitPane = new JSplitPane();
+		splitPane.setResizeWeight(0.2);
+		splitPane.setBounds(0, 31, 784, 509);
+		frmTabpdf.getContentPane().add(splitPane);
+		
+		JLabel lblTiles = new JLabel("Tiles");
+		lblTiles.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTiles.setVerticalAlignment(SwingConstants.TOP);
+		splitPane.setLeftComponent(lblTiles);
+		
+		JPanel panel = new JPanel();
+		splitPane.setRightComponent(panel);
+		
+		JLabel lblArrayOfPanels = new JLabel("Array of panels here.");
+		panel.add(lblArrayOfPanels);
+		
 		frmTabpdf.setBounds(100, 100, 450, 300);
 		frmTabpdf.setSize(800,600);
 		frmTabpdf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
