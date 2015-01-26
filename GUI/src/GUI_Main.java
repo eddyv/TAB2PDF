@@ -127,4 +127,32 @@ public class GUI_Main {
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
 	}
+	public String OpenFile()
+	{
+		JFileChooser fc = new JFileChooser();
+		FileFilter textFilter = new ExtensionFilter("Text file", ".txt");
+		//fc.addChoosableFileFilter(textFilter);
+		fc.setFileFilter(textFilter);
+		int status = fc.showOpenDialog(null);
+		if(status == JFileChooser.APPROVE_OPTION)
+		{
+			out = fc.getSelectedFile();
+		}
+		return out.getPath();
+	}
+	public String SaveFile()
+	{
+		JFileChooser fc = new JFileChooser();
+		FileFilter pdfFilter = new ExtensionFilter("Pdf file", ".pdf");
+		fc.setFileFilter(pdfFilter);
+		int status = fc.showSaveDialog(null);
+		if(status == JFileChooser.APPROVE_OPTION)
+		{
+			//ugly maybe i can fix this....
+			//out = fc.getSelectedFile().getPath().concat(((ExtensionFilter) pdfFilter).getExtension());
+			in = fc.getSelectedFile();
+			
+		}
+		return in.getPath();
+	}
 }
