@@ -1,19 +1,23 @@
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
-import javax.swing.JSplitPane;
-import javax.swing.JPanel;
 
 
 public class GUI_Main {
@@ -21,6 +25,9 @@ public class GUI_Main {
 	private JFrame frmTabpdf;
 	private File in;
 	private File out;
+	private JTextField txtSpacing;
+	private int spacing;
+	private JTextField textField;
 
 	/**
 	 * Launch the application.
@@ -60,20 +67,105 @@ public class GUI_Main {
 		frmTabpdf.getContentPane().add(lblTemp);
 		
 		JSplitPane splitPane = new JSplitPane();
-		splitPane.setResizeWeight(0.2);
+		splitPane.setResizeWeight(0.5);
 		splitPane.setBounds(0, 31, 784, 509);
 		frmTabpdf.getContentPane().add(splitPane);
 		
-		JLabel lblTiles = new JLabel("Tiles");
-		lblTiles.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTiles.setVerticalAlignment(SwingConstants.TOP);
-		splitPane.setLeftComponent(lblTiles);
+		JPanel left_panel = new JPanel();
+		splitPane.setLeftComponent(left_panel);
+		left_panel.setLayout(null);
+		
+		JLabel lblSpacing = new JLabel("Spacing:");
+		lblSpacing.setBounds(0, 33, 56, 14);
+		left_panel.add(lblSpacing);
+		
+		txtSpacing = new JTextField();
+		txtSpacing.setBounds(53, 30, 86, 20);
+		txtSpacing.setText("\r\n");
+		txtSpacing.setHorizontalAlignment(SwingConstants.LEFT);
+		left_panel.add(txtSpacing);
+		txtSpacing.setColumns(10);
+		
+		JButton btnSpacing = new JButton("Accept Spacing");
+		btnSpacing.setBounds(151, 29, 135, 23);
+		btnSpacing.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				spacing = Integer.parseInt(txtSpacing.getText().trim()); //may throw exception if input is not a valid integer
+			}
+		});
+		left_panel.add(btnSpacing);
+		
+		JLabel lblTitle = new JLabel("Title:");
+		lblTitle.setBounds(22, 7, 27, 14);
+		left_panel.add(lblTitle);
+		
+		textField = new JTextField();
+		textField.setBounds(53, 4, 86, 20);
+		left_panel.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnAcceptTitle = new JButton("Accept Title");
+		btnAcceptTitle.setBounds(151, 4, 135, 23);
+		left_panel.add(btnAcceptTitle);
+		
+		JPanel panel_spaces = new JPanel();
+		panel_spaces.setBounds(26, 58, 56, 47);
+		left_panel.add(panel_spaces);
+		
+		JPanel panel_harmonics = new JPanel();
+		panel_harmonics.setBounds(92, 116, 56, 47);
+		left_panel.add(panel_harmonics);
+		
+		JPanel panel_slide = new JPanel();
+		panel_slide.setBounds(155, 116, 56, 47);
+		left_panel.add(panel_slide);
+		
+		JPanel panel_repeatStart = new JPanel();
+		panel_repeatStart.setBounds(221, 116, 56, 47);
+		left_panel.add(panel_repeatStart);
+		
+		JPanel panel_barLine = new JPanel();
+		panel_barLine.setBounds(26, 116, 56, 47);
+		left_panel.add(panel_barLine);
+		
+		JPanel panel_notes = new JPanel();
+		panel_notes.setBounds(92, 58, 56, 47);
+		left_panel.add(panel_notes);
+		
+		JPanel panel_hammerOn = new JPanel();
+		panel_hammerOn.setBounds(155, 58, 56, 47);
+		left_panel.add(panel_hammerOn);
+		
+		JPanel panel_pullOff = new JPanel();
+		panel_pullOff.setBounds(221, 58, 56, 47);
+		left_panel.add(panel_pullOff);
+		
+		JPanel panel_repeatEnd = new JPanel();
+		panel_repeatEnd.setBounds(26, 174, 56, 47);
+		left_panel.add(panel_repeatEnd);
+		
+		JScrollPane right_panel = new JScrollPane();
+		splitPane.setRightComponent(right_panel);
+		
+		JButton btnCreateMoreSymbols = new JButton("Create row of symbols");
+		btnCreateMoreSymbols.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		right_panel.setColumnHeaderView(btnCreateMoreSymbols);
 		
 		JPanel panel = new JPanel();
-		splitPane.setRightComponent(panel);
+		right_panel.setViewportView(panel);
+		right_panel.setPreferredSize(new Dimension(200,200));
+		panel.setLayout(null);
 		
-		JLabel lblArrayOfPanels = new JLabel("Array of panels here.");
-		panel.add(lblArrayOfPanels);
+		JLabel lblCurrentTitle = new JLabel("Current Title:");
+		lblCurrentTitle.setBounds(17, 0, 81, 14);
+		frmTabpdf.getContentPane().add(lblCurrentTitle);
+		
+		JLabel lblCurrentSpacing = new JLabel("Current Spacing:");
+		lblCurrentSpacing.setBounds(0, 11, 95, 14);
+		frmTabpdf.getContentPane().add(lblCurrentSpacing);
 		
 		frmTabpdf.setBounds(100, 100, 450, 300);
 		frmTabpdf.setSize(800,600);
@@ -88,17 +180,7 @@ public class GUI_Main {
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fc = new JFileChooser();
-				FileFilter textFilter = new ExtensionFilter("Text file", ".txt");
-				//fc.addChoosableFileFilter(textFilter);
-				fc.setFileFilter(textFilter);
-				int status = fc.showOpenDialog(null);
-				if(status == JFileChooser.APPROVE_OPTION)
-				{
-					out = fc.getSelectedFile();
-					lblTemp.setText(out.getPath());
-					//DoStuff();
-				}
+				lblTemp.setText(OpenFile());
 			}
 		});
 		
@@ -108,17 +190,7 @@ public class GUI_Main {
 		JMenuItem mntmConvert = new JMenuItem("Convert to PDF");
 		mntmConvert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser fc = new JFileChooser();
-				FileFilter pdfFilter = new ExtensionFilter("Pdf file", ".pdf");
-				fc.setFileFilter(pdfFilter);
-				int status = fc.showSaveDialog(null);
-				if(status == JFileChooser.APPROVE_OPTION)
-				{
-					//ugly maybe i can fix this....
-					//out = fc.getSelectedFile().getPath().concat(((ExtensionFilter) pdfFilter).getExtension());
-					in = fc.getSelectedFile();
-					lblTemp.setText(in.getPath());
-				}
+				lblTemp.setText(SaveFile());
 				//converting stuff to pdf.
 			}
 		});
@@ -127,19 +199,7 @@ public class GUI_Main {
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
 	}
-	public String OpenFile()
-	{
-		JFileChooser fc = new JFileChooser();
-		FileFilter textFilter = new ExtensionFilter("Text file", ".txt");
-		//fc.addChoosableFileFilter(textFilter);
-		fc.setFileFilter(textFilter);
-		int status = fc.showOpenDialog(null);
-		if(status == JFileChooser.APPROVE_OPTION)
-		{
-			out = fc.getSelectedFile();
-		}
-		return out.getPath();
-	}
+	
 	public String SaveFile()
 	{
 		JFileChooser fc = new JFileChooser();
@@ -151,8 +211,21 @@ public class GUI_Main {
 			//ugly maybe i can fix this....
 			//out = fc.getSelectedFile().getPath().concat(((ExtensionFilter) pdfFilter).getExtension());
 			in = fc.getSelectedFile();
-			
 		}
 		return in.getPath();
+	}
+	public String OpenFile()
+	{
+		JFileChooser fc = new JFileChooser();
+		FileFilter textFilter = new ExtensionFilter("Text file", ".txt");
+		//fc.addChoosableFileFilter(textFilter);
+		fc.setFileFilter(textFilter);
+		int status = fc.showOpenDialog(null);
+		if(status == JFileChooser.APPROVE_OPTION)
+		{
+			out = fc.getSelectedFile();
+			//DoStuff();
+		}
+		return out.getPath();
 	}
 }
