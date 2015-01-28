@@ -26,8 +26,9 @@ public class GUI_Main {
 	private File in;
 	private File out;
 	private JTextField txtSpacing;
-	private int spacing;
-	private JTextField textField;
+	private double spacing;
+	private String title;
+	private JTextField txtTitle;
 
 	/**
 	 * Launch the application.
@@ -66,6 +67,14 @@ public class GUI_Main {
 		lblTemp.setBounds(326, 11, 161, 14);
 		frmTabpdf.getContentPane().add(lblTemp);
 		
+		final JLabel lblCurrentTitle = new JLabel("Current Title: N/A");
+		lblCurrentTitle.setBounds(17, 0, 338, 14);
+		frmTabpdf.getContentPane().add(lblCurrentTitle);
+		
+		final JLabel lblCurrentSpacing = new JLabel("Current Spacing: N/A");
+		lblCurrentSpacing.setBounds(0, 11, 355, 14);
+		frmTabpdf.getContentPane().add(lblCurrentSpacing);
+		
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setResizeWeight(0.5);
 		splitPane.setBounds(0, 31, 784, 509);
@@ -90,21 +99,28 @@ public class GUI_Main {
 		btnSpacing.setBounds(151, 29, 135, 23);
 		btnSpacing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				spacing = Integer.parseInt(txtSpacing.getText().trim()); //may throw exception if input is not a valid integer
+				spacing = Double.parseDouble(txtSpacing.getText().trim()); //may throw exception if input is not a valid integer
+				lblCurrentSpacing.setText("Current Spacing: " + spacing);
 			}
 		});
 		left_panel.add(btnSpacing);
 		
-		JLabel lblTitle = new JLabel("Title:");
+		final JLabel lblTitle = new JLabel("Title:");
 		lblTitle.setBounds(22, 7, 27, 14);
 		left_panel.add(lblTitle);
 		
-		textField = new JTextField();
-		textField.setBounds(53, 4, 86, 20);
-		left_panel.add(textField);
-		textField.setColumns(10);
+		txtTitle = new JTextField();
+		txtTitle.setBounds(53, 4, 86, 20);
+		left_panel.add(txtTitle);
+		txtTitle.setColumns(10);
 		
 		JButton btnAcceptTitle = new JButton("Accept Title");
+		btnAcceptTitle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				title = txtTitle.getText();
+				lblCurrentTitle.setText("Current Title: " + title);
+			}
+		});
 		btnAcceptTitle.setBounds(151, 4, 135, 23);
 		left_panel.add(btnAcceptTitle);
 		
@@ -159,13 +175,7 @@ public class GUI_Main {
 		right_panel.setPreferredSize(new Dimension(200,200));
 		panel.setLayout(null);
 		
-		JLabel lblCurrentTitle = new JLabel("Current Title:");
-		lblCurrentTitle.setBounds(17, 0, 81, 14);
-		frmTabpdf.getContentPane().add(lblCurrentTitle);
 		
-		JLabel lblCurrentSpacing = new JLabel("Current Spacing:");
-		lblCurrentSpacing.setBounds(0, 11, 95, 14);
-		frmTabpdf.getContentPane().add(lblCurrentSpacing);
 		
 		frmTabpdf.setBounds(100, 100, 450, 300);
 		frmTabpdf.setSize(800,600);
@@ -194,6 +204,9 @@ public class GUI_Main {
 				//converting stuff to pdf.
 			}
 		});
+		
+		JMenuItem mntmSave = new JMenuItem("Save");
+		mnFile.add(mntmSave);
 		mnFile.add(mntmConvert);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
