@@ -1,10 +1,12 @@
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -89,76 +91,124 @@ public class GUI_Main {
 		left_panel.add(lblSpacing);
 		
 		txtSpacing = new JTextField();
+		txtSpacing.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				spacing = Double.parseDouble(txtSpacing.getText().trim()); //may throw exception if input is not a valid integer
+				lblCurrentSpacing.setText("Current Spacing: " + spacing);
+			}
+		});
 		txtSpacing.setBounds(53, 30, 86, 20);
 		txtSpacing.setText("\r\n");
 		txtSpacing.setHorizontalAlignment(SwingConstants.LEFT);
 		left_panel.add(txtSpacing);
 		txtSpacing.setColumns(10);
 		
-		JButton btnSpacing = new JButton("Accept Spacing");
-		btnSpacing.setBounds(151, 29, 135, 23);
-		btnSpacing.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				spacing = Double.parseDouble(txtSpacing.getText().trim()); //may throw exception if input is not a valid integer
-				lblCurrentSpacing.setText("Current Spacing: " + spacing);
-			}
-		});
-		left_panel.add(btnSpacing);
-		
 		final JLabel lblTitle = new JLabel("Title:");
 		lblTitle.setBounds(22, 7, 27, 14);
 		left_panel.add(lblTitle);
 		
 		txtTitle = new JTextField();
-		txtTitle.setBounds(53, 4, 86, 20);
-		left_panel.add(txtTitle);
-		txtTitle.setColumns(10);
-		
-		JButton btnAcceptTitle = new JButton("Accept Title");
-		btnAcceptTitle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		txtTitle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 				title = txtTitle.getText();
 				lblCurrentTitle.setText("Current Title: " + title);
 			}
 		});
-		btnAcceptTitle.setBounds(151, 4, 135, 23);
-		left_panel.add(btnAcceptTitle);
+		txtTitle.setBounds(53, 4, 86, 20);
+		left_panel.add(txtTitle);
+		txtTitle.setColumns(10);
+		
 		
 		JPanel panel_spaces = new JPanel();
 		panel_spaces.setBounds(26, 58, 56, 47);
 		left_panel.add(panel_spaces);
 		
+		JLabel imgSpacing = new JLabel("");
+		ImageIcon img = new ImageIcon("images/test.png");
+		CreateImage(panel_spaces,img,imgSpacing); //change other code to this...
+		panel_spaces.add(imgSpacing);
+		
 		JPanel panel_harmonics = new JPanel();
 		panel_harmonics.setBounds(92, 116, 56, 47);
 		left_panel.add(panel_harmonics);
+		
+		JLabel imgHarmonics = new JLabel("");
+		imgHarmonics.setIcon(img);
+		panel_harmonics.add(imgHarmonics); //don't forget to add this to other panels...
 		
 		JPanel panel_slide = new JPanel();
 		panel_slide.setBounds(155, 116, 56, 47);
 		left_panel.add(panel_slide);
 		
+		JLabel imgSlide = new JLabel("");
+		imgSlide.setIcon(img);
+		panel_slide.add(imgSlide);
+		
 		JPanel panel_repeatStart = new JPanel();
 		panel_repeatStart.setBounds(221, 116, 56, 47);
 		left_panel.add(panel_repeatStart);
+		
+		JLabel imgRepeatStart = new JLabel("");
+		imgRepeatStart.setIcon(img);
+		panel_repeatStart.add(imgRepeatStart);
 		
 		JPanel panel_barLine = new JPanel();
 		panel_barLine.setBounds(26, 116, 56, 47);
 		left_panel.add(panel_barLine);
 		
+		JLabel imgBarLine = new JLabel("");
+		imgBarLine.setIcon(img);
+		panel_barLine.add(imgBarLine);
+		
 		JPanel panel_notes = new JPanel();
 		panel_notes.setBounds(92, 58, 56, 47);
 		left_panel.add(panel_notes);
+		
+		JLabel imgNotes = new JLabel("");
+		imgNotes.setIcon(img);
+		panel_notes.add(imgNotes);
 		
 		JPanel panel_hammerOn = new JPanel();
 		panel_hammerOn.setBounds(155, 58, 56, 47);
 		left_panel.add(panel_hammerOn);
 		
+		JLabel imgHammerOn = new JLabel("");
+		imgHammerOn.setIcon(img);
+		panel_hammerOn.add(imgHammerOn);
+		
 		JPanel panel_pullOff = new JPanel();
 		panel_pullOff.setBounds(221, 58, 56, 47);
 		left_panel.add(panel_pullOff);
 		
+		JLabel imgPullOff = new JLabel("");
+		imgPullOff.setIcon(img);
+		panel_pullOff.add(imgPullOff);
+		
 		JPanel panel_repeatEnd = new JPanel();
 		panel_repeatEnd.setBounds(26, 174, 56, 47);
 		left_panel.add(panel_repeatEnd);
+		
+		JLabel imgRepeatEnd = new JLabel("");
+		imgRepeatEnd.setIcon(img);
+		panel_repeatEnd.add(imgRepeatEnd);
+		
+		JButton btnConvertToPdf = new JButton("Convert to PDF");
+		btnConvertToPdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblTemp.setText(SaveFile());
+			}
+		});
+		btnConvertToPdf.setBounds(65, 359, 161, 47);
+		left_panel.add(btnConvertToPdf);
+		
+		JButton btnLoadTextFile = new JButton("Load text file");
+		btnLoadTextFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				lblTemp.setText(OpenFile());
+			}
+		});
+		btnLoadTextFile.setBounds(65, 417, 161, 47);
+		left_panel.add(btnLoadTextFile);
 		
 		JScrollPane right_panel = new JScrollPane();
 		splitPane.setRightComponent(right_panel);
@@ -240,5 +290,14 @@ public class GUI_Main {
 			//DoStuff();
 		}
 		return out.getPath();
+	}
+	private void CreateImage(JPanel panel, ImageIcon img, JLabel imgLoc)
+	{
+		imgLoc.setIcon(img);
+		imgLoc.setBounds(panel.getBounds());
+	}
+	private void CreateRow()
+	{
+		
 	}
 }
