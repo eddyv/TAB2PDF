@@ -11,7 +11,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class Symbol {
 
-	public static final float SIZEY = 792;
+	public static float SIZEY;
+	
+	public Symbol(float pageHeight)
+	{
+		SIZEY = pageHeight;
+	}
 	
     public void createTextCenteredAtPosition(PdfWriter writer, String text, float x, float y, float size) throws DocumentException, IOException {
         PdfContentByte cb = writer.getDirectContent();
