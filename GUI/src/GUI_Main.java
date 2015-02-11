@@ -1,7 +1,6 @@
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -20,7 +19,12 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
+import org.icepdf.ri.common.SwingController;
+import org.icepdf.ri.common.SwingViewBuilder;
+import org.icepdf.ri.util.PropertiesManager;
 
+import javax.swing.*;
+import java.util.ResourceBundle;
 
 public class GUI_Main {
 
@@ -195,7 +199,32 @@ public class GUI_Main {
 		JButton btnConvertToPdf = new JButton("Convert to PDF");
 		btnConvertToPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lblTemp.setText(SaveFile());
+				String filePath = SaveFile();
+				lblTemp.setText(filePath);
+				// build a component controller
+		        SwingController controller = new SwingController();
+		        controller.setIsEmbeddedComponent(true);
+
+		        PropertiesManager properties = new PropertiesManager(
+		                System.getProperties(),
+		                ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
+
+		        properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.75");
+
+		        SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
+
+		        // add interactive mouse link annotation support via callback
+		        controller.getDocumentViewController().setAnnotationCallback(
+		                new org.icepdf.ri.common.MyAnnotationCallback(controller.getDocumentViewController()));
+		        JPanel viewerComponentPanel = factory.buildViewerPanel();
+		        JFrame applicationFrame = new JFrame();
+		        applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		        applicationFrame.getContentPane().add(viewerComponentPanel);
+		        // Now that the GUI is all in place, we can try openning a PDF
+		        controller.openDocument(filePath);
+		        // show the component
+		        applicationFrame.pack();
+		        applicationFrame.setVisible(true);
 			}
 		});
 		btnConvertToPdf.setBounds(65, 359, 161, 47);
