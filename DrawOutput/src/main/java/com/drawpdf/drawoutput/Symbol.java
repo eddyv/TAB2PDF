@@ -2,6 +2,7 @@ package com.drawpdf.drawoutput;
 
 import java.io.IOException;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.BaseFont;
@@ -112,4 +113,20 @@ public class Symbol {
 		cb.fillStroke();
 	}
 	
+	public static void createDiamond(PdfContentByte canvas, float x, float y, float size)
+	{
+		canvas.moveTo(x, y);
+		canvas.lineTo(x - size, y - size);
+		canvas.lineTo(x, y - (size * 2));
+		canvas.lineTo(x + size, y - size);
+		canvas.lineTo(x - 0.35f, y + 0.35f);
+		canvas.setColorFill(new BaseColor(255, 255, 255));
+		canvas.fillStroke();
+		//canvas.stroke();
+	}
+	
+	public static void createArc(PdfContentByte canvas, float bottom, float top, float leftend, float rightend, float size)
+	{
+		canvas.arc(leftend - size, bottom, leftend + size, top, 0, 180);
+	}
 }

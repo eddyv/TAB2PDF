@@ -1,7 +1,3 @@
-/*
- * this project can't distinguish simple bar and repeat bar
- * 
- */
 package com.drawpdf.drawoutput;
 
 
