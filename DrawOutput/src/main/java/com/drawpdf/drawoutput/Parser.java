@@ -129,7 +129,7 @@ public class Parser
 				{
 					// add the current line to the segment
 					segment.add(line);
-					System.out.println("Segment: " + line);
+					//System.out.println("Segment: " + line);
 				} else
 				{
 					// if the segment is 6 lines long, add it to the input
@@ -137,7 +137,7 @@ public class Parser
 					if (segment.size() == 6)
 					{
 						input.add(segment);
-						System.out.println("add segment into input");
+						//System.out.println("add segment into input");
 					}
 					// instantiate a new segment
 					segment = new Segment();
@@ -149,7 +149,7 @@ public class Parser
 			if (segment.size() == 6)
 			{
 				input.add(segment);
-				System.out.println("Leftover segment");
+				//System.out.println("Leftover segment");
 			}
 
 			in.close();

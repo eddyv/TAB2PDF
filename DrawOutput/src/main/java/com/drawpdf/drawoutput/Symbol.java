@@ -19,67 +19,65 @@ public class Symbol {
 		SIZEY = pageHeight;
 	}
 	
-    public void createTextCenteredAtPosition(PdfWriter writer, String text, float x, float y, float size) throws DocumentException, IOException {
-        PdfContentByte cb = writer.getDirectContent();
-        cb.setFontAndSize(BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false), size);
-        cb.beginText();
-        cb.showTextAligned(Element.ALIGN_CENTER, text, x, SIZEY - y, 0);
-        cb.endText();
-        cb.stroke();
+    public void createTextCenteredAtPosition(PdfContentByte canvas, String text, float x, float y, float size) throws DocumentException, IOException {
+        canvas.setFontAndSize(BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false), size);
+        canvas.beginText();
+        canvas.showTextAligned(Element.ALIGN_CENTER, text, x, SIZEY - y, 0);
+        canvas.endText();
+        canvas.stroke();
     }
     
-    public void createHLineAtPosition(PdfWriter writer, float x, float y, float length) {
-        PdfContentByte cb = writer.getDirectContent();
-        cb.setLineWidth(0.5f);
-        cb.moveTo(x, SIZEY - y);
-        cb.lineTo(x + length, SIZEY - y);
-        cb.stroke();
+    public void createHLineAtPosition(PdfContentByte canvas, float x, float y, float length) {
+        canvas.setLineWidth(0.5f);
+        canvas.moveTo(x, SIZEY - y);
+        canvas.lineTo(x + length, SIZEY - y);
+        canvas.stroke();
     }
 
-    public void createVLineAtPosition(PdfWriter writer, float x, float y, float length) {
-        PdfContentByte cb = writer.getDirectContent();
-        cb.setLineWidth(0.5f);
-        cb.moveTo(x, SIZEY - y);
-        cb.lineTo(x, SIZEY - (y + length));
-        cb.stroke();
+    public void createVLineAtPosition(PdfContentByte canvas, float x, float y, float length) {
+        canvas.setLineWidth(0.5f);
+        canvas.moveTo(x, SIZEY - y);
+        canvas.lineTo(x, SIZEY - (y + length));
+        canvas.stroke();
     }
 
 	//draw circle for repeat bar
-    public void createCircle(PdfWriter writer, float x, float y, float length){
-    		PdfContentByte cb = writer.getDirectContent();
-    		cb.circle(x + 2f, SIZEY - y, 1);
-    		cb.stroke();
+    public void createCircle(PdfContentByte canvas, float x, float y, float length){
+    		canvas.circle(x + 2f, SIZEY - y, 1);
+    		canvas.stroke();
     }
     
-    public void createRDoubleBar(PdfWriter writer, float x, float y, float length){
-    	PdfContentByte cbThin = writer.getDirectContent();
-    	cbThin.setLineWidth(0.5f);
-    	cbThin.moveTo(x - 1, SIZEY - y);
-    	cbThin.lineTo(x - 1, SIZEY - (y + length));
-    	PdfContentByte cbBold = writer.getDirectContent();
-    	cbThin.stroke();
-    	cbBold.setLineWidth(1.2f);
-    	cbBold.moveTo(x + 1, SIZEY - y);
-    	cbBold.lineTo(x + 1, SIZEY - (y + length));
-    	cbBold.stroke();
+    public void createRDoubleBar(PdfContentByte canvas, float x, float y, float length){
+    	//PdfContentByte canvas = writer.getDirectContent();
+    	canvas.setLineWidth(0.5f);
+    	canvas.moveTo(x - 1, SIZEY - y);
+    	canvas.lineTo(x - 1, SIZEY - (y + length));
+    	
+    	//PdfContentByte canvas = writer.getDirectContent();
+    	canvas.stroke();
+    	canvas.setLineWidth(1.2f);
+    	canvas.moveTo(x + 1, SIZEY - y);
+    	canvas.lineTo(x + 1, SIZEY - (y + length));
+    	canvas.stroke();
     }
     
-    public void createLDoubleBar(PdfWriter writer, float x, float y, float length){
-    	PdfContentByte cbBold = writer.getDirectContent();
-    	cbBold.setLineWidth(1.2f);
-    	cbBold.moveTo(x + 1, SIZEY - y);
-    	cbBold.lineTo(x + 1, SIZEY - (y + length));
-    	cbBold.stroke();
-    	PdfContentByte cbThin = writer.getDirectContent();
-    	cbThin.setLineWidth(0.5f);
-    	cbThin.moveTo(x - 1, SIZEY - y);
-    	cbThin.lineTo(x - 1, SIZEY - (y + length));
-    	cbThin.stroke();
+    public void createLDoubleBar(PdfContentByte canvas, float x, float y, float length){
+    	//PdfContentByte canvas = writer.getDirectContent();
+    	canvas.setLineWidth(1.2f);
+    	canvas.moveTo(x + 1, SIZEY - y);
+    	canvas.lineTo(x + 1, SIZEY - (y + length));
+    	canvas.stroke();
+    	
+    	//PdfContentByte canvas = writer.getDirectContent();
+    	canvas.setLineWidth(0.5f);
+    	canvas.moveTo(x - 1, SIZEY - y);
+    	canvas.lineTo(x - 1, SIZEY - (y + length));
+    	canvas.stroke();
     }
     
     //draw S
-    public void drawS(PdfWriter writer, float x, float y, float length) {
-    	PdfContentByte cb = writer.getDirectContent();
+    public void drawS(PdfContentByte canvas, float x, float y, float length) {
+    	//PdfContentByte canvas = writer.getDirectContent();
 		
     	float tiltAngle = (float)(-45 * (Math.PI / 180));
 		float scaleX = (float)(Math.cos(tiltAngle)); 		
@@ -89,28 +87,28 @@ public class Symbol {
 
 		PdfTemplate diagonal = null;
 
-		diagonal = cb.createTemplate(12/2.0f, 12/2.0f);
+		diagonal = canvas.createTemplate(12/2.0f, 12/2.0f);
 		diagonal.moveTo(0f, 12/4.0f);
 		diagonal.lineTo(12/2.0f, 12/4.0f);
 		diagonal.stroke();
 		
 		//adds the diagonal line to the PdfContentByte object
-		cb.addTemplate(diagonal, scaleX, tiltX, scaleY, tiltY, x, SIZEY - y);
+		canvas.addTemplate(diagonal, scaleX, tiltX, scaleY, tiltY, x, SIZEY - y);
 		
 		//adds the horizontal line to the PdfContentByte object
-		cb.moveTo(x, SIZEY - y);
-        cb.lineTo(x + length, SIZEY - y);
+		canvas.moveTo(x, SIZEY - y);
+        canvas.lineTo(x + length, SIZEY - y);
 	}
     
-	public void drawStar (PdfWriter writer, float x, float y, float length, boolean nextCharBar) {
-		PdfContentByte cb = writer.getDirectContent();
+	public void drawStar (PdfContentByte canvas, float x, float y, float length, boolean nextCharBar) {
+		//PdfContentByte canvas = writer.getDirectContent();
 		if (nextCharBar) {
-			cb.circle(x + (length - 5), SIZEY - y, 7/5f);
+			canvas.circle(x + (length - 5), SIZEY - y, 7/5f);
 		}
 		else {
-			cb.circle(x - (length - 5), SIZEY - y, 7/5f);
+			canvas.circle(x - (length - 5), SIZEY - y, 7/5f);
 		}
-		cb.fillStroke();
+		canvas.fillStroke();
 	}
 	
 	public static void createDiamond(PdfContentByte canvas, float x, float y, float size)
