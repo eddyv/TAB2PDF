@@ -8,7 +8,7 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfTemplate;
-import com.itextpdf.text.pdf.PdfWriter;
+
 
 public class Symbol {
 
@@ -43,8 +43,9 @@ public class Symbol {
 
 	//draw circle for repeat bar
     public void createCircle(PdfContentByte canvas, float x, float y, float length){
-    		canvas.circle(x + 2f, SIZEY - y, 1);
-    		canvas.stroke();
+    		canvas.circle(x + (length/2), SIZEY - y, 1);
+    		canvas.fillStroke();
+    		createHLineAtPosition(canvas, x, y, length);
     }
     
     public void createRDoubleBar(PdfContentByte canvas, float x, float y, float length){

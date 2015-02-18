@@ -7,14 +7,11 @@ package com.drawpdf.drawoutput;
  * and the setting of the document size
  * 
  */
-import java.io.BufferedReader;
-import java.io.File;
+
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,8 +47,8 @@ public class drawOutput
 			DocumentException
 	{
 		a = new Parser(src);
-		// displayInfo();
-		createPdf(dest);
+		//displayInfo();
+		//createPdf(dest);
 	}
 
 	// display lines parsed from Parser
@@ -94,111 +91,59 @@ public class drawOutput
 		float currX = cX;
 
 		for (int i = 0; i < a.input.size(); i++)
-		 // to test only first 2 rows of music 
-		//for(int i = 0; i < 4; i++)	// i = segment # (music bar row)
+		 // to test only first n rows of music 
+		//for(int i = 0; i < 6; i++)	// i = bar #
 		{
-			for (int j = 0; j < a.input.get(i).size(); j++)	// j = line # of segment
-			//while (j < a.input.get(i).size())
+			for(int j = 0; j < a.input.get(i).size(); j++) // j = line number in bar
 			{
 				currX = cX;
-				System.out.printf("%d %s\n", i, a.input.get(i).get(j));
-
-				drawSymbol.createHLineAtPosition(canvas, 0, currY + j * SEGY,BEGINX); // draws beginning starting lines
-
-				//String[] bars = a.input.get(i).get(j).split("((?<!\\|)\\|(?!\\|))|(\\|\\|)");
+				drawSymbol.createHLineAtPosition(canvas, 0, currY + j * SEGY,BEGINX);
+				System.out.println(i + " " + a.input.get(i).get(j));
+				drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
+				
 				/*
-				 * separate into bars the input line splitting at all | and ||
+				 * check size of current bar and test if it will fit within the page width when drawn
+				 * if does not fit then continue in the if statement to end the current line with
+				 * a vertical line, then start on a new line
 				 */
-				String[] bars = a.input.get(i).get(j).split("(\\|\\|)|(\\|)");
-				
-				// get all vertical bars
-				Pattern ptn = Pattern.compile("((?<!\\|)\\|(?!\\|))|(\\|\\|\\*)|(\\*\\|\\|)|((?<!\\*)\\|\\|(?!\\*))");
-				Matcher mtr = ptn.matcher(a.input.get(i).get(j));
-
-				List<String> vlines = new ArrayList<String>();
-
-				while (mtr.find())
+				if(a.input.get(i).get(j).length() * a.spacing + currX > 570)
 				{
-					String s = mtr.group();
-					vlines.add(s);
-					System.out.println(s);
-				}
-
-				for (int k = 0; k < bars.length; k++) // k = bar #
-				{
-					System.out.println("current bar length: " + bars[k].length());
-				
-					/*
-					 * check size of current bar and test if it will fit within the page width when drawn
-					 * if does not fit then continue in the if statement to end the current line with
-					 * a vertical line, then start on a new line
-					 */
-					if (bars.length * a.spacing + currX > 450)
-					{
-						System.out.println("Testing 1");
-						if (k == 0) 
-						{
-							System.out.println("Testing 2");
-							drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
-							for (int l = 0; l < 6; l++)
-							{
-								drawSymbol.createHLineAtPosition(canvas, currX,currY + l * SEGY, SIZEX - currX);
-							}
-						}
-						cX = BEGINX;
-						currX = cX;
-						currY += LINEY * 2;
-						System.out.println("Testing 3");
-					}
+					drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
 					
-					/* 
-					 * draw the vertical bars determined by
-					 * the different cases | || ||* *|| |||
-					 */
-
-					if (j == 2)
+					for(int k = 0; k < 6; k++)
 					{
-						// check if turn to newline
-
-						if (vlines.get(k).equals("|"))
-							drawSymbol.createVLineAtPosition(canvas, currX,
-									currY, LINEY);
-						else if (vlines.get(k).equals("||*"))
-						{
-							// draw two vertical bar
-							drawSymbol.createLDoubleBar(canvas, currX, currY,
-									LINEY);
-
-						} else if (vlines.get(k).equals("*||"))
-						{
-							drawSymbol.createRDoubleBar(canvas, currX, currY,
-									LINEY);
-						}
+						drawSymbol.createHLineAtPosition(canvas, currX,currY + k * SEGY, SIZEX - currX);
 					}
-					
-					/*
-					 * check cases to draw symbols as needed
-					 */
-					System.out.println("Testing 4");
-					for (int l = 0; l < bars[k].length(); l++)
-					{
-						if (bars[k].charAt(l) == '-')
-						{
-							drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
-						} 
-						else
-						{
-							drawSymbol.createTextCenteredAtPosition(canvas, "" + bars[k].charAt(l), currX + 
-									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.3f
-									* a. spacing, a.spacing);
-						}
-					}
-					currX += bars[k].length() * a.spacing;
+					cX = BEGINX;
+					currX = cX;
+					currY += LINEY * 2;
 				}
 				
+				/*
+				 * check cases to draw symbols as needed
+				 */
+				
+				for (int l = 0; l < a.input.get(i).get(j).length(); l++)
+				{
+					if (a.input.get(i).get(j).charAt(l) == '-')
+					{
+						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+					}
+					else if (a.input.get(i).get(j).charAt(l) == '*')
+					{
+						drawSymbol.createCircle(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+					}
+					else
+					{
+						drawSymbol.createTextCenteredAtPosition(canvas, "" + a.input.get(i).get(j).charAt(l), currX + 
+								(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.3f
+								* a. spacing, 7);
+					}
+				}
+				currX += a.input.get(i).get(j).length() * a.spacing;
 			}
 			cX = currX;
-			System.out.println();
+			System.out.println(i + " " + a.input.get(i).get(1).length()); //length of bar
 		}
 		document.close();
 	}
