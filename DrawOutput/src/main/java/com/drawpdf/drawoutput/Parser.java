@@ -22,54 +22,10 @@ public class Parser
 
 	public Parser(String filePath) throws IOException
 	{
-		// tempSegment = new Segment();
 		tempList = new ArrayList<Segment>();
 		input = new ArrayList<Segment>();
-		//parseVerticalBars(filePath);
+
 		fileIn(filePath);
-	}
-
-	public void parseVerticalBars(String filePath)
-	{
-		try
-		{
-			BufferedReader in = new BufferedReader(new FileReader(filePath));
-			String line = "";
-
-			// read the first line
-			line = in.readLine();
-
-			// Skip blank lines.
-			while (line != null && line.trim().equals(""))
-			{
-				line = in.readLine();
-				lineNumber++;
-			}
-
-			while (line != null)
-			{
-				Pattern ptn = Pattern
-						.compile("(\\|\\|\\|)|(\\*\\|\\|)|(\\|\\|\\*)|(\\|\\|)|(\\|)");
-						//("((?<!\\|)\\|(?!\\|))|(\\|\\|\\*)|(\\*\\|\\|)|((?<!\\*)\\|\\|(?!\\*))");
-			
-				Matcher mtr = ptn.matcher(line);
-
-				// the loop finds how many segments are in the line and adds
-				// them to the vLines arraylist
-				ArrayList<String> vLines = new ArrayList<String>();
-				while (mtr.find())
-				{
-					String s = mtr.group();
-					vLines.add(s);
-					System.out.println(s);
-				}
-				line = in.readLine();
-			}
-			in.close();
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 	public void fileIn(String filePath) throws IOException
