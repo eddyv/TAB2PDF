@@ -48,7 +48,7 @@ public class drawOutput
 	{
 		a = new Parser(src);
 		//displayInfo();
-		//createPdf(dest);
+		createPdf(dest);
 	}
 
 	// display lines parsed from Parser
@@ -73,7 +73,7 @@ public class drawOutput
 		Rectangle pageSize = new Rectangle(SIZEX, SIZEY);
 		Document document = new Document(pageSize);
 		PdfWriter writer = PdfWriter.getInstance(document,
-				new FileOutputStream(dest));
+		new FileOutputStream(dest));
 		document.open();
 
 		// create Symbol object and canvas to draw on
@@ -119,6 +119,14 @@ public class drawOutput
 					currY += LINEY * 2;
 				}
 				
+				// start on new page if needed
+				if (currY > 750)
+				{
+					document.newPage();
+					currX = BEGINX;
+					currY = LINEY;
+				}
+				
 				/*
 				 * check cases to draw symbols as needed
 				 */
@@ -132,6 +140,10 @@ public class drawOutput
 					else if (a.input.get(i).get(j).charAt(l) == '*')
 					{
 						drawSymbol.createCircle(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+					}
+					else if (a.input.get(i).get(j).charAt(l) == 's')
+					{
+						drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
 					else
 					{

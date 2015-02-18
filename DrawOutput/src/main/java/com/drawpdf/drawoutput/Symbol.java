@@ -77,7 +77,7 @@ public class Symbol {
     }
     
     //draw S
-    public void drawS(PdfContentByte canvas, float x, float y, float length) {
+    public void createS(PdfContentByte canvas, float x, float y, float length) {
     	//PdfContentByte canvas = writer.getDirectContent();
 		
     	float tiltAngle = (float)(-45 * (Math.PI / 180));
@@ -94,14 +94,14 @@ public class Symbol {
 		diagonal.stroke();
 		
 		//adds the diagonal line to the PdfContentByte object
-		canvas.addTemplate(diagonal, scaleX, tiltX, scaleY, tiltY, x, SIZEY - y);
+		canvas.addTemplate(diagonal, scaleX, tiltX, scaleY, tiltY, x - (length/2), SIZEY - y);
 		
 		//adds the horizontal line to the PdfContentByte object
 		canvas.moveTo(x, SIZEY - y);
         canvas.lineTo(x + length, SIZEY - y);
 	}
     
-	public void drawStar (PdfContentByte canvas, float x, float y, float length, boolean nextCharBar) {
+	public void createStar (PdfContentByte canvas, float x, float y, float length, boolean nextCharBar) {
 		//PdfContentByte canvas = writer.getDirectContent();
 		if (nextCharBar) {
 			canvas.circle(x + (length - 5), SIZEY - y, 7/5f);
