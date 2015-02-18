@@ -131,31 +131,49 @@ public class drawOutput
 				 * check cases to draw symbols as needed
 				 */
 				
-				for (int l = 0; l < a.input.get(i).get(j).length(); l++)
+				String tempString = a.input.get(i).get(j);
+				for (int l = 0; l < tempString.length(); l++)
 				{
-					if (a.input.get(i).get(j).charAt(l) == '-')
+					
+					//realign string due to bug in parser
+					if (l == 0 && j ==0 && a.input.get(i).get(j).substring(l, l+1).matches("[0-9]"))
+					{
+						System.out.println(a.input.get(i).get(j).substring(l, l+1).matches("[0-9]"));
+						tempString = tempString.substring(1);
+						System.out.println("temp substring: " + tempString);
+					}
+					
+					if (tempString.charAt(l) == '-')
 					{
 						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
-					else if (a.input.get(i).get(j).charAt(l) == '*')
+					else if (tempString.charAt(l) == '*')
 					{
 						drawSymbol.createCircle(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
-					else if (a.input.get(i).get(j).charAt(l) == 's')
+					else if (tempString.charAt(l) == 's')
 					{
 						drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
 					else
 					{
-						drawSymbol.createTextCenteredAtPosition(canvas, "" + a.input.get(i).get(j).charAt(l), currX + 
+						drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
 								(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.3f
 								* a. spacing, 7);
+					}
+					
+					//Write repeat n times message
+					if (a.input.get(i).get(j).substring(l, l+1).matches("[0-9]") && l == 0)
+					{
+						System.out.println("Test");
+						
+						drawSymbol.createTextCenteredAtPosition(canvas, "Repeat " + a.input.get(i).get(j).substring(l, l+1).charAt(l) + " times", currX , currY - a. spacing, 7);
 					}
 				}
 				currX += a.input.get(i).get(j).length() * a.spacing;
 			}
 			cX = currX;
-			System.out.println(i + " " + a.input.get(i).get(1).length()); //length of bar
+			//System.out.println(i + " " + a.input.get(i).get(1).length()); //length of bar
 		}
 		document.close();
 	}

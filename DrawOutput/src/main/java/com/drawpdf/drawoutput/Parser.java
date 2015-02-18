@@ -151,7 +151,8 @@ public class Parser
 				if (line.matches(regex))
 				{
 					Pattern ptn = Pattern
-							.compile("((?<!\\|)\\|(?!\\|))|(\\|\\|\\*)|(\\*\\|\\|)|((?<!\\*)\\|\\|(?!\\*))");
+							.compile("(\\|\\|\\|)|(\\|\\d)|(\\*\\|\\|)|(\\|\\|\\*)|(\\|\\|)|(\\|)");
+							//("((?<!\\|)\\|(?!\\|))|(\\|\\|\\*)|(\\*\\|\\|)|((?<!\\*)\\|\\|(?!\\*))");
 					Matcher mtr = ptn.matcher(line);
 
 					// the loop finds how many segments are in the line and adds
@@ -161,7 +162,7 @@ public class Parser
 					{
 						String s = mtr.group();
 						vLines.add(s);
-						// System.out.println(s);
+						 System.out.println(s);
 					}
 
 					// lineAfterSplit is an array of strings that contains the
