@@ -21,6 +21,7 @@ public class Symbol {
 	
     public void createTextCenteredAtPosition(PdfContentByte canvas, String text, float x, float y, float size) throws DocumentException, IOException {
         canvas.setFontAndSize(BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false), size);
+        canvas.setLineWidth(0.5f);
         canvas.beginText();
         canvas.showTextAligned(Element.ALIGN_CENTER, text, x, SIZEY - y, 0);
         canvas.endText();
@@ -49,30 +50,28 @@ public class Symbol {
     }
     
     public void createRDoubleBar(PdfContentByte canvas, float x, float y, float length){
-    	//PdfContentByte canvas = writer.getDirectContent();
-    	canvas.setLineWidth(0.5f);
-    	canvas.moveTo(x - 1, SIZEY - y);
-    	canvas.lineTo(x - 1, SIZEY - (y + length));
     	
-    	//PdfContentByte canvas = writer.getDirectContent();
+    	canvas.setLineWidth(1.8f);
+    	canvas.moveTo(x, SIZEY - y);
+    	canvas.lineTo(x, SIZEY - (y + length));
     	canvas.stroke();
-    	canvas.setLineWidth(1.2f);
-    	canvas.moveTo(x + 1, SIZEY - y);
-    	canvas.lineTo(x + 1, SIZEY - (y + length));
+    	
+    	canvas.setLineWidth(0.5f);
+    	canvas.moveTo(x - 3, SIZEY - y);
+    	canvas.lineTo(x - 3, SIZEY - (y + length));
     	canvas.stroke();
+    	
     }
     
     public void createLDoubleBar(PdfContentByte canvas, float x, float y, float length){
-    	//PdfContentByte canvas = writer.getDirectContent();
-    	canvas.setLineWidth(1.2f);
-    	canvas.moveTo(x + 1, SIZEY - y);
-    	canvas.lineTo(x + 1, SIZEY - (y + length));
+    	canvas.setLineWidth(1.8f);
+    	canvas.moveTo(x, SIZEY - y);
+    	canvas.lineTo(x, SIZEY - (y + length));
     	canvas.stroke();
     	
-    	//PdfContentByte canvas = writer.getDirectContent();
     	canvas.setLineWidth(0.5f);
-    	canvas.moveTo(x - 1, SIZEY - y);
-    	canvas.lineTo(x - 1, SIZEY - (y + length));
+    	canvas.moveTo(x + 3, SIZEY - y);
+    	canvas.lineTo(x + 3, SIZEY - (y + length));
     	canvas.stroke();
     }
     

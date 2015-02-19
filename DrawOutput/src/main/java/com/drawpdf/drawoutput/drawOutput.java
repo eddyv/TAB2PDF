@@ -26,21 +26,13 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class drawOutput
 {
-
-	// public String title = null;
-	// public String subtitle = null;
-	// public String[] lines = null;
-	public static final String DEST = "P1.pdf";
-
-	public static final int MARK_LIMIT = 100; // limit use to remember previous
-												// empty line, called by mark()
-
 	public static final float SIZEX = 612;
 	public static final float SIZEY = 792;
 	public static final float LINEY = SIZEY / 22;
 	public static final float SEGY = LINEY / 5;
 	public static final float BEGINX = SIZEX / 15;
-
+	public static int vCounter;
+	public static Symbol drawSymbol = new Symbol(SIZEY);
 	Parser a;
 
 	public drawOutput(String src, String dest) throws IOException,
@@ -48,16 +40,32 @@ public class drawOutput
 	{
 		a = new Parser(src);
 		//displayInfo();
+		//displayVerticalBars();
 		createPdf(dest);
 	}
 
+	public void displayVerticalBars()
+	{
+		System.out.println(a.vLinesInput.size());
+		for (int i = 0; i < a.vLinesInput.size(); i++)
+		{
+			System.out.println(a.vLinesInput.get(i).size());
+			for (int j = 0; j < a.vLinesInput.get(i).size(); j++)
+			{
+				System.out.println(a.vLinesInput.get(i).get(j));
+			}
+		}
+	}
+	
 	// display lines parsed from Parser
 	public void displayInfo()
 	{
 		int i = 0;
+		System.out.println(a.input.size());
 		while (i < a.input.size())
 		{
 			int j = 0;
+			System.out.println(a.input.get(i).size());
 			while (j < a.input.get(i).size())
 			{
 				System.out.printf("%d %s\n", i, a.input.get(i).get(j));
@@ -77,7 +85,7 @@ public class drawOutput
 		document.open();
 
 		// create Symbol object and canvas to draw on
-		Symbol drawSymbol = new Symbol(SIZEY);
+		//Symbol drawSymbol = new Symbol(SIZEY);
 		PdfContentByte canvas = writer.getDirectContent();
 
 		/*
@@ -92,15 +100,19 @@ public class drawOutput
 
 		for (int i = 0; i < a.input.size(); i++)
 		 // to test only first n rows of music 
-		//for(int i = 0; i < 6; i++)	// i = bar #
+		//for(int i = 0; i < 2; i++)	// i = bar #
 		{
+			
 			for(int j = 0; j < a.input.get(i).size(); j++) // j = line number in bar
 			{
-				currX = cX;
-				drawSymbol.createHLineAtPosition(canvas, 0, currY + j * SEGY,BEGINX);
-				System.out.println(i + " " + a.input.get(i).get(j));
-				drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
+				//initialize counter for vLinesInput line number
+				vCounter = j * 2;
 				
+				currX = cX;
+				
+				// draw beginning filler lines
+				drawSymbol.createHLineAtPosition(canvas, 0, currY + j * SEGY,BEGINX);
+
 				/*
 				 * check size of current bar and test if it will fit within the page width when drawn
 				 * if does not fit then continue in the if statement to end the current line with
@@ -108,7 +120,7 @@ public class drawOutput
 				 */
 				if(a.input.get(i).get(j).length() * a.spacing + currX > 570)
 				{
-					drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
+					//drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
 					
 					for(int k = 0; k < 6; k++)
 					{
@@ -127,20 +139,28 @@ public class drawOutput
 					currY = LINEY;
 				}
 				
+				// Draws beginning vertical bars
+				DrawVerticalBar(i, j, canvas, currX, currY);
+
 				/*
 				 * check cases to draw symbols as needed
 				 */
-				
 				String tempString = a.input.get(i).get(j);
+				
+				
 				for (int l = 0; l < tempString.length(); l++)
 				{
-					
-					//realign string due to bug in parser
+					// realign string due to bug in parser, occurs on parsed lines with vertical bars for repeat n times 
+					// ex. |4, the 4 gets parsed into the line making it 1 length longer than the rest in the segment
 					if (l == 0 && j ==0 && a.input.get(i).get(j).substring(l, l+1).matches("[0-9]"))
 					{
-						System.out.println(a.input.get(i).get(j).substring(l, l+1).matches("[0-9]"));
 						tempString = tempString.substring(1);
-						System.out.println("temp substring: " + tempString);
+					}
+					
+					// replaces blank space with a dash
+					if (a.input.get(i).get(j).substring(l, l+1).matches("\\s"))
+					{
+						tempString = tempString.replaceAll("\\s", "-");
 					}
 					
 					if (tempString.charAt(l) == '-')
@@ -149,32 +169,96 @@ public class drawOutput
 					}
 					else if (tempString.charAt(l) == '*')
 					{
-						drawSymbol.createCircle(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+						if (l == 0)
+						{
+							drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createCircle(canvas, currX + a.spacing, currY + j * SEGY, a.spacing);
+						}
+						else
+						{
+							drawSymbol.createCircle(canvas, (currX + a.spacing * (l - 1)), currY + j * SEGY, a.spacing);
+							drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+						}
 					}
 					else if (tempString.charAt(l) == 's')
 					{
 						drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
+					else if (tempString.charAt(l) == 'h')
+					{
+						// needs to be fixed, positioning completely wrong...
+						drawSymbol.createArc(canvas, currY + j * SEGY, currY + (j + 1) * SEGY, currX + l * a.spacing, currX + l * a.spacing * 2, a.spacing);
+						//drawSymbol.createArc(canvas, bottom, top, leftend, rightend, size);
+					}
 					else
 					{
 						drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
 								(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.3f
-								* a. spacing, 7);
-					}
-					
-					//Write repeat n times message
-					if (a.input.get(i).get(j).substring(l, l+1).matches("[0-9]") && l == 0)
-					{
-						System.out.println("Test");
-						
-						drawSymbol.createTextCenteredAtPosition(canvas, "Repeat " + a.input.get(i).get(j).substring(l, l+1).charAt(l) + " times", currX , currY - a. spacing, 7);
-					}
+								* a. spacing, 8);
+					}	
 				}
-				currX += a.input.get(i).get(j).length() * a.spacing;
+				currX += tempString.length() * a.spacing;	
+				// Draws ending vertical bars
+				DrawVerticalBar(i, j, canvas, currX, currY);	
 			}
-			cX = currX;
-			//System.out.println(i + " " + a.input.get(i).get(1).length()); //length of bar
+			cX = currX;	
+		}
+		
+		// Draw ending filler lines
+		for(int k = 0; k < 6; k++)
+		{
+			drawSymbol.createHLineAtPosition(canvas, currX,currY + k * SEGY, SIZEX - currX);
 		}
 		document.close();
+	}
+	
+	public void DrawVerticalBar(int i, int j, PdfContentByte canvas, float currX, float currY) throws DocumentException, IOException
+	{
+		String vLines = a.vLinesInput.get(i).get(vCounter);
+		//System.out.println(a.vLinesInput.get(i).get(vCounter));
+		//System.out.println("j = " + j + " vCounter = " + vCounter);
+		if (vLines.equals("|||"))
+		{
+			drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
+			drawSymbol.createVLineAtPosition(canvas, currX + a.spacing, currY,LINEY);
+			drawSymbol.createVLineAtPosition(canvas, currX + 2 * a.spacing, currY,LINEY);
+		}
+		else if (vLines.equals("||"))
+		{
+			if (vCounter % 2 == 0)
+			{
+				if (!a.vLinesInput.get(i).get(4).equals("*||"))
+				{
+					drawSymbol.createLDoubleBar(canvas, currX, currY, LINEY);
+				}	
+			}
+			else
+			{
+				if (!a.vLinesInput.get(i).get(4).equals("||*"))
+				{
+					drawSymbol.createRDoubleBar(canvas, currX, currY, LINEY);	
+				}
+			}
+			currX += a.input.get(i).get(j).length() * a.spacing;
+		}
+		else if (vLines.equals("*||") && vCounter % 2 == 1)
+		{
+			drawSymbol.createRDoubleBar(canvas, currX, currY, LINEY);
+			currX += a.input.get(i).get(j).length() * a.spacing;
+		}
+		else if (vLines.equals("||*") && vCounter % 2 == 0)
+		{
+			drawSymbol.createLDoubleBar(canvas, currX, currY, LINEY);
+			currX += a.input.get(i).get(j).length() * a.spacing;
+		}
+		else if (vLines.matches("\\|\\d") && vCounter % 2 == 1)
+		{
+			drawSymbol.createTextCenteredAtPosition(canvas, "Repeat " + vLines.charAt(1) + " times", currX - 5 * a.spacing, currY - 1.5f * a. spacing, 8);
+		}
+		else if (vLines.equals("|"))
+		{
+			drawSymbol.createVLineAtPosition(canvas, currX, currY, LINEY);
+		}
+		vCounter++;
 	}
 }
