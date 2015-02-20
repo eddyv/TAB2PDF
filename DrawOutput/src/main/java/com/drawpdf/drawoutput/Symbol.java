@@ -44,7 +44,7 @@ public class Symbol {
 
 	//draw circle for repeat bar
     public void createCircle(PdfContentByte canvas, float x, float y, float length){
-    		canvas.circle(x + (length/2), SIZEY - y, 1);
+    		canvas.circle(x + (length/2), SIZEY - y, 1.25f);
     		canvas.fillStroke();
     		createHLineAtPosition(canvas, x, y, length);
     }
@@ -113,18 +113,18 @@ public class Symbol {
 	
 	public static void createDiamond(PdfContentByte canvas, float x, float y, float size)
 	{
-		canvas.moveTo(x, y);
-		canvas.lineTo(x - size, y - size);
-		canvas.lineTo(x, y - (size * 2));
-		canvas.lineTo(x + size, y - size);
-		canvas.lineTo(x - 0.35f, y + 0.35f);
-		canvas.setColorFill(new BaseColor(255, 255, 255));
-		canvas.fillStroke();
-		//canvas.stroke();
+		canvas.setLineWidth(0.5f);
+		canvas.moveTo(x, SIZEY - y);
+		canvas.lineTo(x - size, SIZEY - y - size);
+		canvas.lineTo(x, SIZEY - y - (size * 2));
+		canvas.lineTo(x + size, SIZEY - y - size);
+		canvas.lineTo(x - 0.35f, SIZEY - y + 0.35f);
+		//canvas.setColorFill(new BaseColor(255, 255, 255));
+		canvas.stroke();
 	}
 	
 	public static void createArc(PdfContentByte canvas, float bottom, float top, float leftend, float rightend, float size)
 	{
-		canvas.arc(leftend - size, bottom, leftend + size, top, 0, 180);
+		canvas.arc(leftend - size, SIZEY - bottom, leftend + size, SIZEY - top, 0, 180);
 	}
 }

@@ -1,13 +1,5 @@
 package com.drawpdf.drawoutput;
 
-/*
- * changes:
- * 
- * create separate method for the initial creation of the document
- * and the setting of the document size
- * 
- */
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -148,6 +140,20 @@ public class drawOutput
 				String tempString = a.input.get(i).get(j);
 				
 				
+				//checking for diamond in the line
+				Boolean hasDiamond = false;
+				Pattern pattern = Pattern.compile("<\\d+>");
+			    Matcher matcher = pattern.matcher(tempString);
+			    List<Integer> diamondIndex = new ArrayList<Integer>(); // stores start and end indexes of diamonds
+			    int diamondIndexCount = 0;	// counts number of diamonds in a line
+			    
+			    while (matcher.find()) 	// stores indexes of diamond start and end position for each line
+			    {
+			    	diamondIndex.add(matcher.start());
+			    	diamondIndex.add(matcher.end());
+			        hasDiamond = true;
+			    }
+			    
 				for (int l = 0; l < tempString.length(); l++)
 				{
 					// realign string due to bug in parser, occurs on parsed lines with vertical bars for repeat n times 
@@ -161,6 +167,27 @@ public class drawOutput
 					if (a.input.get(i).get(j).substring(l, l+1).matches("\\s"))
 					{
 						tempString = tempString.replaceAll("\\s", "-");
+					}
+					
+					//check case for diamond symbol
+					if (hasDiamond == true && diamondIndexCount < diamondIndex.size())
+					{
+						if (l == diamondIndex.get(diamondIndexCount))
+						{
+							System.out.println("Testing diamond");
+							
+							//get number value
+							String diamondnum = tempString.substring(diamondIndex.get(diamondIndexCount) + 1, diamondIndex.get(diamondIndexCount + 1) - 1);
+							System.out.println(diamondnum);
+							int difference = (diamondIndex.get(diamondIndexCount + 1) - diamondIndex.get(diamondIndexCount));
+							drawSymbol.createTextCenteredAtPosition(canvas, diamondnum, currX + 
+									(l + 1f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
+							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);
+							//drawSymbol.createHLineAtPosition(canvas, currX + (l + difference) * a.spacing, currY + j * SEGY, a.spacing);
+							
+							l = l + difference;	// advances character counter past the diamond symbol
+							diamondIndexCount = diamondIndexCount + 2;
+						}
 					}
 					
 					if (tempString.charAt(l) == '-')
@@ -184,17 +211,17 @@ public class drawOutput
 					{
 						drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
-					else if (tempString.charAt(l) == 'h')
+					else if (tempString.charAt(l) == 'h' || tempString.charAt(l) == 'p')
 					{
-						// needs to be fixed, positioning completely wrong...
-						drawSymbol.createArc(canvas, currY + j * SEGY, currY + (j + 1) * SEGY, currX + l * a.spacing, currX + l * a.spacing * 2, a.spacing);
-						//drawSymbol.createArc(canvas, bottom, top, leftend, rightend, size);
+						drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
+						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+						drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
+								(l + 0.5f)	* a.spacing, currY + (j - 1.25f) * SEGY + 0.5f * a. spacing, 5);
 					}
 					else
 					{
 						drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
-								(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.3f
-								* a. spacing, 8);
+								(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
 					}	
 				}
 				currX += tempString.length() * a.spacing;	
