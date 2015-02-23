@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itextpdf-5.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itextpdf-5.5.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itextpdf-5.5.4-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itext-pdfa-5.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itext-pdfa-5.5.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itext-pdfa-5.5.4-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itext-xtra-5.5.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itext-xtra-5.5.4-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/DrawOutput/itext-5/itext-xtra-5.5.4-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/batik-awt-util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/batik-dom.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/batik-svg-dom.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/batik-svggen.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/batik-util.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/batik-xml.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/icepdf-core.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Edward/Desktop/TAB2PDF/TAB2PDF/ICEpdf-5.1.1-bin/icepdf/lib/icepdf-viewer.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
