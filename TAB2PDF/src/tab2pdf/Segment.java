@@ -11,7 +11,7 @@ public class Segment {
 
 	public void add(String line) {
 		segment.add(line);
-		
+
 	}
 
 	public int size() {

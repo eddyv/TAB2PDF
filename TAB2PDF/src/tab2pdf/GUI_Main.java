@@ -48,7 +48,7 @@ public class GUI_Main {
 	/**
 	 * Create the application.
 	 */
-	public GUI_Main() { 
+	public GUI_Main() {
 		initialize();
 	}
 
@@ -58,18 +58,16 @@ public class GUI_Main {
 	private void initialize() {
 		frmTabpdf = new JFrame();
 		frmTabpdf.setTitle("TAB2PDF");
-		frmTabpdf.getContentPane().setFont(new Font("Times New Roman", Font.PLAIN, 11));
+		frmTabpdf.getContentPane().setFont(
+				new Font("Times New Roman", Font.PLAIN, 11));
 		frmTabpdf.getContentPane().setLayout(null);
-		
-		
-		
+
 		JButton btnConvertToPdf = new JButton("Convert and Display PDF");
 		btnConvertToPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				openPdf();
 			}
 
-			
 		});
 		btnConvertToPdf.setBounds(414, 135, 228, 163);
 		frmTabpdf.getContentPane().add(btnConvertToPdf);
@@ -81,80 +79,78 @@ public class GUI_Main {
 		});
 		btnLoadTextFile.setBounds(114, 135, 228, 163);
 		frmTabpdf.getContentPane().add(btnLoadTextFile);
-		
-		
+
 		frmTabpdf.setBounds(100, 100, 450, 300);
-		frmTabpdf.setSize(800,600);
+		frmTabpdf.setSize(800, 600);
 		frmTabpdf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		frmTabpdf.setJMenuBar(menuBar);
 	}
-	//the below methods should be private but are made public for testing purposes.
+
+	// the below methods should be private but are made public for testing
+	// purposes.
 	public void openPdf() {
-				//check if extension is .pdf
-				dest = saveFile();
-				try 
-				{
-					new drawOutput(src,dest);
-				} catch (IOException | DocumentException e) 
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				// build a component controller
-		        SwingController controller = new SwingController();
-		        controller.setIsEmbeddedComponent(true);
+		// check if extension is .pdf
+		dest = saveFile();
+		try {
+			new drawOutput(src, dest);
+		} catch (IOException | DocumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// build a component controller
+		SwingController controller = new SwingController();
+		controller.setIsEmbeddedComponent(true);
 
-		        PropertiesManager properties = new PropertiesManager(
-		                System.getProperties(),
-		                ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
+		PropertiesManager properties = new PropertiesManager(
+				System.getProperties(),
+				ResourceBundle
+						.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
 
-		        properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.75");
+		properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.75");
 
-		        SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
+		SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
 
-		        // add interactive mouse link annotation support via callback
-		        controller.getDocumentViewController().setAnnotationCallback(
-		                new org.icepdf.ri.common.MyAnnotationCallback(controller.getDocumentViewController()));
-		        JPanel viewerComponentPanel = factory.buildViewerPanel();
-		        JFrame applicationFrame = new JFrame();
-		        applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		        applicationFrame.getContentPane().add(viewerComponentPanel);
-		        // Now that the GUI is all in place, we can try opening a PDF
-		        controller.openDocument(dest);
-		        // show the component
-		        applicationFrame.pack();
-		        applicationFrame.setVisible(true);
-			}
-	public String saveFile()
-	{
+		// add interactive mouse link annotation support via callback
+		controller.getDocumentViewController().setAnnotationCallback(
+				new org.icepdf.ri.common.MyAnnotationCallback(controller
+						.getDocumentViewController()));
+		JPanel viewerComponentPanel = factory.buildViewerPanel();
+		JFrame applicationFrame = new JFrame();
+		applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		applicationFrame.getContentPane().add(viewerComponentPanel);
+		// Now that the GUI is all in place, we can try opening a PDF
+		controller.openDocument(dest);
+		// show the component
+		applicationFrame.pack();
+		applicationFrame.setVisible(true);
+	}
+
+	public String saveFile() {
 		JFileChooser fc = new JFileChooser();
 		FileFilter pdfFilter = new ExtensionFilter("Pdf file", ".pdf");
 		fc.setFileFilter(pdfFilter);
 		fc.setAcceptAllFileFilterUsed(false);
 		int status = fc.showSaveDialog(null);
 		File in = null;
-		if(status == JFileChooser.APPROVE_OPTION)
-		{
+		if (status == JFileChooser.APPROVE_OPTION) {
 			in = fc.getSelectedFile();
 		}
 		return in.getPath();
 	}
-	
-	public String openFile()
-	{
+
+	public String openFile() {
 		JFileChooser fc = new JFileChooser();
 		FileFilter textFilter = new ExtensionFilter("Text file", ".txt");
-		//fc.addChoosableFileFilter(textFilter);
+		// fc.addChoosableFileFilter(textFilter);
 		fc.setFileFilter(textFilter);
 		fc.setAcceptAllFileFilterUsed(false);
 		int status = fc.showOpenDialog(null);
 		File out = null;
-		if(status == JFileChooser.APPROVE_OPTION)
-		{
+		if (status == JFileChooser.APPROVE_OPTION) {
 			out = fc.getSelectedFile();
-			//DoStuff();
+			// DoStuff();
 		}
 		return out.getPath();
 	}
