@@ -17,11 +17,11 @@ public class DrawOutputDebugTest {
 	@Before
 	public void setUp() throws Exception {
 		draw1 = new drawOutput("t1.txt", "test1.pdf");
-		draw1.createPdf("test1.pdf");
+		draw1.createPdf();
 		draw2 = new drawOutput("t2.txt", "test2.pdf");
-		draw2.createPdf("test2.pdf");
+		draw2.createPdf();
 		draw3 = new drawOutput("t3.txt", "test3.pdf");
-		draw3.createPdf("test3.pdf");
+		draw3.createPdf();
 	}
 
 	@Test

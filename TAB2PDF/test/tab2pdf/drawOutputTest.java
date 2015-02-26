@@ -1,4 +1,4 @@
-package com.drawpdf.drawoutput;
+package tab2pdf;
 
 import static org.junit.Assert.*;
 
@@ -21,7 +21,7 @@ import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
 public class drawOutputTest {
-	String inURL = "test.txt"; // url to a input test file
+	String inURL = "sample1.txt"; // url to a input test file
 	String outURL = "test.pdf"; // url to a output test file
 	Parser p1, p2, p3; // different parsers use for test
 
@@ -34,8 +34,10 @@ public class drawOutputTest {
 
 	@Test
 	/* Test the functionality of getters and setters */
-	public void testGetterAndSetter() {
-		drawOutput d = new drawOutput(inURL.outURL);
+	public void testGetterAndSetter() throws Exception {
+		drawOutput d;
+		//the exception part here is supposed to be handled in the gui so we do not test it here.
+		d = new drawOutput(inURL,outURL); 
 		// test on parser
 		d.setParser(p1);
 		assertSame(p1, d.getParser());
@@ -57,8 +59,8 @@ public class drawOutputTest {
 		}
 
 		// Init new pdf file
-		drawOutput d = new drawOutput(p1);
-		PdfContentByte canvas = d.initPDF(outURL);
+		drawOutput d = new drawOutput(p1,outURL);
+		PdfContentByte canvas = d.initPDF();
 		d.resetXY();
 		d.DrawTitle(canvas);
 		canvas.getPdfDocument().close();
@@ -71,7 +73,7 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.resetXY() */
 	public void testResetXY() {
-		drawOutput d = new drawOutput();
+		drawOutput d = new drawOutput(outURL);
 		d.resetXY();
 		assertEquals(d.LINEY, d.getCurrY(), 0.0001);
 		assertEquals(d.BEGINX, d.getCurrX(), 0.0001);
@@ -81,8 +83,8 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.checkNewLine() */
 	public void testCheckNewLine() throws FileNotFoundException,
 			DocumentException {
-		drawOutput d = new drawOutput(p1);
-		PdfContentByte canvas = d.initPDF(outURL);
+		drawOutput d = new drawOutput(p1,outURL);
+		PdfContentByte canvas = d.initPDF();
 		d.resetXY();
 
 		// test on new line is required
@@ -102,8 +104,8 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.checkNewPage() */
 	public void testCheckNewPage() throws DocumentException, IOException {
-		drawOutput d = new drawOutput(p1);
-		PdfContentByte canvas = d.initPDF(outURL);
+		drawOutput d = new drawOutput(p1,outURL);
+		PdfContentByte canvas = d.initPDF();
 		d.resetXY();
 
 		// test on new page is required
@@ -134,8 +136,8 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawTitle() */
 	public void testDrawTitle() throws DocumentException, IOException {
-		drawOutput d = new drawOutput(p1);
-		PdfContentByte canvas = d.initPDF(outURL);
+		drawOutput d = new drawOutput(p1,outURL);
+		PdfContentByte canvas = d.initPDF();
 		d.resetXY();
 		d.DrawTitle(canvas);
 		canvas.getPdfDocument().close();
@@ -160,8 +162,8 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawVerticalBar() */
 	public void testDrawVerticalBar() throws DocumentException, IOException { // t3.txt
-		drawOutput d = new drawOutput(p3);
-		PdfContentByte canvas = d.initPDF(outURL);
+		drawOutput d = new drawOutput(p3,outURL);
+		PdfContentByte canvas = d.initPDF();
 		d.resetXY();
 		d.DrawTitle(canvas);
 
@@ -186,8 +188,8 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawSegment() */
 	public void testDrawSegment() throws DocumentException, IOException {
-		drawOutput d = new drawOutput(p3);
-		PdfContentByte canvas = d.initPDF(outURL);
+		drawOutput d = new drawOutput(p3,outURL);
+		PdfContentByte canvas = d.initPDF();
 		d.resetXY();
 		d.DrawTitle(canvas);
 
@@ -210,8 +212,8 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.createPdf() */
 	public void testCreatePdf() throws DocumentException, IOException {
 		Parser p = p3;
-		drawOutput d = new drawOutput(p);
-		d.createPdf(outURL);
+		drawOutput d = new drawOutput(p,outURL);
+		d.createPdf();
 
 		// Get expect value of x and y
 		float ex = d.BEGINX, ey = d.LINEY * 3f;

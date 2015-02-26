@@ -95,7 +95,7 @@ public class GUI_Main {
 		dest = saveFile();
 		try {
 			new drawOutput(src, dest);
-		} catch (IOException | DocumentException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
