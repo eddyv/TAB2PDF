@@ -90,7 +90,8 @@ public class GUI_Main {
 		JMenuBar menuBar = new JMenuBar();
 		frmTabpdf.setJMenuBar(menuBar);
 	}
-	private void openPdf() {
+	//the below methods should be private but are made public for testing purposes.
+	public void openPdf() {
 				//check if extension is .pdf
 				dest = saveFile();
 				try 
@@ -126,7 +127,7 @@ public class GUI_Main {
 		        applicationFrame.pack();
 		        applicationFrame.setVisible(true);
 			}
-	private String saveFile()
+	public String saveFile()
 	{
 		JFileChooser fc = new JFileChooser();
 		FileFilter pdfFilter = new ExtensionFilter("Pdf file", ".pdf");
@@ -140,7 +141,8 @@ public class GUI_Main {
 		}
 		return in.getPath();
 	}
-	private String openFile()
+	
+	public String openFile()
 	{
 		JFileChooser fc = new JFileChooser();
 		FileFilter textFilter = new ExtensionFilter("Text file", ".txt");
