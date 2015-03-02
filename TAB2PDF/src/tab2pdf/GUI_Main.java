@@ -94,8 +94,14 @@ public class GUI_Main {
 		// check if extension is .pdf
 		dest = saveFile();
 		try {
-			new drawOutput(src, dest);
+			drawOutput output = new drawOutput(src, dest);
+		
+				output.createPdf();
+		
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
