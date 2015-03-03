@@ -22,12 +22,25 @@ import org.icepdf.ri.common.SwingViewBuilder;
 import org.icepdf.ri.util.PropertiesManager;
 
 import com.itextpdf.text.DocumentException;
+import javax.swing.JSlider;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.SwingConstants;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.border.TitledBorder;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class GUI_Main {
 
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
+	private double spacing = 50;
 
 	/**
 	 * Launch the application.
@@ -60,25 +73,73 @@ public class GUI_Main {
 		frmTabpdf.setTitle("TAB2PDF");
 		frmTabpdf.getContentPane().setFont(
 				new Font("Times New Roman", Font.PLAIN, 11));
-		frmTabpdf.getContentPane().setLayout(null);
+				frmTabpdf.getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
+				
+				JPanel panel_PDF_Component = new JPanel();
+				panel_PDF_Component.setBorder(new TitledBorder(null, "pdf components", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				frmTabpdf.getContentPane().add(panel_PDF_Component);
+						panel_PDF_Component.setLayout(new GridLayout(2, 1, 1, 1));
+				
+						JButton btnConvertToPdf = new JButton("Convert and Display PDF");
+						panel_PDF_Component.add(btnConvertToPdf);
+						
+						JButton btnSavePDF = new JButton("Save PDF file");
+						panel_PDF_Component.add(btnSavePDF);
+						btnConvertToPdf.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								openPdf();
+							}
 
-		JButton btnConvertToPdf = new JButton("Convert and Display PDF");
-		btnConvertToPdf.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				openPdf();
-			}
-
-		});
-		btnConvertToPdf.setBounds(414, 135, 228, 163);
-		frmTabpdf.getContentPane().add(btnConvertToPdf);
+						});
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "text components", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		frmTabpdf.getContentPane().add(panel);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{380, 0};
+		gbl_panel.rowHeights = new int[]{123, 0, 123, 0};
+		gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
 		JButton btnLoadTextFile = new JButton("Load text file");
+		GridBagConstraints gbc_btnLoadTextFile = new GridBagConstraints();
+		gbc_btnLoadTextFile.weighty = 2.0;
+		gbc_btnLoadTextFile.weightx = 2.0;
+		gbc_btnLoadTextFile.fill = GridBagConstraints.BOTH;
+		gbc_btnLoadTextFile.insets = new Insets(0, 0, 5, 0);
+		gbc_btnLoadTextFile.gridx = 0;
+		gbc_btnLoadTextFile.gridy = 0;
+		panel.add(btnLoadTextFile, gbc_btnLoadTextFile);
 		btnLoadTextFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				src = openFile();
 			}
 		});
-		btnLoadTextFile.setBounds(114, 135, 228, 163);
-		frmTabpdf.getContentPane().add(btnLoadTextFile);
+		
+		JLabel lblSpacing = new JLabel("Spacing=50");
+		GridBagConstraints gbc_lblSpacing = new GridBagConstraints();
+		gbc_lblSpacing.insets = new Insets(0, 0, 5, 0);
+		gbc_lblSpacing.gridx = 0;
+		gbc_lblSpacing.gridy = 1;
+		panel.add(lblSpacing, gbc_lblSpacing);
+		
+		JSlider sldrSpacing = new JSlider();
+		sldrSpacing.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				
+			}
+		});
+		GridBagConstraints gbc_sldrSpacing = new GridBagConstraints();
+		gbc_sldrSpacing.weightx = 1.0;
+		gbc_sldrSpacing.weighty = 1.0;
+		gbc_sldrSpacing.fill = GridBagConstraints.BOTH;
+		gbc_sldrSpacing.gridx = 0;
+		gbc_sldrSpacing.gridy = 2;
+		panel.add(sldrSpacing, gbc_sldrSpacing);
+		sldrSpacing.setMinorTickSpacing(1);
+		sldrSpacing.setMajorTickSpacing(10);
+		sldrSpacing.setPaintLabels(true);
+		sldrSpacing.setPaintTicks(true);
 
 		frmTabpdf.setBounds(100, 100, 450, 300);
 		frmTabpdf.setSize(800, 600);
@@ -86,6 +147,15 @@ public class GUI_Main {
 
 		JMenuBar menuBar = new JMenuBar();
 		frmTabpdf.setJMenuBar(menuBar);
+		
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+		
+		JMenuItem mntmAbout = new JMenuItem("About");
+		mnHelp.add(mntmAbout);
+		
+		JMenuItem mntmUserManual = new JMenuItem("User Manual");
+		mnHelp.add(mntmUserManual);
 	}
 
 	// the below methods should be private but are made public for testing
@@ -95,8 +165,7 @@ public class GUI_Main {
 		dest = saveFile();
 		try {
 			drawOutput output = new drawOutput(src, dest);
-		
-				output.createPdf();
+			output.createPdf();
 		
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -124,7 +193,8 @@ public class GUI_Main {
 						.getDocumentViewController()));
 		JPanel viewerComponentPanel = factory.buildViewerPanel();
 		JFrame applicationFrame = new JFrame();
-		applicationFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//changed from exit on close to dispose on close
+		applicationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		applicationFrame.getContentPane().add(viewerComponentPanel);
 		// Now that the GUI is all in place, we can try opening a PDF
 		controller.openDocument(dest);
