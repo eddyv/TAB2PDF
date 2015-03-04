@@ -2,7 +2,6 @@ package tab2pdf;
 
 import java.io.IOException;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.BaseFont;
