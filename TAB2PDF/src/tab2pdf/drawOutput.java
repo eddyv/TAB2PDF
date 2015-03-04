@@ -45,10 +45,22 @@ public class drawOutput
 	 * Constructors 
 	 */
 	/* create new drawOutput object using path string of the txt file */
-	public drawOutput(String src, String dest) throws IOException
+	public drawOutput(String src, String dest, boolean customTitle, boolean customSubtitle, boolean customSpacing, String title, String subtitle, float spacing) throws IOException
 	{
 		Parser p = new Parser(src);
 		this.dest = dest;
+		if(customTitle==true)
+		{
+			p.title=title;
+		}
+		if(customSpacing==true)
+		{
+			p.spacing=spacing;
+		}
+		if(customSubtitle==true)
+		{
+			p.subtitle=subtitle;
+		}
 		this.setParser(p);
 	}
 	

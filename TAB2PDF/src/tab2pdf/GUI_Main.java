@@ -40,7 +40,7 @@ public class GUI_Main {
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
-	private double spacing = 50;
+	private float spacing = 50;
 	private boolean useCustomTitle;
 	private boolean useCustomSubtitle;
 	private boolean useCustomSpacing;
@@ -295,7 +295,7 @@ public class GUI_Main {
 		// check if extension is .pdf
 		dest = saveFile();
 		try {
-			drawOutput output = new drawOutput(src, dest);
+			drawOutput output = new drawOutput(src, dest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
 			output.createPdf();
 
 		} catch (IOException e) {
