@@ -28,6 +28,8 @@ public class Parser {
 		input = new ArrayList<Segment>();
 		vLinesInput = new ArrayList<Segment>();
 		fileIn(filePath);
+		Processor processor = new Processor(input);
+		input = processor.getInput();
 	}
 
 	public void fileIn(String filePath) throws IOException {

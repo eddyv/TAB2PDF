@@ -76,6 +76,13 @@ public class drawOutput
 		this.dest = dest;
 	}
 	
+	/* create new drawOutput object using path string of the txt file, does not use any custom features*/
+	public drawOutput(String src, String dest) throws IOException{
+		Parser p = new Parser(src);
+		this.dest=dest;
+		this.setParser(p);
+	}
+	
 	/**
 	 * Getters
 	 */
@@ -255,65 +262,63 @@ public class drawOutput
 			// Draws beginning vertical bars
 			vCounter = DrawVerticalBar(i, j, canvas, currX, currY, vCounter);
 
-			//check cases to draw symbols as needed
+			
 			String tempString = a.input.get(i).get(j);
 			
 			//checking for diamond in the line
-			Boolean hasDiamond = false;
-			Pattern pattern = Pattern.compile("<\\d+>");
+			Pattern pattern = Pattern.compile("<\\d+>|\\d+");
 		    Matcher matcher = pattern.matcher(tempString);
-		    List<Integer> diamondIndex = new ArrayList<Integer>(); // stores start and end indexes of diamonds
-		    int diamondIndexCount = 0;	// counts number of diamonds in a line
-		    
+	
+		    int numberIndex = 0;	// counts number of diamonds in a line
+		    List<Integer> startIndex = new ArrayList<Integer>();
+		    List<Integer> endIndex = new ArrayList<Integer>();
 		    while (matcher.find()) 	// stores indexes of diamond start and end position for each line
 		    {
-		    	diamondIndex.add(matcher.start());
-		    	diamondIndex.add(matcher.end());
-		        hasDiamond = true;
+		    	startIndex.add(matcher.start());
+		    	endIndex.add(matcher.end());
+		        
+		        //System.out.println("start " + matcher.start());
+		    	//System.out.println("end " + matcher.end());
+		    	//System.out.println(matcher.group());
 		    }
 			
+		    //check cases to draw symbols as needed
 			
 			for (int l = 0; l < tempString.length(); l++)
 			{
-				// realign string due to bug in parser, occurs on parsed lines with vertical bars for repeat n times 
-				// ex. |4, the 4 gets parsed into the line making it 1 length longer than the rest in the segment
-				if (l == 0 && j ==0 && a.input.get(i).get(j).substring(l, l+1).matches("[0-9]"))
+				if (numberIndex < startIndex.size())
 				{
-					tempString = tempString.substring(1);
-				}
-				
-				// replaces blank space with a dash
-				if (a.input.get(i).get(j).substring(l, l+1).matches("\\s"))
-				{
-					tempString = tempString.replaceAll("\\s", "-");
-				}
-				
-				//check case for diamond symbol
-				if (hasDiamond == true && diamondIndexCount < diamondIndex.size())
-				{
-					if (l == diamondIndex.get(diamondIndexCount))
+					if (l == startIndex.get(numberIndex))
 					{
-						//System.out.println("Testing diamond");
+						String tempNumber = tempString.substring(startIndex.get(numberIndex), endIndex.get(numberIndex));
+						int difference = endIndex.get(numberIndex) - startIndex.get(numberIndex);
+						System.out.println("number" + tempNumber);
 						
-						//get number value
-						String diamondnum = tempString.substring(diamondIndex.get(diamondIndexCount) + 1, diamondIndex.get(diamondIndexCount + 1) - 1);
-						//System.out.println(diamondnum);
-						int difference = (diamondIndex.get(diamondIndexCount + 1) - diamondIndex.get(diamondIndexCount));
-						drawSymbol.createTextCenteredAtPosition(canvas, diamondnum, currX + 
-								(l + 1f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
-						drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);
-						//drawSymbol.createHLineAtPosition(canvas, currX + (l + difference) * a.spacing, currY + j * SEGY, a.spacing);
-						
-						l = l + difference;	// advances character counter past the diamond symbol
-						diamondIndexCount = diamondIndexCount + 2;
+						if (tempNumber.matches("<\\d+>"))	// is a diamond and not a regular number
+						{
+							String diamondNumber = tempNumber.substring(1, tempNumber.length() - 1);
+							System.out.println("diamond number" + diamondNumber);
+							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 
+									(l + 1f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
+							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);
+						}
+						else
+						{
+							drawSymbol.createTextCenteredAtPosition(canvas, tempNumber, currX + 
+									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f
+									* a. spacing, 8);
+						}
+						l = l + difference;	// advances character counter past the symbol
+						numberIndex++;
 					}
 				}
 				
-				if (tempString.charAt(l) == '-')
+				if (l >= tempString.length())	// continues the loop in the case that the previous l advancement reaches the end of the current line
 				{
-					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+					continue;
 				}
-				else if (tempString.charAt(l) == '*')
+				
+				if (tempString.charAt(l) == '*')
 				{
 					if (l == 0)
 					{
@@ -339,9 +344,7 @@ public class drawOutput
 				}
 				else
 				{
-					drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
-							(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f
-							* a. spacing, 8);
+					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 				}	
 			}
 
