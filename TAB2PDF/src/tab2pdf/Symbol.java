@@ -19,7 +19,7 @@ public class Symbol {
 	}
 	
     public void createTextCenteredAtPosition(PdfContentByte canvas, String text, float x, float y, float size) throws DocumentException, IOException {
-        canvas.setFontAndSize(BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, false), size);
+        canvas.setFontAndSize(BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1257, BaseFont.EMBEDDED), size);
         canvas.setLineWidth(0.5f);
         canvas.beginText();
         canvas.showTextAligned(Element.ALIGN_CENTER, text, x, SIZEY - y, 0);

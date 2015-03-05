@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -33,7 +35,6 @@ import org.icepdf.ri.common.SwingViewBuilder;
 import org.icepdf.ri.util.PropertiesManager;
 
 import com.itextpdf.text.DocumentException;
-import javax.swing.SwingConstants;
 
 public class GUI_Main {
 
@@ -41,6 +42,7 @@ public class GUI_Main {
 	private String src;
 	private String dest;
 	private String localDest="result.pdf";
+	private String userManualDest="User_Manual.pdf";
 	private drawOutput output;
 	private float spacing = 25;
 	private boolean useCustomTitle;
@@ -111,30 +113,30 @@ public class GUI_Main {
 		JButton btnDisplayPdf = new JButton("Display PDF");
 		btnDisplayPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				openPdf();
+				openPdf(localDest);
 			}
 		});
+		
+				JButton btnSavePDF = new JButton("Save PDF");
+				btnSavePDF.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dest=saveFile();
+						try {
+							output = new drawOutput(src, dest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
+							output.createPdf();
+
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (DocumentException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+						
+				});
+				panel_PDF_Component.add(btnSavePDF);
 		panel_PDF_Component.add(btnDisplayPdf);
-
-		JButton btnSavePDF = new JButton("Save PDF");
-		btnSavePDF.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dest=saveFile();
-				try {
-					output = new drawOutput(src, dest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
-					output.createPdf();
-
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (DocumentException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-				
-		});
-		panel_PDF_Component.add(btnSavePDF);
 		
 
 		JPanel panel_Text_Component = createTextPanel();
@@ -251,7 +253,7 @@ public class GUI_Main {
 		gbc_bxCustomSpacing.gridy = 9;
 		panel_Text_Component.add(bxCustomSpacing, gbc_bxCustomSpacing);
 
-		JLabel lblSpacing = new JLabel("Spacing=50");
+		JLabel lblSpacing = new JLabel("Spacing=25.0");
 		GridBagConstraints gbc_lblSpacing = new GridBagConstraints();
 		gbc_lblSpacing.insets = new Insets(0, 0, 5, 0);
 		gbc_lblSpacing.gridx = 0;
@@ -259,10 +261,14 @@ public class GUI_Main {
 		panel_Text_Component.add(lblSpacing, gbc_lblSpacing);
 
 		JSlider sldrSpacing = new JSlider();
-		sldrSpacing.setMaximum(25);
+		sldrSpacing.setMaximum(100);
+		Hashtable labelTable = new Hashtable();
+		labelTable.put(new Integer(0), new JLabel("0.0"));
+		labelTable.put(new Integer(100), new JLabel("10.0"));
+		sldrSpacing.setLabelTable(labelTable);
 		sldrSpacing.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				spacing = sldrSpacing.getValue();
+				spacing = (float)(sldrSpacing.getValue()/10.0f);
 				lblSpacing.setText("Spacing=" + spacing);
 
 			}
@@ -294,6 +300,11 @@ public class GUI_Main {
 		mnHelp.add(mntmAbout);
 
 		JMenuItem mntmUserManual = new JMenuItem("User Manual");
+		mntmUserManual.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openPdf(userManualDest);
+			}
+		});
 		mnHelp.add(mntmUserManual);
 	}
 
@@ -330,7 +341,7 @@ public class GUI_Main {
 
 	// the below methods should be private but are made public for testing
 	// purposes.
-	public void openPdf() {
+	public void openPdf(String localDest) {
 		// build a component controller
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
