@@ -40,12 +40,14 @@ public class GUI_Main {
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
-	private float spacing = 50;
+	private String localDest="result.pdf";
+	private drawOutput output;
+	private float spacing = 25;
 	private boolean useCustomTitle;
 	private boolean useCustomSubtitle;
 	private boolean useCustomSpacing;
-	private String title;
-	private String subtitle;
+	private String title="";
+	private String subtitle="";
 
 	/**
 	 * Launch the application.
@@ -84,19 +86,56 @@ public class GUI_Main {
 		panel_PDF_Component.setBorder(new TitledBorder(null, "pdf components",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		frmTabpdf.getContentPane().add(panel_PDF_Component);
-		panel_PDF_Component.setLayout(new GridLayout(2, 1, 1, 1));
+		panel_PDF_Component.setLayout(new GridLayout(3, 1, 1, 1));
 
-		JButton btnConvertToPdf = new JButton("Convert and Display PDF");
-		panel_PDF_Component.add(btnConvertToPdf);
-
-		JButton btnSavePDF = new JButton("Save PDF file");
-		panel_PDF_Component.add(btnSavePDF);
+		JButton btnConvertToPdf = new JButton("Convert PDF");
 		btnConvertToPdf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				openPdf();
+				//create a local version of the pdf file.
+				try {
+					output = new drawOutput(src, localDest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
+					output.createPdf();
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (DocumentException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 
 		});
+		panel_PDF_Component.add(btnConvertToPdf);
+		
+		JButton btnDisplayPdf = new JButton("Display PDF");
+		btnDisplayPdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openPdf();
+			}
+		});
+		panel_PDF_Component.add(btnDisplayPdf);
+
+		JButton btnSavePDF = new JButton("Save PDF");
+		btnSavePDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dest=saveFile();
+				try {
+					output = new drawOutput(src, dest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
+					output.createPdf();
+
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (DocumentException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+				
+		});
+		panel_PDF_Component.add(btnSavePDF);
+		
 
 		JPanel panel_Text_Component = createTextPanel();
 
@@ -292,19 +331,6 @@ public class GUI_Main {
 	// the below methods should be private but are made public for testing
 	// purposes.
 	public void openPdf() {
-		// check if extension is .pdf
-		dest = saveFile();
-		try {
-			drawOutput output = new drawOutput(src, dest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
-			output.createPdf();
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		// build a component controller
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
@@ -328,7 +354,7 @@ public class GUI_Main {
 		applicationFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		applicationFrame.getContentPane().add(viewerComponentPanel);
 		// Now that the GUI is all in place, we can try opening a PDF
-		controller.openDocument(dest);
+		controller.openDocument(localDest);
 		// show the component
 		applicationFrame.pack();
 		applicationFrame.setVisible(true);
