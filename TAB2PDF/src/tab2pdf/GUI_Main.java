@@ -1,5 +1,6 @@
 package tab2pdf;
 
+import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -14,7 +15,6 @@ import java.util.Hashtable;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,15 +41,16 @@ public class GUI_Main {
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
-	private String localDest="result.pdf";
-	private String userManualDest="User_Manual.pdf";
+	private String localDest = "result.pdf";
+	private String userManualDest = "User_Manual.pdf";
 	private drawOutput output;
-	private float spacing = 25;
-	private boolean useCustomTitle;
-	private boolean useCustomSubtitle;
-	private boolean useCustomSpacing;
-	private String title="";
-	private String subtitle="";
+	private float spacing = 5.0f;
+	private boolean useCustomTitle =false;
+	private boolean useCustomSubtitle=false;
+	private boolean useCustomSpacing=false;
+	private String title = "";
+	private String subtitle = "";
+	private JPanel panel_Text_Component;
 
 	/**
 	 * Launch the application.
@@ -82,209 +83,226 @@ public class GUI_Main {
 		frmTabpdf.setTitle("TAB2PDF");
 		frmTabpdf.getContentPane().setFont(
 				new Font("Times New Roman", Font.PLAIN, 11));
-		frmTabpdf.getContentPane().setLayout(new GridLayout(0, 2, 0, 0));
-
-		JPanel panel_PDF_Component = new JPanel();
-		panel_PDF_Component.setBorder(new TitledBorder(null, "pdf components",
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		frmTabpdf.getContentPane().add(panel_PDF_Component);
-		panel_PDF_Component.setLayout(new GridLayout(3, 1, 1, 1));
-
-		JButton btnConvertToPdf = new JButton("Convert PDF");
-		btnConvertToPdf.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//create a local version of the pdf file.
-				try {
-					output = new drawOutput(src, localDest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
-					output.createPdf();
-
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (DocumentException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-
-		});
-		panel_PDF_Component.add(btnConvertToPdf);
-		
-		JButton btnDisplayPdf = new JButton("Display PDF");
-		btnDisplayPdf.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				openPdf(localDest);
-			}
-		});
-		
-				JButton btnSavePDF = new JButton("Save PDF");
-				btnSavePDF.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						dest=saveFile();
-						try {
-							output = new drawOutput(src, dest,useCustomTitle,useCustomSubtitle,useCustomSpacing,title,subtitle,spacing);
-							output.createPdf();
-
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						} catch (DocumentException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-					}
-						
-				});
-				panel_PDF_Component.add(btnSavePDF);
-		panel_PDF_Component.add(btnDisplayPdf);
-		
+		frmTabpdf.getContentPane().setLayout(new GridLayout(1, 2, 0, 0));
 
 		JPanel panel_Text_Component = createTextPanel();
 
-		JLabel lblCurrentTitle = new JLabel("Current Title: ");
-		GridBagConstraints gbc_lblCurrentTitle = new GridBagConstraints();
-		gbc_lblCurrentTitle.insets = new Insets(5, 0, 5, 0);
-		gbc_lblCurrentTitle.gridx = 0;
-		gbc_lblCurrentTitle.gridy = 1;
-		panel_Text_Component.add(lblCurrentTitle, gbc_lblCurrentTitle);
+		JPanel panel_LoadText = new JPanel();
+		GridBagConstraints gbc_panel_LoadText = new GridBagConstraints();
+		gbc_panel_LoadText.gridx = 0;
+		gbc_panel_LoadText.gridy = 0;
+		panel_Text_Component.add(panel_LoadText, gbc_panel_LoadText);
+		GridBagLayout gbl_panel_LoadText = new GridBagLayout();
+		gbl_panel_LoadText.columnWidths = new int[] { 0 };
+		gbl_panel_LoadText.rowHeights = new int[] { 0 };
+		gbl_panel_LoadText.columnWeights = new double[] { 1.0 };
+		gbl_panel_LoadText.rowWeights = new double[] { 1.0 };
+		panel_LoadText.setLayout(gbl_panel_LoadText);
+		JButton btnLoadTextFile = new JButton("Load text file");
+		GridBagConstraints gbc_btnLoadTextFile = new GridBagConstraints();
+		gbc_btnLoadTextFile.fill = GridBagConstraints.BOTH;
+		gbc_btnLoadTextFile.gridx = 0;
+		gbc_btnLoadTextFile.gridy = 0;
+		panel_LoadText.add(btnLoadTextFile, gbc_btnLoadTextFile);
+		btnLoadTextFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				src = openFile();
+			}
+		});
 
 		JPanel panel_title = new JPanel();
 		GridBagConstraints gbc_panel_title = new GridBagConstraints();
-		gbc_panel_title.insets = new Insets(0, 0, 5, 0);
-		gbc_panel_title.fill = GridBagConstraints.BOTH;
+		gbc_panel_title.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_title.gridx = 0;
-		gbc_panel_title.gridy = 2;
+		gbc_panel_title.gridy = 1;
 		panel_Text_Component.add(panel_title, gbc_panel_title);
-		panel_title.setLayout(new GridLayout(0, 2, 0, 0));
-
-		JLabel lblTitle = new JLabel("Title:");
-		lblTitle.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel_title.add(lblTitle);
-
-		JTextField txtTitle = new JTextField();
+		
+		final JLabel lblCurrentTitle = new JLabel("Title: ");
+		final JTextField txtTitle = new JTextField();
+		
 		txtTitle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				title = txtTitle.getText();
-				lblCurrentTitle.setText("Title: " + title);
+				lblCurrentTitle.setText("Current Title: " + title);
+				if(useCustomTitle==false)
+				{
+					useCustomTitle=true;
+				}
+				
 			}
 		});
+		panel_title.setLayout(new BorderLayout(0, 0));
+
+		lblCurrentTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_title.add(lblCurrentTitle, BorderLayout.NORTH);
 		txtTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		txtTitle.setText("<insert title here>");
 		panel_title.add(txtTitle);
 		txtTitle.setColumns(10);
 
-		JLabel lblCurrentSubtitle = new JLabel("Current Subtitle:");
-		GridBagConstraints gbc_lblCurrentSubtitle = new GridBagConstraints();
-		gbc_lblCurrentSubtitle.insets = new Insets(0, 0, 5, 0);
-		gbc_lblCurrentSubtitle.gridx = 0;
-		gbc_lblCurrentSubtitle.gridy = 3;
-		panel_Text_Component.add(lblCurrentSubtitle, gbc_lblCurrentSubtitle);
-
 		JPanel panel_subtitle = new JPanel();
 		GridBagConstraints gbc_panel_subtitle = new GridBagConstraints();
-		gbc_panel_subtitle.insets = new Insets(0, 0, 5, 0);
-		gbc_panel_subtitle.fill = GridBagConstraints.BOTH;
+		gbc_panel_subtitle.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panel_subtitle.gridx = 0;
-		gbc_panel_subtitle.gridy = 4;
+		gbc_panel_subtitle.gridy = 2;
 		panel_Text_Component.add(panel_subtitle, gbc_panel_subtitle);
-		panel_subtitle.setLayout(new GridLayout(0, 2, 0, 0));
 
-		JLabel lblSubtitle = new JLabel("Subtitle:");
-		lblSubtitle.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel_subtitle.add(lblSubtitle);
-
-		JTextField txtSubtitle = new JTextField();
+		final JLabel lblCurrentSubtitle = new JLabel("Subtitle:");
+		final JTextField txtSubtitle = new JTextField();
+		txtSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
 		txtSubtitle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				subtitle = txtSubtitle.getText();
-				lblCurrentSubtitle.setText("Subtitle: " + subtitle);
+				lblCurrentSubtitle.setText("Current Subtitle: " + subtitle);
+				if(useCustomSubtitle==false)
+				{
+					useCustomSubtitle=true;
+				}
+
 			}
 		});
-		txtSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_subtitle.setLayout(new BorderLayout(0, 0));
 		txtSubtitle.setText("<insert subtitle here>");
-		panel_subtitle.add(txtSubtitle);
+		panel_subtitle.add(txtSubtitle, BorderLayout.CENTER);
 		txtSubtitle.setColumns(10);
 
-		JCheckBox bxCustomTitle = new JCheckBox("Use custom title");
-		bxCustomTitle.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (bxCustomTitle.isSelected() == true) {
-					useCustomTitle = true;
-				} else {
-					useCustomTitle = false;
-				}
-			}
-		});
-		GridBagConstraints gbc_bxCustomTitle = new GridBagConstraints();
-		gbc_bxCustomTitle.insets = new Insets(0, 0, 5, 0);
-		gbc_bxCustomTitle.gridx = 0;
-		gbc_bxCustomTitle.gridy = 7;
-		panel_Text_Component.add(bxCustomTitle, gbc_bxCustomTitle);
+		lblCurrentSubtitle.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_subtitle.add(lblCurrentSubtitle, BorderLayout.NORTH);
 
-		JCheckBox bxCustomSubtitle = new JCheckBox("Use custom subtitle");
-		bxCustomSubtitle.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (bxCustomSubtitle.isSelected() == true) {
-					useCustomSubtitle = true;
-				} else {
-					useCustomSubtitle = false;
-				}
-			}
-		});
-		GridBagConstraints gbc_bxCustomSubtitle = new GridBagConstraints();
-		gbc_bxCustomSubtitle.insets = new Insets(0, 0, 5, 0);
-		gbc_bxCustomSubtitle.gridx = 0;
-		gbc_bxCustomSubtitle.gridy = 8;
-		panel_Text_Component.add(bxCustomSubtitle, gbc_bxCustomSubtitle);
+		JPanel panel_SliderSpacing = new JPanel();
+		GridBagConstraints gbc_panel_SliderSpacing = new GridBagConstraints();
+		gbc_panel_SliderSpacing.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panel_SliderSpacing.gridx = 0;
+		gbc_panel_SliderSpacing.gridy = 3;
+		panel_Text_Component
+				.add(panel_SliderSpacing, gbc_panel_SliderSpacing);
+		panel_SliderSpacing.setLayout(new BorderLayout(0, 0));
 
-		JCheckBox bxCustomSpacing = new JCheckBox("Use custom spacing");
-		bxCustomSpacing.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (bxCustomSpacing.isSelected() == true) {
-					useCustomSpacing = true;
-				} else {
-					useCustomSpacing = false;
-				}
-			}
-		});
-		GridBagConstraints gbc_bxCustomSpacing = new GridBagConstraints();
-		gbc_bxCustomSpacing.insets = new Insets(0, 0, 5, 0);
-		gbc_bxCustomSpacing.gridx = 0;
-		gbc_bxCustomSpacing.gridy = 9;
-		panel_Text_Component.add(bxCustomSpacing, gbc_bxCustomSpacing);
-
-		JLabel lblSpacing = new JLabel("Spacing=25.0");
-		GridBagConstraints gbc_lblSpacing = new GridBagConstraints();
-		gbc_lblSpacing.insets = new Insets(0, 0, 5, 0);
-		gbc_lblSpacing.gridx = 0;
-		gbc_lblSpacing.gridy = 5;
-		panel_Text_Component.add(lblSpacing, gbc_lblSpacing);
-
-		JSlider sldrSpacing = new JSlider();
+		final JLabel lblSpacing = new JLabel("Spacing=5.0");
+		
+		final JSlider sldrSpacing = new JSlider();
+		panel_SliderSpacing.add(sldrSpacing);
 		sldrSpacing.setMaximum(100);
-		Hashtable labelTable = new Hashtable();
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
 		labelTable.put(new Integer(0), new JLabel("0.0"));
 		labelTable.put(new Integer(100), new JLabel("10.0"));
 		sldrSpacing.setLabelTable(labelTable);
 		sldrSpacing.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				spacing = (float)(sldrSpacing.getValue()/10.0f);
+				spacing = (float) (sldrSpacing.getValue() / 10.0f);
 				lblSpacing.setText("Spacing=" + spacing);
+				if(useCustomSpacing==false)
+				{
+					useCustomSpacing=true;
+				}
 
 			}
 		});
-
-		GridBagConstraints gbc_sldrSpacing = new GridBagConstraints();
-		gbc_sldrSpacing.weightx = 2.0;
-		gbc_sldrSpacing.weighty = 2.0;
-		gbc_sldrSpacing.fill = GridBagConstraints.BOTH;
-		gbc_sldrSpacing.gridx = 0;
-		gbc_sldrSpacing.gridy = 6;
-		panel_Text_Component.add(sldrSpacing, gbc_sldrSpacing);
 		sldrSpacing.setMinorTickSpacing(1);
 		sldrSpacing.setMajorTickSpacing(5);
 		sldrSpacing.setPaintLabels(true);
 		sldrSpacing.setPaintTicks(true);
+		lblSpacing.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_SliderSpacing.add(lblSpacing, BorderLayout.NORTH);
+
+		JPanel panel_PDF_Component = new JPanel();
+		panel_PDF_Component.setBorder(new TitledBorder(null, "PDF COMPONENTS",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		frmTabpdf.getContentPane().add(panel_PDF_Component);
+		panel_PDF_Component.setLayout(new GridLayout(3, 1, 0, 0));
+
+		JPanel panel_ConvertPDF = new JPanel();
+		panel_PDF_Component.add(panel_ConvertPDF);
+		GridBagLayout gbl_panel_ConvertPDF = new GridBagLayout();
+		gbl_panel_ConvertPDF.columnWidths = new int[] { 0 };
+		gbl_panel_ConvertPDF.rowHeights = new int[] { 0 };
+		gbl_panel_ConvertPDF.columnWeights = new double[] { 0.0 };
+		gbl_panel_ConvertPDF.rowWeights = new double[] { 0.0 };
+		panel_ConvertPDF.setLayout(gbl_panel_ConvertPDF);
+
+		JButton btnConvertToPdf = new JButton("Convert PDF");
+		GridBagConstraints gbc_btnConvertToPdf = new GridBagConstraints();
+		gbc_btnConvertToPdf.ipady = 10;
+		gbc_btnConvertToPdf.ipadx = 10;
+		gbc_btnConvertToPdf.fill = GridBagConstraints.BOTH;
+		gbc_btnConvertToPdf.gridx = 0;
+		gbc_btnConvertToPdf.gridy = 0;
+		panel_ConvertPDF.add(btnConvertToPdf, gbc_btnConvertToPdf);
+		btnConvertToPdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// create a local version of the pdf file.
+				try {
+					output = new drawOutput(src, localDest, useCustomTitle,
+							useCustomSubtitle, useCustomSpacing, title,
+							subtitle, spacing);
+					output.createPdf();
+
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (DocumentException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+
+		JPanel panel_SavePDF = new JPanel();
+		panel_PDF_Component.add(panel_SavePDF);
+		GridBagLayout gbl_panel_SavePDF = new GridBagLayout();
+		gbl_panel_SavePDF.columnWidths = new int[] { 0 };
+		gbl_panel_SavePDF.rowHeights = new int[] { 0 };
+		gbl_panel_SavePDF.columnWeights = new double[] { 0.0 };
+		gbl_panel_SavePDF.rowWeights = new double[] { 0.0 };
+		panel_SavePDF.setLayout(gbl_panel_SavePDF);
+
+		JButton btnSavePDF = new JButton("Save PDF");
+		GridBagConstraints gbc_btnSavePDF = new GridBagConstraints();
+		gbc_btnSavePDF.ipady = 10;
+		gbc_btnSavePDF.ipadx = 10;
+		gbc_btnSavePDF.fill = GridBagConstraints.BOTH;
+		gbc_btnSavePDF.gridx = 0;
+		gbc_btnSavePDF.gridy = 0;
+		panel_SavePDF.add(btnSavePDF, gbc_btnSavePDF);
+		btnSavePDF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dest = saveFile();
+				try {
+					output = new drawOutput(src, dest, useCustomTitle,
+							useCustomSubtitle, useCustomSpacing, title,
+							subtitle, spacing);
+					output.createPdf();
+
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (DocumentException e1) {
+					e1.printStackTrace();
+				}
+			}
+
+		});
+
+		JPanel panel_DisplayPDF = new JPanel();
+		panel_PDF_Component.add(panel_DisplayPDF);
+		GridBagLayout gbl_panel_DisplayPDF = new GridBagLayout();
+		gbl_panel_DisplayPDF.columnWidths = new int[] { 0 };
+		gbl_panel_DisplayPDF.rowHeights = new int[] { 0 };
+		gbl_panel_DisplayPDF.columnWeights = new double[] { 0.0 };
+		gbl_panel_DisplayPDF.rowWeights = new double[] { 0.0 };
+		panel_DisplayPDF.setLayout(gbl_panel_DisplayPDF);
+
+		JButton btnDisplayPdf = new JButton("Display PDF");
+		GridBagConstraints gbc_btnDisplayPdf = new GridBagConstraints();
+		gbc_btnDisplayPdf.ipady = 10;
+		gbc_btnDisplayPdf.ipadx = 10;
+		gbc_btnDisplayPdf.fill = GridBagConstraints.BOTH;
+		gbc_btnDisplayPdf.gridx = 0;
+		gbc_btnDisplayPdf.gridy = 0;
+		panel_DisplayPDF.add(btnDisplayPdf, gbc_btnDisplayPdf);
+		btnDisplayPdf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openPdf(localDest);
+			}
+		});
 
 		frmTabpdf.setBounds(100, 100, 450, 300);
 		frmTabpdf.setSize(800, 600);
@@ -297,6 +315,11 @@ public class GUI_Main {
 		menuBar.add(mnHelp);
 
 		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				openPdf("font_types.pdf");
+			}
+		});
 		mnHelp.add(mntmAbout);
 
 		JMenuItem mntmUserManual = new JMenuItem("User Manual");
@@ -309,33 +332,18 @@ public class GUI_Main {
 	}
 
 	private JPanel createTextPanel() {
-		JPanel panel_Text_Component = new JPanel();
+		panel_Text_Component = new JPanel();
 		panel_Text_Component.setBorder(new TitledBorder(null,
-				"text components", TitledBorder.LEADING, TitledBorder.TOP,
+				"TEXT COMPONENTS", TitledBorder.LEADING, TitledBorder.TOP,
 				null, null));
 		frmTabpdf.getContentPane().add(panel_Text_Component);
 		GridBagLayout gbl_panel_Text_Component = new GridBagLayout();
-		gbl_panel_Text_Component.columnWidths = new int[] { 380 };
-		gbl_panel_Text_Component.rowHeights = new int[] { 123, 0, 0, 0, 0, 0,
-				0, 30, 30, 0 };
-		gbl_panel_Text_Component.columnWeights = new double[] { 0.0 };
-		gbl_panel_Text_Component.rowWeights = new double[] { 0.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+		gbl_panel_Text_Component.columnWidths = new int[] {364};
+		gbl_panel_Text_Component.rowHeights = new int[] {126, 63, 63, 126};
+		gbl_panel_Text_Component.columnWeights = new double[] { 1.0 };
+		gbl_panel_Text_Component.rowWeights = new double[] { 1.0, 1.0, 1.0,
+				1.0 };
 		panel_Text_Component.setLayout(gbl_panel_Text_Component);
-		JButton btnLoadTextFile = new JButton("Load text file");
-		GridBagConstraints gbc_btnLoadTextFile = new GridBagConstraints();
-		gbc_btnLoadTextFile.insets = new Insets(0, 0, 5, 0);
-		gbc_btnLoadTextFile.weighty = 2.0;
-		gbc_btnLoadTextFile.weightx = 2.0;
-		gbc_btnLoadTextFile.fill = GridBagConstraints.BOTH;
-		gbc_btnLoadTextFile.gridx = 0;
-		gbc_btnLoadTextFile.gridy = 0;
-		panel_Text_Component.add(btnLoadTextFile, gbc_btnLoadTextFile);
-		btnLoadTextFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				src = openFile();
-			}
-		});
 		return panel_Text_Component;
 	}
 
@@ -351,7 +359,7 @@ public class GUI_Main {
 				ResourceBundle
 						.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
 
-		properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.75");
+		properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.00");
 
 		SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
 

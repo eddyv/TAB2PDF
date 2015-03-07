@@ -300,7 +300,7 @@ public class drawOutput
 							System.out.println("diamond number" + diamondNumber);
 							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 
 									(l + 1f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
-							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);
+							Symbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);
 						}
 						else
 						{
@@ -337,7 +337,7 @@ public class drawOutput
 				}
 				else if (tempString.charAt(l) == 'h' || tempString.charAt(l) == 'p')
 				{
-					drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
+					Symbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
 					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
 							(l + 0.5f)	* a.spacing, currY + (j - 1.25f) * SEGY + 0.5f * a. spacing, 5);

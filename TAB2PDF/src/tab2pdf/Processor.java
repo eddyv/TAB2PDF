@@ -106,6 +106,6 @@ public class Processor
 	
 	public ArrayList<Segment> getInput()
 	{
-		return this.inputSegments;
+		return Processor.inputSegments;
 	}
 }

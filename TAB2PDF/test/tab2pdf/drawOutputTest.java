@@ -223,7 +223,7 @@ public class drawOutputTest {
 				ex = d.BEGINX + p.input.get(i).get(0).length() * p.spacing;
 				// update y to move to next line
 				ey += d.LINEY * 2;
-				if (ey > d.NEW_PAGE_THRESHOLD) { // need update y for new page
+				if (ey > drawOutput.NEW_PAGE_THRESHOLD) { // need update y for new page
 					ey = d.LINEY;
 				}
 			}
