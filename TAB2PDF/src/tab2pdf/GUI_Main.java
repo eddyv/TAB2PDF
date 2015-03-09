@@ -532,8 +532,6 @@ public class GUI_Main {
 		useCustomTitle = false;
 		useCustomSubtitle = false;
 		useCustomSpacing = false;
-		title = "";
-		subtitle = "";
 		spacing = (float) (sliderSpacing.getValue() / 10.0f);
 		sliderSpacing.setValue(50);// default value;
 		lblSpacing.setText("Spacing= " + spacing);
