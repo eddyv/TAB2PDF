@@ -28,8 +28,9 @@ public class Parser {
 		input = new ArrayList<Segment>();
 		vLinesInput = new ArrayList<Segment>();
 		fileIn(filePath);
-		Processor processor = new Processor(input);
+		Processor processor = new Processor(input, title, subtitle, spacing);
 		input = processor.getInput();
+		spacing = processor.getSpacing();
 	}
 
 	public void fileIn(String filePath) throws IOException {

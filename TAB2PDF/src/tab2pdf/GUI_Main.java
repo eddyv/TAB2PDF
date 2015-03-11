@@ -43,7 +43,7 @@ public class GUI_Main {
 	private String dest;
 	private final String localDest = "result.pdf";
 	private final String userManualDest = "User_Manual.pdf";
-	private drawOutput output;
+	private DrawOutput output;
 	private float spacing = 5.0f;
 	private boolean useCustomTitle = false;
 	private boolean useCustomSubtitle = false;
@@ -193,7 +193,7 @@ public class GUI_Main {
 			public void actionPerformed(ActionEvent e) {
 				// create a local version of the pdf file.
 				try {
-					output = new drawOutput(src, localDest, useCustomTitle,
+					output = new DrawOutput(src, localDest, useCustomTitle,
 							useCustomSubtitle, useCustomSpacing, title,
 							subtitle, spacing);
 					output.createPdf();
@@ -212,7 +212,7 @@ public class GUI_Main {
 			public void actionPerformed(ActionEvent e) {
 				dest = saveFile();
 				try {
-					output = new drawOutput(src, dest, useCustomTitle,
+					output = new DrawOutput(src, dest, useCustomTitle,
 							useCustomSubtitle, useCustomSpacing, title,
 							subtitle, spacing);
 					output.createPdf();

@@ -22,7 +22,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class drawOutput
+public class DrawOutput
 {
 	/**
 	 * Attributes
@@ -45,7 +45,7 @@ public class drawOutput
 	 * Constructors 
 	 */
 	/* create new drawOutput object using path string of the txt file */
-	public drawOutput(String src, String dest, boolean customTitle, boolean customSubtitle, boolean customSpacing, String title, String subtitle, float spacing) throws IOException
+	public DrawOutput(String src, String dest, boolean customTitle, boolean customSubtitle, boolean customSpacing, String title, String subtitle, float spacing) throws IOException
 	{
 		Parser p = new Parser(src);
 		this.dest = dest;
@@ -65,19 +65,19 @@ public class drawOutput
 	}
 	
 	/* create new drawOutput object using Parser */
-	public drawOutput(Parser p, String dest){
+	public DrawOutput(Parser p, String dest){
 		this.setParser(p);	
 		this.dest=dest;
 	}
 	
 	/* create an empty drawOutput object without parser */
-	public drawOutput(String dest){
+	public DrawOutput(String dest){
 		this.setParser(null);
 		this.dest = dest;
 	}
 	
 	/* create new drawOutput object using path string of the txt file, does not use any custom features*/
-	public drawOutput(String src, String dest) throws IOException{
+	public DrawOutput(String src, String dest) throws IOException{
 		Parser p = new Parser(src);
 		this.dest=dest;
 		this.setParser(p);
@@ -292,12 +292,10 @@ public class drawOutput
 					{
 						String tempNumber = tempString.substring(startIndex.get(numberIndex), endIndex.get(numberIndex));
 						int difference = endIndex.get(numberIndex) - startIndex.get(numberIndex);
-						System.out.println("number" + tempNumber);
 						
 						if (tempNumber.matches("<\\d+>"))	// is a diamond and not a regular number
 						{
 							String diamondNumber = tempNumber.substring(1, tempNumber.length() - 1);
-							System.out.println("diamond number" + diamondNumber);
 							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 
 									(l + 1f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
 							Symbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);

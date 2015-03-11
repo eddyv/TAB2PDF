@@ -13,12 +13,19 @@ import java.util.ArrayList;
 public class Processor
 {
 	private static ArrayList<Segment> inputSegments;
+	private static String title;
+	private static String subtitle;
+	private static float spacing;
 	
-	public Processor(ArrayList<Segment> input)
+	public Processor(ArrayList<Segment> input, String p_title, String p_subtitle, float p_spacing)
 	{
 		inputSegments = input;
+		title = p_title;
+		subtitle = p_subtitle;
+		spacing = p_spacing;
 		checkRepeatNumber();
 		checkRepeatSpacing();
+		checkParseInfo();
 		displayInfo();
 	
 	}
@@ -89,11 +96,11 @@ public class Processor
 	public void displayInfo()
 	{
 		int i = 0;
-		System.out.println(inputSegments.size());
+		System.out.println("# of segments " + inputSegments.size());
 		while (i < inputSegments.size())
 		{
 			int j = 0;
-			System.out.println(inputSegments.get(i).size());
+			System.out.println("Size of segment " + inputSegments.get(i).size());
 			while (j < inputSegments.get(i).size())
 			{
 				System.out.printf("%d %s\n", i, inputSegments.get(i).get(j));
@@ -103,9 +110,28 @@ public class Processor
 			i++;
 		}
 	}
-	
-	public ArrayList<Segment> getInput()
+
+	public void checkParseInfo()
 	{
-		return Processor.inputSegments;
+		System.out.println("Title " + title);
+		System.out.println("Subtitle " + subtitle);
+		System.out.println("Spacing " + spacing);
+		
+		if (spacing == 0)
+		{
+			spacing = 5;
+		}
 	}
+		
+		public ArrayList<Segment> getInput()
+		{
+			return Processor.inputSegments;
+		}
+		
+		public float getSpacing()
+		{
+			return Processor.spacing;
+		}
+		
 }
+	

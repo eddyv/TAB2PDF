@@ -40,7 +40,7 @@ public class ParserTest
 		// test space
 		assertEquals(4.4, p.spacing, 0.0001);
 		// test segments
-		assertEquals("------------------------------<12>----------", p.input.get(0).get(0));	// input 
+		assertEquals("-------------------------------<12>-----------", p.input.get(0).get(0));	// input 				  
 		assertEquals("*||", p.vLinesInput.get(2).get(7));	// vertical input
 	}
 	
