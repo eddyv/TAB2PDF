@@ -98,6 +98,24 @@ public class DrawOutput
 		return this.currY;
 	}
 	
+	public String getTitle()
+	{
+		Parser a = this.getParser();
+		return a.title;
+	}
+	
+	public String getSubtitle()
+	{
+		Parser a = this.getParser();
+		return a.subtitle;
+	}
+	
+	public float getSpacing()
+	{
+		Parser a = this.getParser();
+		return a.spacing;
+	}
+	
 	/**
 	 * Setters
 	 */
@@ -113,6 +131,23 @@ public class DrawOutput
 		this.currY = y;
 	}
 
+	public void setTitle(String title)
+	{
+		Parser a = this.getParser();
+		a.title = title;
+	}
+	
+	public void setSubtitle(String subtitle)
+	{
+		Parser a = this.getParser();
+		a.subtitle = subtitle;
+	}
+	
+	public void setSpacing(float spacing)
+	{
+		Parser a = this.getParser();
+		a.spacing = spacing;
+	}
 	/**
 	 * Methods
 	 */
@@ -232,7 +267,7 @@ public class DrawOutput
 		}
 		else if (vLines.matches("\\|\\d") && vCounter % 2 == 1)
 		{
-			drawSymbol.createTextCenteredAtPosition(canvas, "Repeat " + vLines.charAt(1) + " times", currX - 5 * a.spacing, currY - 1.5f * a. spacing, 8);
+			drawSymbol.createTextCenteredAtPosition(canvas, "Repeat " + vLines.charAt(1) + " times", currX - 5 * a.spacing, currY - 1.5f * 5, 8);
 		}
 		else if (vLines.equals("|"))
 		{
@@ -296,15 +331,15 @@ public class DrawOutput
 						if (tempNumber.matches("<\\d+>"))	// is a diamond and not a regular number
 						{
 							String diamondNumber = tempNumber.substring(1, tempNumber.length() - 1);
-							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 
-									(l + 1f)	* a.spacing, currY + j * SEGY + 0.5f * a. spacing, 8);
-							Symbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * a. spacing, 2);
+							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 	(l + 1f)* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
+							drawSymbol.createHLineAtPosition(canvas, currX + (l + difference - 2) * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createHLineAtPosition(canvas, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * 4f, 2);
 						}
 						else
 						{
 							drawSymbol.createTextCenteredAtPosition(canvas, tempNumber, currX + 
-									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f
-									* a. spacing, 8);
+									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
 						}
 						l = l + difference;	// advances character counter past the symbol
 						numberIndex++;
@@ -335,7 +370,7 @@ public class DrawOutput
 				}
 				else if (tempString.charAt(l) == 'h' || tempString.charAt(l) == 'p')
 				{
-					Symbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
+					drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
 					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
 							(l + 0.5f)	* a.spacing, currY + (j - 1.25f) * SEGY + 0.5f * a. spacing, 5);

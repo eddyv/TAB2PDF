@@ -2,6 +2,7 @@ package tab2pdf;
 
 import java.io.IOException;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.BaseFont;
@@ -47,6 +48,7 @@ public class Symbol {
     		canvas.circle(x + (length/2), SIZEY - y, 1.25f);
     		canvas.fillStroke();
     		createHLineAtPosition(canvas, x, y, length);
+    		
     }
     
     public void createRDoubleBar(PdfContentByte canvas, float x, float y, float length){
@@ -111,19 +113,27 @@ public class Symbol {
 		canvas.fillStroke();
 	}
 	
-	public static void createDiamond(PdfContentByte canvas, float x, float y, float size)
+	public void createDiamond(PdfContentByte canvas, float x, float y, float size)
 	{
 		canvas.setLineWidth(0.5f);
-		canvas.moveTo(x, SIZEY - y);
-		canvas.lineTo(x - size, SIZEY - y - size);
-		canvas.lineTo(x, SIZEY - y - (size * 2));
+		//canvas.moveTo(x, SIZEY - y);
+		canvas.moveTo(x - size, SIZEY - y - size);
+		canvas.lineTo(x, SIZEY - y);
 		canvas.lineTo(x + size, SIZEY - y - size);
-		canvas.lineTo(x - 0.35f, SIZEY - y + 0.35f);
-		//canvas.setColorFill(new BaseColor(255, 255, 255));
-		canvas.stroke();
+		canvas.lineTo(x, SIZEY - y - (size * 2));
+		canvas.lineTo(x - size, SIZEY - y - size);
+		//canvas.lineTo(x - size, SIZEY - y - size);
+		//canvas.lineTo(x, SIZEY - y - (size * 2));
+		//canvas.lineTo(x + size, SIZEY - y - size);
+		//canvas.lineTo(x, SIZEY - y);
+		
+		canvas.setColorFill(new BaseColor(255, 255, 255));
+		canvas.fillStroke();
+		canvas.setColorFill(new BaseColor(0, 0, 0));
+		//canvas.stroke();
 	}
 	
-	public static void createArc(PdfContentByte canvas, float bottom, float top, float leftend, float rightend, float size)
+	public void createArc(PdfContentByte canvas, float bottom, float top, float leftend, float rightend, float size)
 	{
 		canvas.arc(leftend - size, SIZEY - bottom, leftend + size, SIZEY - top, 0, 180);
 	}
