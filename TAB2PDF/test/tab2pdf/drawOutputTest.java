@@ -58,7 +58,7 @@ public class drawOutputTest {
 
 		// Init new pdf file
 		DrawOutput d = new DrawOutput(p1,outURL);
-		PdfContentByte canvas = d.initPDF();
+		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitle(canvas);
 		canvas.getPdfDocument().close();
@@ -82,7 +82,7 @@ public class drawOutputTest {
 	public void testCheckNewLine() throws FileNotFoundException,
 			DocumentException {
 		DrawOutput d = new DrawOutput(p1,outURL);
-		PdfContentByte canvas = d.initPDF();
+		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 
 		// test on new line is required
@@ -103,7 +103,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.checkNewPage() */
 	public void testCheckNewPage() throws DocumentException, IOException {
 		DrawOutput d = new DrawOutput(p1,outURL);
-		PdfContentByte canvas = d.initPDF();
+		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 
 		// test on new page is required
@@ -135,7 +135,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.DrawTitle() */
 	public void testDrawTitle() throws DocumentException, IOException {
 		DrawOutput d = new DrawOutput(p1,outURL);
-		PdfContentByte canvas = d.initPDF();
+		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitle(canvas);
 		canvas.getPdfDocument().close();
@@ -161,7 +161,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.DrawVerticalBar() */
 	public void testDrawVerticalBar() throws DocumentException, IOException { // t3.txt
 		DrawOutput d = new DrawOutput(p3,outURL);
-		PdfContentByte canvas = d.initPDF();
+		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitle(canvas);
 
@@ -187,7 +187,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.DrawSegment() */
 	public void testDrawSegment() throws DocumentException, IOException {
 		DrawOutput d = new DrawOutput(p3,outURL);
-		PdfContentByte canvas = d.initPDF();
+		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitle(canvas);
 
@@ -211,7 +211,7 @@ public class drawOutputTest {
 	public void testCreatePdf() throws DocumentException, IOException {
 		Parser p = p3;
 		DrawOutput d = new DrawOutput(p,outURL);
-		d.createPdf();
+		d.createPdf(true);
 
 		// Get expect value of x and y
 		float ex = d.BEGINX, ey = d.LINEY * 3f;
