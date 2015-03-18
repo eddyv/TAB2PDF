@@ -24,6 +24,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class DrawOutput
 {
+	
 	/**
 	 * Attributes
 	 */
@@ -40,6 +41,7 @@ public class DrawOutput
 	private float currX;	// value of current X coordinate on the pdf document
 	private float currY;	// value of current Y coordinate on the pdf document
 	private String dest;
+	private String localDest = "result.pdf"; //if dest isn't provided we should use the local one!
 	
 	/**
 	 * Constructors 
@@ -115,6 +117,14 @@ public class DrawOutput
 		Parser a = this.getParser();
 		return a.spacing;
 	}
+	public String getDest()
+	{
+		return this.dest;
+	}
+	public String getLocalDest()
+	{
+		return this.localDest;
+	}
 	
 	/**
 	 * Setters
@@ -154,11 +164,19 @@ public class DrawOutput
 	/*
 	 * Initialize a pdf file
 	 */
-	public PdfContentByte initPDF() throws FileNotFoundException, DocumentException
+	public PdfContentByte initPDF(boolean useLocalDest) throws FileNotFoundException, DocumentException
 	{
 		Rectangle pageSize = new Rectangle(SIZEX, SIZEY);
 		Document document = new Document(pageSize);
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
+		PdfWriter writer;
+		if(useLocalDest == false)
+		{
+			writer = PdfWriter.getInstance(document, new FileOutputStream(dest));
+		}
+		else
+		{
+			writer = PdfWriter.getInstance(document, new FileOutputStream(localDest));
+		}
 		document.open();
 		PdfContentByte canvas = writer.getDirectContent();
 		
@@ -393,12 +411,12 @@ public class DrawOutput
 	/*
 	 * Create a pdf file and save is to dest
 	 */
-	public void createPdf() throws DocumentException, IOException
+	public void createPdf(boolean useLocalDest) throws DocumentException, IOException
 	{
 		Parser a = this.getParser();
 		
 		// Setup document
-		PdfContentByte canvas = this.initPDF();
+		PdfContentByte canvas = this.initPDF(useLocalDest);
 
 		// reset the position of X and Y coordinate
 		this.resetXY();
