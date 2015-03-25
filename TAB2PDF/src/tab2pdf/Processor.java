@@ -13,20 +13,23 @@ import java.util.ArrayList;
 public class Processor
 {
 	private static ArrayList<Segment> inputSegments;
+	private static ArrayList<Segment> vLinesSegments;
 	private static String title;
 	private static String subtitle;
 	private static float spacing;
 	
-	public Processor(ArrayList<Segment> input, String p_title, String p_subtitle, float p_spacing)
+	public Processor(ArrayList<Segment> input, ArrayList<Segment> vLinesInput, String p_title, String p_subtitle, float p_spacing)
 	{
 		inputSegments = input;
+		vLinesSegments = vLinesInput;
 		title = p_title;
 		subtitle = p_subtitle;
 		spacing = p_spacing;
 		checkRepeatNumber();
 		checkRepeatSpacing();
 		checkParseInfo();
-		displayInfo();
+		//displayInfo();
+		//displayVerticalBars();
 	
 	}
 	
@@ -111,6 +114,19 @@ public class Processor
 		}
 	}
 
+	public void displayVerticalBars()
+	{	
+		System.out.println(vLinesSegments.size());
+		for (int i = 0; i < vLinesSegments.size(); i++)
+		{
+			System.out.println(vLinesSegments.get(i).size());
+			for (int j = 0; j < vLinesSegments.get(i).size(); j++)
+			{
+				System.out.println(vLinesSegments.get(i).get(j));
+			}
+		}
+	}
+	
 	public void checkParseInfo()
 	{
 		System.out.println("Title " + title);
@@ -121,6 +137,7 @@ public class Processor
 		{
 			spacing = 5;
 		}
+		System.out.println("Spacing " + spacing);
 	}
 		
 		public ArrayList<Segment> getInput()

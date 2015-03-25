@@ -28,7 +28,7 @@ public class Parser {
 		input = new ArrayList<Segment>();
 		vLinesInput = new ArrayList<Segment>();
 		fileIn(filePath);
-		Processor processor = new Processor(input, title, subtitle, spacing);
+		Processor processor = new Processor(input, vLinesInput, title, subtitle, spacing);
 		input = processor.getInput();
 		spacing = processor.getSpacing();
 	}
@@ -36,72 +36,26 @@ public class Parser {
 	public void fileIn(String filePath) throws IOException {
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(filePath));
-			String line = "";
-
-			// read the first line
-			line = in.readLine();
-
-			// Skip blank lines.
-			while (line != null && line.trim().equals("")) {
-				line = in.readLine();
-				lineNumber++;
-			}
-
-			// if the first readable line is the title then set the title
-			// variable
-			if (line.split("=")[0].equals("TITLE")) {
-				title = line.split("=")[1];
-			}
-			// System.out.println(title);
-
-			// read the second line
-			line = in.readLine();
-
-			// Skip blank lines.
-			while (line != null && line.trim().equals("")) {
-				line = in.readLine();
-				lineNumber++;
-			}
-
-			// if the first readable line is the subtitle then set the subtitle
-			// variable
-			if (line.split("=")[0].equals("SUBTITLE")) {
-				subtitle = line.split("=")[1];
-			}
-			// System.out.println(subtitle);
-
-			// read the third line
-			line = in.readLine();
-
-			// Skip blank lines.
-			while (line != null && line.trim().equals("")) {
-				line = in.readLine();
-				lineNumber++;
-			}
-
-			// if the first readable line is the spacing then set the spacing
-			// variable
-			if (line.split("=")[0].equals("SPACING")) {
-				spacing = new Float(line.split("=")[1]);
-			}
-			// System.out.println(spacing);
-
-			// read the fourth line
-			line = in.readLine();
-
-			// Skip blank lines.
-			while (line != null && line.trim().equals("")) {
-				line = in.readLine();
-				lineNumber++;
-			}
+			String line;
 
 			// accounts for more than 3 segments?
 			String regex = "(\\|+|-|[0-9ebgdashEBGDA])(.+)(\\|*)(.*)(\\|+|-|[0-9ebgdashEBGDA])";
 
-			while (line != null) {
+			for(line = in.readLine(); line != null; line=in.readLine()) {
+				if (line.split("=")[0].equals("TITLE")) {
+					title = line.split("=")[1];
+				}
+				
+				if (line.split("=")[0].equals("SUBTITLE")) {
+					subtitle = line.split("=")[1];
+				}
+				
+				if (line.split("=")[0].equals("SPACING")) {
+					spacing = new Float(line.split("=")[1]);
+				}
+				
 				if (line.matches(regex)) {
-					Pattern ptn = Pattern
-							.compile("(\\|\\|\\|)|(\\|\\d)|(\\*\\|\\|)|(\\|\\|\\*)|(\\|\\|)|(\\|)");
+					Pattern ptn = Pattern.compile("(\\|\\|\\|)|(\\|\\d)|(\\*\\|\\|)|(\\|\\|\\*)|(\\|\\|)|(\\|)");
 					// ("((?<!\\|)\\|(?!\\|))|(\\|\\|\\*)|(\\*\\|\\|)|((?<!\\*)\\|\\|(?!\\*))");
 					Matcher mtr = ptn.matcher(line);
 
@@ -116,8 +70,7 @@ public class Parser {
 
 					// lineAfterSplit is an array of strings that contains the
 					// current line of every segment that is on the same level
-					String lineAfterSplit[] = line
-							.split("((?<!\\|)\\|(?!\\|))|(\\|\\|)");
+					String lineAfterSplit[] = line.split("((?<!\\|)\\|(?!\\|))|(\\|\\|)");
 
 					// if this is the first line of the segment, record it as
 					// the previous line
@@ -133,12 +86,10 @@ public class Parser {
 
 					/** System.out.printf("%s %s \n", prevLine, line); */
 					// if the current line is the same length as the previous
-					// line and has the same amount of segments as the revious
+					// line and has the same amount of segments as the previous
 					// line
-					if (prevLine.length() == line.length()
-							&& prevSegmentAmount == vLines.size()) {
+					if (prevLine.length() == line.length() && prevSegmentAmount == vLines.size()) {
 						addToTempList(vLines, lineAfterSplit, line);
-
 					} else {
 						// this is for the case where there are two 6 line
 						// pieces of different length, one after another,
@@ -147,6 +98,7 @@ public class Parser {
 						// as if does not match regex: add previous (filled in)
 						// segments to main arrayList, instantiate a new
 						// tempList
+						
 						this.addToFullList();
 						this.newTempList();
 						// add segments to new tempList
@@ -162,8 +114,7 @@ public class Parser {
 					// instantiate a new temporary list for the next line
 					this.newTempList();
 				}
-				// read the next line
-				line = in.readLine();
+				lineNumber++;
 			}
 
 			// if there is a leftover segment and it is valid (of length 6), add
@@ -229,10 +180,10 @@ public class Parser {
 			}
 			// add the line (lineAfterSplit[k]) to the segment surrounded by the
 			// vertical bars vLines.get(k - 1) and vLines.get(k)
-			// tempList.get(k - 1).add(vLines.get(k - 1) + lineAfterSplit[k] +
-			// vLines.get(k));
+			// tempList.get(k - 1).add(vLines.get(k - 1) + lineAfterSplit[k] + vLines.get(k));
 			tempList.get(k - 1).add(splitLineArray[k]);
-
+			
+			//add the left and right bars of the segment to the separate ArrayList - vLinesTempList
 			vLinesTempList.get(k - 1).add(verticalLinesArrayList.get(k - 1));
 			vLinesTempList.get(k - 1).add(verticalLinesArrayList.get(k));
 		}

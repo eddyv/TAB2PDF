@@ -259,14 +259,14 @@ public class DrawOutput
 		{
 			if (vCounter % 2 == 0)
 			{
-				if (!a.vLinesInput.get(i).get(4).equals("*||"))
+				if (a.vLinesInput.get(i).get(4).equals("||*"))
 				{
 					drawSymbol.createLDoubleBar(canvas, currX, currY, LINEY);
-				}	
+				}
 			}
 			else
 			{
-				if (!a.vLinesInput.get(i).get(4).equals("||*"))
+				if (a.vLinesInput.get(i).get(4).equals("*||"))
 				{
 					drawSymbol.createRDoubleBar(canvas, currX, currY, LINEY);	
 				}
@@ -276,11 +276,15 @@ public class DrawOutput
 		else if (vLines.equals("*||") && vCounter % 2 == 1)
 		{
 			drawSymbol.createRDoubleBar(canvas, currX, currY, LINEY);
+			drawSymbol.createCircle(canvas, currX - 2*a.spacing, currY + j * SEGY, a.spacing); //
+			drawSymbol.createHLineAtPosition(canvas, currX, currY + j * SEGY, a.spacing);
 			currX += a.input.get(i).get(j).length() * a.spacing;
 		}
 		else if (vLines.equals("||*") && vCounter % 2 == 0)
 		{
 			drawSymbol.createLDoubleBar(canvas, currX, currY, LINEY);
+			drawSymbol.createHLineAtPosition(canvas, currX, currY + j * SEGY, a.spacing);
+			drawSymbol.createCircle(canvas, currX + a.spacing, currY + j * SEGY, a.spacing);
 			currX += a.input.get(i).get(j).length() * a.spacing;
 		}
 		else if (vLines.matches("\\|\\d") && vCounter % 2 == 1)
@@ -369,6 +373,7 @@ public class DrawOutput
 					continue;
 				}
 				
+				/*
 				if (tempString.charAt(l) == '*')
 				{
 					if (l == 0)
@@ -381,7 +386,7 @@ public class DrawOutput
 						drawSymbol.createCircle(canvas, (currX + a.spacing * (l - 1)), currY + j * SEGY, a.spacing);
 						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					}
-				}
+				}*/
 				else if (tempString.charAt(l) == 's')
 				{
 					drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
