@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
@@ -27,6 +29,7 @@ import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -37,15 +40,14 @@ import org.icepdf.ri.common.SwingViewBuilder;
 import org.icepdf.ri.util.PropertiesManager;
 
 import com.itextpdf.text.DocumentException;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class GUI_Main {
 
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
-	private final String userManualDest = "User_Manual.pdf";
+	private final String userManualDest = "manual.pdf";
+	private final String aboutPdf = "font_types.pdf";//temporary location.
 	private DrawOutput output;
 	private float spacing = 5.0f;
 	private boolean useCustomTitle = false;
@@ -86,22 +88,21 @@ public class GUI_Main {
 
 		// the main frame stuff
 		createMainFrame();
+		frmTabpdf.getContentPane().setLayout(new BorderLayout(0, 0));
 
 		// text components
 		JPanel panel_Text_Component = new JPanel();
 		panel_Text_Component.setBorder(new TitledBorder(null, "",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		frmTabpdf.getContentPane().add(panel_Text_Component);
+		frmTabpdf.getContentPane().add(panel_Text_Component, BorderLayout.WEST);
 		GridBagLayout gbl_panel_Text_Component = new GridBagLayout();
-		gbl_panel_Text_Component.columnWeights = new double[] { 0.0 };
-		gbl_panel_Text_Component.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0 };
+		gbl_panel_Text_Component.columnWeights = new double[] { 1.0 };
+		gbl_panel_Text_Component.rowWeights = new double[] { 1.0, 1.0, 1.0, 1.0 };
 		panel_Text_Component.setLayout(gbl_panel_Text_Component);
 
-		JPanel panel_LoadText =  new JPanel();
+		JPanel panel_LoadText = new JPanel();
 		GridBagConstraints gbc_panel_LoadText = new GridBagConstraints();
 		gbc_panel_LoadText.fill = GridBagConstraints.BOTH;
-		gbc_panel_LoadText.weighty = 1.0;
-		gbc_panel_LoadText.weightx = 1.0;
 		gbc_panel_LoadText.gridx = 0;
 		gbc_panel_LoadText.gridy = 0;
 		panel_Text_Component.add(panel_LoadText, gbc_panel_LoadText);
@@ -109,8 +110,6 @@ public class GUI_Main {
 		JPanel panel_title = new JPanel();
 		{
 			GridBagConstraints gbc_panel_title = new GridBagConstraints();
-			gbc_panel_title.weighty = 0.5;
-			gbc_panel_title.weightx = 0.5;
 			gbc_panel_title.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panel_title.gridx = 0;
 			gbc_panel_title.gridy = 1;
@@ -135,8 +134,6 @@ public class GUI_Main {
 		JPanel panel_subtitle = new JPanel();
 		{
 			GridBagConstraints gbc_panel_subtitle = new GridBagConstraints();
-			gbc_panel_subtitle.weighty = 0.5;
-			gbc_panel_subtitle.weightx = 0.5;
 			gbc_panel_subtitle.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panel_subtitle.gridx = 0;
 			gbc_panel_subtitle.gridy = 2;
@@ -159,8 +156,6 @@ public class GUI_Main {
 		JPanel panel_SliderSpacing = new JPanel();
 		{
 			GridBagConstraints gbc_panel_SliderSpacing = new GridBagConstraints();
-			gbc_panel_SliderSpacing.weighty = 1.0;
-			gbc_panel_SliderSpacing.weightx = 1.0;
 			gbc_panel_SliderSpacing.fill = GridBagConstraints.HORIZONTAL;
 			gbc_panel_SliderSpacing.gridx = 0;
 			gbc_panel_SliderSpacing.gridy = 3;
@@ -232,26 +227,26 @@ public class GUI_Main {
 		mnHelp.add(mntmUserManual);
 		JPanel panel_PDF_Preview = new JPanel();
 		panel_PDF_SplitPanel.setRightComponent(panel_PDF_Preview);
-						GridBagLayout gbl_panel_LoadText = new GridBagLayout();
-						gbl_panel_LoadText.columnWidths = new int[] {100, 25, 100};
-						gbl_panel_LoadText.rowHeights = new int[] {60, 30, 60};
-						gbl_panel_LoadText.columnWeights = new double[]{0.0, 0.0};
-						gbl_panel_LoadText.rowWeights = new double[]{0.0, 0.0};
-						panel_LoadText.setLayout(gbl_panel_LoadText);
-								
-										JButton btnLoadTextFile = new JButton("Load file");
-										GridBagConstraints gbc_btnLoadTextFile = new GridBagConstraints();
-										gbc_btnLoadTextFile.fill = GridBagConstraints.BOTH;
-										gbc_btnLoadTextFile.gridheight = 2;
-										gbc_btnLoadTextFile.gridwidth = 3;
-										gbc_btnLoadTextFile.insets = new Insets(0, 0, 5, 5);
-										gbc_btnLoadTextFile.gridx = 0;
-										gbc_btnLoadTextFile.gridy = 0;
-										panel_LoadText.add(btnLoadTextFile, gbc_btnLoadTextFile);
-										setActionListeners(btnLoadTextFile, lblTitle, txtTitle, lblSubtitle,
-												txtSubtitle, lblSpacing, sldrSpacing, btnConvertToPdf,
-												btnSavePDF, mntmAbout, mntmUserManual, panel_PDF_Preview,
-												panel_PDF_SplitPanel);
+		GridBagLayout gbl_panel_LoadText = new GridBagLayout();
+		gbl_panel_LoadText.columnWidths = new int[] { 100, 25, 100 };
+		gbl_panel_LoadText.rowHeights = new int[] { 60, 30, 60 };
+		gbl_panel_LoadText.columnWeights = new double[] { 1.0, 0.0 };
+		gbl_panel_LoadText.rowWeights = new double[] { 0.0, 0.0 };
+		panel_LoadText.setLayout(gbl_panel_LoadText);
+
+		JButton btnLoadTextFile = new JButton("Load file");
+		GridBagConstraints gbc_btnLoadTextFile = new GridBagConstraints();
+		gbc_btnLoadTextFile.fill = GridBagConstraints.BOTH;
+		gbc_btnLoadTextFile.gridheight = 2;
+		gbc_btnLoadTextFile.gridwidth = 3;
+		gbc_btnLoadTextFile.insets = new Insets(0, 0, 5, 5);
+		gbc_btnLoadTextFile.gridx = 0;
+		gbc_btnLoadTextFile.gridy = 0;
+		panel_LoadText.add(btnLoadTextFile, gbc_btnLoadTextFile);
+		setActionListeners(btnLoadTextFile, lblTitle, txtTitle, lblSubtitle,
+				txtSubtitle, lblSpacing, sldrSpacing, btnConvertToPdf,
+				btnSavePDF, mntmAbout, mntmUserManual, panel_PDF_Preview,
+				panel_PDF_SplitPanel);
 		setButtons(btnConvertToPdf, btnSavePDF);
 
 	}
@@ -266,13 +261,13 @@ public class GUI_Main {
 			final JSplitPane panel_PDF_SplitPanel) {
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// openPdf("font_types.pdf");
+				openPdf(aboutPdf);
 			}
 		});
 
 		mntmUserManual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// openPdf(userManualDest);
+				openPdf(userManualDest);
 			}
 		});
 
@@ -288,7 +283,15 @@ public class GUI_Main {
 					output = new DrawOutput(src, dest, useCustomTitle,
 							useCustomSubtitle, useCustomSpacing, title,
 							subtitle, spacing);
-					JOptionPane.showMessageDialog(null, "You have successfully loaded the file at: " + src);
+					subtitle = output.getSubtitle();
+					title = output.getTitle();
+					txtSubtitle.setText(subtitle);
+					txtTitle.setText(title);
+					spacing = output.getSpacing();
+					lblSpacing.setText("Spacing=" + spacing);
+					sldrSpacing.setValue((int)(spacing*10));
+					JOptionPane.showMessageDialog(null,
+							"You have successfully loaded the file at: " + src);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -302,15 +305,16 @@ public class GUI_Main {
 				if (useCustomSpacing == false) {
 					useCustomSpacing = true;
 				}
-				try {
-					output = new DrawOutput(src, dest, useCustomTitle,
-							useCustomSubtitle, useCustomSpacing, title,
-							subtitle, spacing);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (isInputProvided == true) {
+					try {
+						output = new DrawOutput(src, dest, useCustomTitle,
+								useCustomSubtitle, useCustomSpacing, title,
+								subtitle, spacing);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-
 			}
 		});
 
@@ -351,15 +355,12 @@ public class GUI_Main {
 		});
 		txtTitle.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent arg0) {
+			public void keyReleased(KeyEvent arg0) {
 				title = txtTitle.getText();
-				title = title +arg0.getKeyChar();
-				lblTitle.setText("Title: "+ title);
 				if (useCustomTitle == false) {
 					useCustomTitle = true;
 				}
-				if(isInputProvided==true)
-				{
+				if (isInputProvided == true) {
 					try {
 						output = new DrawOutput(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
@@ -369,21 +370,17 @@ public class GUI_Main {
 						e1.printStackTrace();
 					}
 				}
-				lblSubtitle.setText("Subtitle: " + subtitle);
-				
 			}
 		});
-		
+
 		txtSubtitle.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyTyped(KeyEvent e) {
+			public void keyReleased(KeyEvent e) {
 				subtitle = txtSubtitle.getText();
-				subtitle = subtitle+ e.getKeyChar();
 				if (useCustomSubtitle == false) {
 					useCustomSubtitle = true;
 				}
-				if(isInputProvided==true)
-				{
+				if (isInputProvided == true) {
 					try {
 						output = new DrawOutput(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
@@ -393,19 +390,18 @@ public class GUI_Main {
 						e1.printStackTrace();
 					}
 				}
-				lblSubtitle.setText("Subtitle: " + subtitle);
 			}
 		});
 	}
 
 	private void createMainFrame() {
 		frmTabpdf = new JFrame();
+		frmTabpdf.setResizable(false);
 		frmTabpdf.setTitle("TAB2PDF");
 		frmTabpdf.getContentPane().setFont(
 				new Font("Times New Roman", Font.PLAIN, 11));
-		frmTabpdf.getContentPane().setLayout(new GridLayout(1, 2, 0, 0));
 		frmTabpdf.setBounds(100, 100, 450, 300);
-		frmTabpdf.setSize(800, 600);
+		frmTabpdf.setSize(1200, 800);
 		frmTabpdf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
@@ -434,10 +430,39 @@ public class GUI_Main {
 		// Now that the GUI is all in place, we can try opening a PDF
 		controller.openDocument(localDest);
 		panel.setRightComponent(viewerComponentPanel);
-		}
-	public void openPdf(String localDest)
-	{
-	
+	}
+
+	public void openPdf(String localDest) {
+        // build a component controller
+        SwingController controller = new SwingController();
+        controller.setIsEmbeddedComponent(true);
+
+        PropertiesManager properties = new PropertiesManager(
+                System.getProperties(),
+                ResourceBundle.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
+
+        properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.25");
+
+        SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
+
+        // add interactive mouse link annotation support via callback
+        controller.getDocumentViewController().setAnnotationCallback(
+                new org.icepdf.ri.common.MyAnnotationCallback(controller.getDocumentViewController()));
+        JPanel viewerComponentPanel = factory.buildViewerPanel();
+        JFrame applicationFrame = new JFrame();
+        applicationFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        applicationFrame.getContentPane().add(viewerComponentPanel);
+        // Now that the GUI is all in place, we can try opening a PDF
+        controller.openDocument(localDest);
+
+        // add the window event callback to dispose the controller and
+        // currently open document.
+        applicationFrame.addWindowListener(controller);
+
+        // show the component
+        applicationFrame.pack();
+        applicationFrame.setVisible(true);
+
 	}
 
 	public String saveFile() {
