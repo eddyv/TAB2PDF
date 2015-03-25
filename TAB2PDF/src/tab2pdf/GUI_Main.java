@@ -37,6 +37,8 @@ import org.icepdf.ri.common.SwingViewBuilder;
 import org.icepdf.ri.util.PropertiesManager;
 
 import com.itextpdf.text.DocumentException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GUI_Main {
 
@@ -205,7 +207,7 @@ public class GUI_Main {
 			panel_PDF_buttons.add(panel_ConvertPDF);
 		}
 		panel_ConvertPDF.setLayout(new BorderLayout(0, 0));
-		final JButton btnConvertToPdf = new JButton("Convert PDF");
+		final JButton btnConvertToPdf = new JButton("Convert to PDF");
 		{
 			panel_ConvertPDF.add(btnConvertToPdf);
 		}
@@ -288,7 +290,6 @@ public class GUI_Main {
 							subtitle, spacing);
 					JOptionPane.showMessageDialog(null, "You have successfully loaded the file at: " + src);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -300,6 +301,14 @@ public class GUI_Main {
 				lblSpacing.setText("Spacing=" + spacing);
 				if (useCustomSpacing == false) {
 					useCustomSpacing = true;
+				}
+				try {
+					output = new DrawOutput(src, dest, useCustomTitle,
+							useCustomSubtitle, useCustomSpacing, title,
+							subtitle, spacing);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
 			}
@@ -340,25 +349,51 @@ public class GUI_Main {
 			}
 
 		});
-		txtSubtitle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				subtitle = txtSubtitle.getText();
-				lblSubtitle.setText("Subtitle: " + subtitle);
-				if (useCustomSubtitle == false) {
-					useCustomSubtitle = true;
-				}
-
-			}
-		});
-
-		txtTitle.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		txtTitle.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent arg0) {
 				title = txtTitle.getText();
-				lblTitle.setText("Title: " + title);
+				title = title +arg0.getKeyChar();
+				lblTitle.setText("Title: "+ title);
 				if (useCustomTitle == false) {
 					useCustomTitle = true;
 				}
-
+				if(isInputProvided==true)
+				{
+					try {
+						output = new DrawOutput(src, dest, useCustomTitle,
+								useCustomSubtitle, useCustomSpacing, title,
+								subtitle, spacing);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				lblSubtitle.setText("Subtitle: " + subtitle);
+				
+			}
+		});
+		
+		txtSubtitle.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				subtitle = txtSubtitle.getText();
+				subtitle = subtitle+ e.getKeyChar();
+				if (useCustomSubtitle == false) {
+					useCustomSubtitle = true;
+				}
+				if(isInputProvided==true)
+				{
+					try {
+						output = new DrawOutput(src, dest, useCustomTitle,
+								useCustomSubtitle, useCustomSpacing, title,
+								subtitle, spacing);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				lblSubtitle.setText("Subtitle: " + subtitle);
 			}
 		});
 	}
@@ -399,6 +434,10 @@ public class GUI_Main {
 		// Now that the GUI is all in place, we can try opening a PDF
 		controller.openDocument(localDest);
 		panel.setRightComponent(viewerComponentPanel);
+		}
+	public void openPdf(String localDest)
+	{
+	
 	}
 
 	public String saveFile() {
