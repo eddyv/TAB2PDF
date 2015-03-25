@@ -280,6 +280,7 @@ public class GUI_Main {
 						txtSubtitle);
 				setButtons(btnConvertToPdf, btnSavePDF);
 				try {
+					useCustomSpacing=false;
 					output = new DrawOutput(src, dest, useCustomTitle,
 							useCustomSubtitle, useCustomSpacing, title,
 							subtitle, spacing);
@@ -290,10 +291,10 @@ public class GUI_Main {
 					spacing = output.getSpacing();
 					lblSpacing.setText("Spacing=" + spacing);
 					sldrSpacing.setValue((int)(spacing*10));
-					JOptionPane.showMessageDialog(null,
-							"You have successfully loaded the file at: " + src);
 				} catch (IOException e1) {
 					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null,
+							"You have unsuccessfully loaded the file at: " + src);
 				}
 			}
 		});
@@ -499,9 +500,7 @@ public class GUI_Main {
 		useCustomSpacing = false;
 		spacing = (float) (sliderSpacing.getValue() / 10.0f);
 		sliderSpacing.setValue(50);// default value;
-		lblSpacing.setText("Spacing= " + spacing);
-		lblTitle.setText("Title: " + title);
-		lblSubtitle.setText("Subtitle: " + subtitle);
+		lblSpacing.setText("Spacing= ");
 		txtTitle.setText("<insert title here>");
 		txtSubtitle.setText("<insert subtitle here>");
 	}
