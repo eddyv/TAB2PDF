@@ -263,12 +263,20 @@ public class DrawOutput
 				{
 					drawSymbol.createLDoubleBar(canvas, currX, currY, LINEY);
 				}
+				else
+				{
+					drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
+				}
 			}
 			else
 			{
 				if (a.vLinesInput.get(i).get(4).equals("*||"))
 				{
 					drawSymbol.createRDoubleBar(canvas, currX, currY, LINEY);	
+				}
+				else
+				{
+					drawSymbol.createVLineAtPosition(canvas, currX, currY,LINEY);
 				}
 			}
 			currX += a.input.get(i).get(j).length() * a.spacing;
