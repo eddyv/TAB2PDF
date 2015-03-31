@@ -13,6 +13,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 
@@ -46,8 +48,8 @@ public class GUI_Main {
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
-	private final String userManualDest = "manual.pdf";
-	private final String aboutPdf = "font_types.pdf";// temporary location.
+	private URL userManualDest;
+	private URL aboutPdf;
 	private DrawOutput output;
 	private float spacing = 5.0f;
 	private float originalSpacing = 5.0f;
@@ -87,7 +89,19 @@ public class GUI_Main {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
+		try {
+			aboutPdf = new URL("http://www.cse.yorku.ca/~eddyv/2311/team4/User_Manual.pdf");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}// temporary location.
+		
+		try {
+			userManualDest = new URL("http://www.cse.yorku.ca/~eddyv/2311/team4/User_Manual.pdf");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// the main frame stuff
 		createMainFrame();
 		frmTabpdf.getContentPane().setLayout(new BorderLayout(0, 0));
@@ -485,7 +499,7 @@ public class GUI_Main {
 		panel.setRightComponent(viewerComponentPanel);
 	}
 
-	public void openPdf(String localDest) {
+	public void openPdf(URL localDest) {
 		// build a component controller
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
