@@ -482,14 +482,7 @@ public class GUI_Main {
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
 
-		PropertiesManager properties = new PropertiesManager(
-				System.getProperties(),
-				ResourceBundle
-						.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
-
-		properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.00");
-
-		SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
+		SwingViewBuilder factory = new SwingViewBuilder(controller);
 
 		// add interactive mouse link annotation support via callback
 		controller.getDocumentViewController().setAnnotationCallback(
@@ -506,14 +499,7 @@ public class GUI_Main {
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
 
-		PropertiesManager properties = new PropertiesManager(
-				System.getProperties(),
-				ResourceBundle
-						.getBundle(PropertiesManager.DEFAULT_MESSAGE_BUNDLE));
-
-		properties.set(PropertiesManager.PROPERTY_DEFAULT_ZOOM_LEVEL, "1.25");
-
-		SwingViewBuilder factory = new SwingViewBuilder(controller, properties);
+		SwingViewBuilder factory = new SwingViewBuilder(controller);
 
 		// add interactive mouse link annotation support via callback
 		controller.getDocumentViewController().setAnnotationCallback(
