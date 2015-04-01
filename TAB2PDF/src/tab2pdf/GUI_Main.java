@@ -442,10 +442,30 @@ public class GUI_Main {
 				}
 			}
 		});*/
-
+/*
 		txtSubtitle.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				subtitle = txtSubtitle.getText();
+				if (useCustomSubtitle == false) {
+					useCustomSubtitle = true;
+				}
+				if (isInputProvided == true) {
+					try {
+						output = new DrawOutput(src, dest, useCustomTitle,
+								useCustomSubtitle, useCustomSpacing, title,
+								subtitle, spacing);
+						convertToPdf(btnSavePDF, panel_PDF_Preview);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			}
+		});*/
+		txtSubtitle.addFocusListener(new FocusAdapter(){
+			@Override
+			public void focusLost(FocusEvent arg0) {
 				subtitle = txtSubtitle.getText();
 				if (useCustomSubtitle == false) {
 					useCustomSubtitle = true;
@@ -478,6 +498,7 @@ public class GUI_Main {
 	// the below methods should be private but are made public for testing
 	// purposes.
 	public void openPdf(String localDest, JPanel panel_PDF_Preview) {
+		panel_PDF_Preview.removeAll();
 		// build a component controller
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
