@@ -129,15 +129,15 @@ public class Processor
 	
 	public void checkParseInfo()
 	{
-		System.out.println("Title " + title);
-		System.out.println("Subtitle " + subtitle);
-		System.out.println("Spacing " + spacing);
+		//System.out.println("Title " + title);
+		//System.out.println("Subtitle " + subtitle);
+		//System.out.println("Spacing " + spacing);
 		
 		if (spacing == 0)
 		{
 			spacing = 5;
 		}
-		System.out.println("Spacing " + spacing);
+		//System.out.println("Spacing " + spacing);
 	}
 		
 		public ArrayList<Segment> getInput()

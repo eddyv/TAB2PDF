@@ -284,7 +284,7 @@ public class DrawOutput
 		else if (vLines.equals("*||") && vCounter % 2 == 1)
 		{
 			drawSymbol.createRDoubleBar(canvas, currX, currY, LINEY);
-			drawSymbol.createCircle(canvas, currX - 2*a.spacing, currY + j * SEGY, a.spacing); //
+			drawSymbol.createCircle(canvas, currX - 9, currY + j * SEGY, a.spacing); //
 			drawSymbol.createHLineAtPosition(canvas, currX, currY + j * SEGY, a.spacing);
 			currX += a.input.get(i).get(j).length() * a.spacing;
 		}
@@ -292,7 +292,7 @@ public class DrawOutput
 		{
 			drawSymbol.createLDoubleBar(canvas, currX, currY, LINEY);
 			drawSymbol.createHLineAtPosition(canvas, currX, currY + j * SEGY, a.spacing);
-			drawSymbol.createCircle(canvas, currX + a.spacing, currY + j * SEGY, a.spacing);
+			drawSymbol.createCircle(canvas, currX + 4, currY + j * SEGY, a.spacing);
 			currX += a.input.get(i).get(j).length() * a.spacing;
 		}
 		else if (vLines.matches("\\|\\d") && vCounter % 2 == 1)
@@ -330,14 +330,15 @@ public class DrawOutput
 			
 			String tempString = a.input.get(i).get(j);
 			
-			//checking for diamond in the line
+			//checking for diamond or digits in the line
+			//Pattern pattern = Pattern.compile("<\\d+>|((\\d+)(-*)(p|h)(-*))+(\\d+)|\\d+");
 			Pattern pattern = Pattern.compile("<\\d+>|\\d+");
 		    Matcher matcher = pattern.matcher(tempString);
 	
-		    int numberIndex = 0;	// counts number of diamonds in a line
+		    int numberIndex = 0;	// counts number of diamonds or digits in a line
 		    List<Integer> startIndex = new ArrayList<Integer>();
 		    List<Integer> endIndex = new ArrayList<Integer>();
-		    while (matcher.find()) 	// stores indexes of diamond start and end position for each line
+		    while (matcher.find()) 	// stores start and end position indexes for symbols for each line
 		    {
 		    	startIndex.add(matcher.start());
 		    	endIndex.add(matcher.end());
@@ -358,7 +359,7 @@ public class DrawOutput
 						String tempNumber = tempString.substring(startIndex.get(numberIndex), endIndex.get(numberIndex));
 						int difference = endIndex.get(numberIndex) - startIndex.get(numberIndex);
 						
-						if (tempNumber.matches("<\\d+>"))	// is a diamond and not a regular number
+						if (tempNumber.matches("<\\d\\d>"))	// is a 2 digit diamond
 						{
 							String diamondNumber = tempNumber.substring(1, tempNumber.length() - 1);
 							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 	(l + 1f)* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
@@ -366,7 +367,21 @@ public class DrawOutput
 							drawSymbol.createHLineAtPosition(canvas, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
 							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * 4f, 2);
 						}
-						else
+						else if (tempNumber.matches("<\\d>"))	// is a 1 digit diamond
+						{
+							String diamondNumber = tempNumber.substring(1, tempNumber.length() - 1);
+							drawSymbol.createTextCenteredAtPosition(canvas, diamondNumber, currX + 	(l + 0.5f)* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
+							drawSymbol.createHLineAtPosition(canvas, currX + (l + difference - 2) * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createHLineAtPosition(canvas, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * 4f, 2);
+						}
+						else if (tempNumber.matches("\\d\\d"))	// is a 2 digit number
+						{
+							drawSymbol.createTextCenteredAtPosition(canvas, tempNumber, currX + 
+									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
+							drawSymbol.createHLineAtPosition(canvas, currX + (l + 1.3f) * a.spacing, currY + j * SEGY, a.spacing);
+						}
+						else	// is a single digit number
 						{
 							drawSymbol.createTextCenteredAtPosition(canvas, tempNumber, currX + 
 									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
@@ -380,21 +395,6 @@ public class DrawOutput
 				{
 					continue;
 				}
-				
-				/*
-				if (tempString.charAt(l) == '*')
-				{
-					if (l == 0)
-					{
-						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
-						drawSymbol.createCircle(canvas, currX + a.spacing, currY + j * SEGY, a.spacing);
-					}
-					else
-					{
-						drawSymbol.createCircle(canvas, (currX + a.spacing * (l - 1)), currY + j * SEGY, a.spacing);
-						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
-					}
-				}*/
 				else if (tempString.charAt(l) == 's')
 				{
 					drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
@@ -404,7 +404,7 @@ public class DrawOutput
 					drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
 					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
-							(l + 0.5f)	* a.spacing, currY + (j - 1.25f) * SEGY + 0.5f * a. spacing, 5);
+							(l + 0.5f)	* a.spacing, currY + (j - 1.25f) * SEGY + 0.5f * 7, 5);
 				}
 				else
 				{

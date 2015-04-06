@@ -45,7 +45,7 @@ public class Symbol {
 
 	//draw circle for repeat bar
     public void createCircle(PdfContentByte canvas, float x, float y, float length){
-    		canvas.circle(x + (length/2), SIZEY - y, 1.25f);
+    		canvas.circle(x + 2.5f, SIZEY - y, 1.25f);
     		canvas.fillStroke();
     		createHLineAtPosition(canvas, x, y, length);
     		
