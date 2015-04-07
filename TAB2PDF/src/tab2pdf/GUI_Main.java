@@ -421,48 +421,31 @@ public class GUI_Main {
 					}
 				}
 			}
-		});/*
+		});
 		txtTitle.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent arg0) {
-				title = txtTitle.getText();
-				if (useCustomTitle == false) {
-					useCustomTitle = true;
-				}
-				if (isInputProvided == true) {
-					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				}
-			}
-		});*/
-/*
-		txtSubtitle.addKeyListener(new KeyAdapter() {
-			@Override
 			public void keyReleased(KeyEvent e) {
-				subtitle = txtSubtitle.getText();
-				if (useCustomSubtitle == false) {
-					useCustomSubtitle = true;
-				}
-				if (isInputProvided == true) {
-					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					title = txtTitle.getText();
+					if (useCustomTitle == false) {
+						useCustomTitle = true;
+					}
+					if (isInputProvided == true) {
+						try {
+							output = new DrawOutput(src, dest, useCustomTitle,
+									useCustomSubtitle, useCustomSpacing, title,
+									subtitle, spacing);
+							convertToPdf(btnSavePDF, panel_PDF_Preview);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
-		});*/
+		});
+		
 		txtSubtitle.addFocusListener(new FocusAdapter(){
 			@Override
 			public void focusLost(FocusEvent arg0) {
@@ -479,6 +462,29 @@ public class GUI_Main {
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
+					}
+				}
+			}
+		});
+		txtSubtitle.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+				{
+					subtitle = txtSubtitle.getText();
+					if (useCustomSubtitle == false) {
+						useCustomSubtitle = true;
+					}
+					if (isInputProvided == true) {
+						try {
+							output = new DrawOutput(src, dest, useCustomTitle,
+									useCustomSubtitle, useCustomSpacing, title,
+									subtitle, spacing);
+							convertToPdf(btnSavePDF, panel_PDF_Preview);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			}

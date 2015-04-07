@@ -25,4 +25,8 @@ public class Segment {
 	public String get(int i) {
 		return segment.get(i);
 	}
+	public void remove(int i)
+	{
+		segment.remove(i);
+	}
 }
