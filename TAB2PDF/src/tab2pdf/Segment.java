@@ -11,9 +11,12 @@ public class Segment {
 
 	public void add(String line) {
 		segment.add(line);
-
 	}
 
+	public void remove(int i){
+		segment.remove(i);
+	}
+	
 	public int size() {
 		return segment.size();
 	}
@@ -24,9 +27,5 @@ public class Segment {
 
 	public String get(int i) {
 		return segment.get(i);
-	}
-	public void remove(int i)
-	{
-		segment.remove(i);
 	}
 }

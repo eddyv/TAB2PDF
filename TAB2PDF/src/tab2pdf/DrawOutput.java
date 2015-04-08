@@ -332,7 +332,8 @@ public class DrawOutput
 			
 			//checking for diamond or digits in the line
 			//Pattern pattern = Pattern.compile("<\\d+>|((\\d+)(-*)(p|h)(-*))+(\\d+)|\\d+");
-			Pattern pattern = Pattern.compile("<\\d+>|\\d+");
+			//Pattern pattern = Pattern.compile("<\\d+>|\\d+");
+			Pattern pattern = Pattern.compile("<\\d+>|\\d+|(-*)(p|h)([-#=]*)|s|(-+)");
 		    Matcher matcher = pattern.matcher(tempString);
 	
 		    int numberIndex = 0;	// counts number of diamonds or digits in a line
@@ -348,9 +349,9 @@ public class DrawOutput
 		    	//System.out.println(matcher.group());
 		    }
 			
-		    //check cases to draw symbols as needed
+//check cases to draw symbols as needed
 			
-			for (int l = 0; l < tempString.length(); l++)
+			for (int l = 0; l < tempString.length();)
 			{
 				if (numberIndex < startIndex.size())
 				{
@@ -375,41 +376,72 @@ public class DrawOutput
 							drawSymbol.createHLineAtPosition(canvas, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
 							drawSymbol.createDiamond(canvas,  currX + (l + difference - 1) * a.spacing,  currY + j * SEGY - 0.5f * 4f, 2);
 						}
+						else if (tempNumber.matches("(-*)(p)([-#=]*)"))
+						{
+							drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + difference - 0.50f) * a.spacing, a.spacing);
+							drawSymbol.createHLine(canvas, currX + l * a.spacing, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createTextCenteredAtPosition(canvas, "p" , ((currX + (l + 0.5f) * a.spacing) + (currX + (l + difference - 0.5f) * a.spacing))/2, currY + (j - 1.25f) * SEGY + 0.5f * 7, 5);
+						}
+						else if (tempNumber.matches("(-*)(h)([-#=]*)"))
+						{
+							drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + difference - 0.50f) * a.spacing, a.spacing);
+							drawSymbol.createHLine(canvas, currX + l * a.spacing, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
+							drawSymbol.createTextCenteredAtPosition(canvas, "h" , ((currX + (l + 0.5f) * a.spacing) + (currX + (l + difference - 0.5f) * a.spacing))/2, currY + (j - 1.25f) * SEGY + 0.5f * 7, 5);
+						}
+						else if (tempNumber.matches("s")) // is a s
+						{
+							drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+						}
 						else if (tempNumber.matches("\\d\\d"))	// is a 2 digit number
 						{
 							drawSymbol.createTextCenteredAtPosition(canvas, tempNumber, currX + 
 									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
 							drawSymbol.createHLineAtPosition(canvas, currX + (l + 1.3f) * a.spacing, currY + j * SEGY, a.spacing);
 						}
-						else	// is a single digit number
+						else if (tempNumber.matches("\\d"))	// is a single digit number
 						{
 							drawSymbol.createTextCenteredAtPosition(canvas, tempNumber, currX + 
 									(l + 0.5f)	* a.spacing, currY + j * SEGY + 0.5f * 5, 8);
 						}
+						else if (tempNumber.matches("(-+)")) // is horizontal line
+						{
+							drawSymbol.createHLine(canvas, currX + l * a.spacing, currX + (l + difference - 1) * a.spacing, currY + j * SEGY, a.spacing);
+						}
 						l = l + difference;	// advances character counter past the symbol
 						numberIndex++;
 					}
+					else
+					{
+						drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+						l++;
+					}
+				}
+				else
+				{
+					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+					l++;
+				}	
+				
+				//if (l >= tempString.length())	// continues the loop in the case that the previous l advancement reaches the end of the current line
+				{
+				//	continue;
 				}
 				
-				if (l >= tempString.length())	// continues the loop in the case that the previous l advancement reaches the end of the current line
-				{
-					continue;
-				}
-				else if (tempString.charAt(l) == 's')
-				{
-					drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
-				}
-				else if (tempString.charAt(l) == 'h' || tempString.charAt(l) == 'p')
+				//else if (tempString.charAt(l) == 's')
+				//{
+				//	drawSymbol.createS(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+				//}
+				/*else if (tempString.charAt(l) == 'h' || tempString.charAt(l) == 'p')
 				{
 					drawSymbol.createArc(canvas, currY + (j - 0.75f) * SEGY, currY + (j - 0.25f) * SEGY, currX + (l + 0.50f) * a.spacing, currX + (l + 5) * a.spacing, a.spacing);
 					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
 					drawSymbol.createTextCenteredAtPosition(canvas, "" + tempString.charAt(l), currX + 
 							(l + 0.5f)	* a.spacing, currY + (j - 1.25f) * SEGY + 0.5f * 7, 5);
-				}
-				else
-				{
-					drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
-				}	
+				}*/
+				//else
+				//{
+					//drawSymbol.createHLineAtPosition(canvas, currX + l * a.spacing, currY + j * SEGY, a.spacing);
+				//}	
 			}
 
 			// Draws ending vertical bars

@@ -36,6 +36,13 @@ public class Symbol {
         canvas.stroke();
     }
 
+    public void createHLine(PdfContentByte canvas, float xStart, float xEnd, float y, float length)
+    {
+    	canvas.setLineWidth(0.5f);
+        canvas.moveTo(xStart, SIZEY - y);
+        canvas.lineTo(xEnd + length, SIZEY - y);
+        canvas.stroke();
+    }
     public void createVLineAtPosition(PdfContentByte canvas, float x, float y, float length) {
         canvas.setLineWidth(0.5f);
         canvas.moveTo(x, SIZEY - y);
@@ -133,8 +140,13 @@ public class Symbol {
 		//canvas.stroke();
 	}
 	
+	//public void createArc(PdfContentByte canvas, float bottom, float top, float leftend, float rightend, float size)
+	//{
+	//	canvas.arc(leftend - size, SIZEY - bottom, leftend + size, SIZEY - top, 0, 180);
+	//}
+	
 	public void createArc(PdfContentByte canvas, float bottom, float top, float leftend, float rightend, float size)
 	{
-		canvas.arc(leftend - size, SIZEY - bottom, leftend + size, SIZEY - top, 0, 180);
+		canvas.arc(leftend - size, SIZEY - bottom, rightend + size, SIZEY - top, 0, 180);
 	}
 }
