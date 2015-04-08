@@ -3,7 +3,6 @@ Created for the EECS2311 course at york. This program will contain librarys from
 TAB2PDF is the main directory folder that contains all the classes that we have worked on.<br />
 website for jar downlaod and documents: http://www.cse.yorku.ca/~eddyv/2311/team4/<br />
 TODO(02/25/2015):<br />
-1) User Friendly GUI. (alert boxes when something fails)<br />
-2) additional features on GUI such as changing page size, margins, font etc...<br />
-3) Project needs to be edited to work with ALL spacing values<br />
-4) fix issues with opening the pdf file in the program with icepdf OR Remove icepdf component and just make the computers default program open the file for us.<br />***Got 4 to work but need to clarefy.. works with BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1257, BaseFont.EMBEDDED);****
+1) Alex has to help Edward create some test cases for the parser class to make coverage over 90%
+2) Edward has to create some test cases for the gui main class
+3) ***for gui*** handle the case where there is no internet connection. <br/> remove the temporary file that is created. <br/> give a message asking if the user is sure if he wants to delete the file when saving.
