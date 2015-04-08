@@ -228,7 +228,7 @@ public class DrawOutput
 	/*
 	 * Draw title of the document
 	 */
-	public void DrawTitle(PdfContentByte canvas) throws DocumentException, IOException
+	public void DrawTitles(PdfContentByte canvas) throws DocumentException, IOException
 	{
 		Parser a = this.getParser();
 		
@@ -435,7 +435,7 @@ public class DrawOutput
 		this.resetXY();
 		
 		// Draws title and subtitle to PDF
-		this.DrawTitle(canvas);
+		this.DrawTitles(canvas);
 				
 		// Loop on parser's segment list
 		for (int i = 0; i < a.input.size(); i++)

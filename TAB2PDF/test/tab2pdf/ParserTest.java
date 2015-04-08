@@ -59,5 +59,14 @@ public class ParserTest
 		assertEquals("|", p.vLinesInput.get(0).get(11));	// vertical input
 	}
 	
+	@Test
+	public void testFile4() throws IOException
+	{
+		Parser p = new Parser("test3.txt");
+		// test segments
+		assertEquals("-3-----3-----3-----3------2-----2-----2-----0-----", p.input.get(0).get(3));	// input 
+		assertEquals("--------------------------------------------------", p.input.get(1).get(0));
+		assertEquals("|", p.vLinesInput.get(0).get(11));	// vertical input
+	}
 	// test array list values
 }

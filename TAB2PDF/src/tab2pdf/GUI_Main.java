@@ -521,7 +521,7 @@ public class GUI_Main {
 		controller.openDocument(localDest);
 	}
 
-	public void openPdf(URL localDest) {
+	public void openPdf(URL dest) {
 		// build a component controller
 		SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
@@ -538,7 +538,7 @@ public class GUI_Main {
 				.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		applicationFrame.getContentPane().add(viewerComponentPanel);
 		// Now that the GUI is all in place, we can try opening a PDF
-		controller.openDocument(localDest);
+		controller.openDocument(dest);
 
 		// add the window event callback to dispose the controller and
 		// currently open document.
@@ -576,9 +576,7 @@ public class GUI_Main {
 		return out.getPath();
 	}
 
-	public void setDefaultValues(JButton btnSave, JSlider sliderSpacing,
-			JLabel lblSpacing, JLabel lblTitle, JLabel lblSubtitle,
-			JTextField txtTitle, JTextField txtSubtitle) {
+	public void setDefaultValues(JButton btnSave, JSlider sliderSpacing,JLabel lblSpacing, JLabel lblTitle, JLabel lblSubtitle,JTextField txtTitle, JTextField txtSubtitle) {
 		useCustomTitle = false;
 		useCustomSubtitle = false;
 		useCustomSpacing = false;

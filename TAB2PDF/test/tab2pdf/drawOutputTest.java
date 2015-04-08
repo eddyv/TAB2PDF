@@ -19,7 +19,8 @@ import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
 public class drawOutputTest {
-	String inURL = "sample1.txt"; // url to a input test file
+	String inURL1 = "sample1.txt"; // url to a input test file
+	String inURL2 = "sample2.txt";
 	String outURL = "test.pdf"; // url to a output test file
 	Parser p1, p2, p3; // different parsers use for test
 
@@ -34,8 +35,20 @@ public class drawOutputTest {
 	/* Test the functionality of getters and setters */
 	public void testGetterAndSetter() throws Exception {
 		DrawOutput d;
-		//the exception part here is supposed to be handled in the gui so we do not test it here.
-		d = new DrawOutput(inURL,outURL); 
+		// the exception part here is supposed to be handled in the gui so we do
+		// not test it here.
+		d = new DrawOutput(inURL1, outURL);
+		// test on parser
+		d.setParser(p1);
+		assertSame(p1, d.getParser());
+		// test on currX
+		d.setCurrX(180f);
+		assertEquals(180.0, d.getCurrX(), 0.0001);
+		// test on currY
+		d.setCurrY(10f);
+		assertEquals(10.0, d.getCurrY(), 0.0001);
+
+		d = new DrawOutput(inURL2, outURL);
 		// test on parser
 		d.setParser(p1);
 		assertSame(p1, d.getParser());
@@ -57,10 +70,10 @@ public class drawOutputTest {
 		}
 
 		// Init new pdf file
-		DrawOutput d = new DrawOutput(p1,outURL);
+		DrawOutput d = new DrawOutput(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
-		d.DrawTitle(canvas);
+		d.DrawTitles(canvas);
 		canvas.getPdfDocument().close();
 
 		// test on the existence of the created file
@@ -81,7 +94,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.checkNewLine() */
 	public void testCheckNewLine() throws FileNotFoundException,
 			DocumentException {
-		DrawOutput d = new DrawOutput(p1,outURL);
+		DrawOutput d = new DrawOutput(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 
@@ -102,12 +115,12 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.checkNewPage() */
 	public void testCheckNewPage() throws DocumentException, IOException {
-		DrawOutput d = new DrawOutput(p1,outURL);
+		DrawOutput d = new DrawOutput(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 
 		// test on new page is required
-		d.DrawTitle(canvas);
+		d.DrawTitles(canvas);
 		d.setCurrY(751);
 		float beforeTestY = d.getCurrY();
 		float beforeTestX = d.getCurrX();
@@ -116,7 +129,7 @@ public class drawOutputTest {
 		assertEquals(d.BEGINX, d.getCurrX(), 0.0001);
 
 		// test on new page is not required
-		d.DrawTitle(canvas);
+		d.DrawTitles(canvas);
 		d.setCurrY(570);
 		beforeTestY = d.getCurrY();
 		beforeTestX = d.getCurrX();
@@ -132,12 +145,12 @@ public class drawOutputTest {
 	}
 
 	@Test
-	/* Test the functionality of drawOuput.DrawTitle() */
-	public void testDrawTitle() throws DocumentException, IOException {
-		DrawOutput d = new DrawOutput(p1,outURL);
+	/* Test the functionality of drawOuput.DrawTitles() */
+	public void testDrawTitles() throws DocumentException, IOException {
+		DrawOutput d = new DrawOutput(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
-		d.DrawTitle(canvas);
+		d.DrawTitles(canvas);
 		canvas.getPdfDocument().close();
 
 		// test position value
@@ -160,10 +173,10 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawVerticalBar() */
 	public void testDrawVerticalBar() throws DocumentException, IOException { // t3.txt
-		DrawOutput d = new DrawOutput(p3,outURL);
+		DrawOutput d = new DrawOutput(p3, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
-		d.DrawTitle(canvas);
+		d.DrawTitles(canvas);
 
 		float beforeTestY = d.getCurrY();
 		float beforeTestX = d.getCurrX();
@@ -186,10 +199,10 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawSegment() */
 	public void testDrawSegment() throws DocumentException, IOException {
-		DrawOutput d = new DrawOutput(p3,outURL);
+		DrawOutput d = new DrawOutput(p3, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
-		d.DrawTitle(canvas);
+		d.DrawTitles(canvas);
 
 		float beforeTestY = d.getCurrY();
 		float beforeTestX = d.getCurrX();
@@ -210,7 +223,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.createPdf() */
 	public void testCreatePdf() throws DocumentException, IOException {
 		Parser p = p3;
-		DrawOutput d = new DrawOutput(p,outURL);
+		DrawOutput d = new DrawOutput(inURL2, outURL);
 		d.createPdf(true);
 
 		// Get expect value of x and y
@@ -223,7 +236,8 @@ public class drawOutputTest {
 				ex = d.BEGINX + p.input.get(i).get(0).length() * p.spacing;
 				// update y to move to next line
 				ey += d.LINEY * 2;
-				if (ey > DrawOutput.NEW_PAGE_THRESHOLD) { // need update y for new page
+				if (ey > DrawOutput.NEW_PAGE_THRESHOLD) { // need update y for
+															// new page
 					ey = d.LINEY;
 				}
 			}
