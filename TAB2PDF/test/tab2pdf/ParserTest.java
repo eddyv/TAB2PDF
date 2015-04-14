@@ -62,7 +62,7 @@ public class ParserTest
 	@Test
 	public void testFile4() throws IOException
 	{
-		Parser p = new Parser("test3.txt");
+		Parser p = new Parser("sample3.txt");
 		// test segments
 		assertEquals("-3-----3-----3-----3------2-----2-----2-----0-----", p.input.get(0).get(3));	// input 
 		assertEquals("--------------------------------------------------", p.input.get(1).get(0));
