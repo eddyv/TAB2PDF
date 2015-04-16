@@ -10,18 +10,18 @@ import org.junit.Test;
 
 public class DrawOutputDebugTest {
 
-	DrawOutput draw1;
-	DrawOutput draw2;
-	DrawOutput draw3;
+	OutputDrawer draw1;
+	OutputDrawer draw2;
+	OutputDrawer draw3;
 
 	@Before
 	public void setUp() throws Exception {
-		draw1 = new DrawOutput("t1.txt", "test1.pdf");
+		draw1 = new OutputDrawer("t1.txt", "test1.pdf");
 		draw1.createPdf(true);
 		//draw1.initPdf("test1.pdf");
-		draw2 = new DrawOutput("t2.txt", "test2.pdf");
+		draw2 = new OutputDrawer("t2.txt", "test2.pdf");
 		draw2.createPdf(true);
-		draw3 = new DrawOutput("t3.txt", "test3.pdf");
+		draw3 = new OutputDrawer("t3.txt", "test3.pdf");
 		draw3.createPdf(true);
 	}
 

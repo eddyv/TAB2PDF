@@ -44,14 +44,14 @@ import org.icepdf.ri.util.PropertiesManager;
 
 import com.itextpdf.text.DocumentException;
 
-public class GUI_Main {
+public class Main {
 
 	private JFrame frmTabpdf;
 	private String src;
 	private String dest;
 	private URL userManualDest;
 	private URL aboutPdf;
-	private DrawOutput output;
+	private OutputDrawer output;
 	private float spacing = 5.0f;
 	private float originalSpacing = 5.0f;
 	private boolean useCustomTitle = false;
@@ -70,7 +70,7 @@ public class GUI_Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUI_Main window = new GUI_Main();
+					Main window = new Main();
 					window.frmTabpdf.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -82,7 +82,7 @@ public class GUI_Main {
 	/**
 	 * Create the application.
 	 */
-	public GUI_Main() {
+	public Main() {
 		initialize();
 	}
 
@@ -293,7 +293,7 @@ public class GUI_Main {
 				setButtons(btnSavePDF);
 				try {
 					useCustomSpacing = false;
-					output = new DrawOutput(src, dest, useCustomTitle,
+					output = new OutputDrawer(src, dest, useCustomTitle,
 							useCustomSubtitle, useCustomSpacing, title,
 							subtitle, spacing);
 					subtitle = output.getSubtitle();
@@ -323,7 +323,7 @@ public class GUI_Main {
 				useCustomTitle = false;
 				if (isInputProvided == true) {
 					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
+						output = new OutputDrawer(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
 								subtitle, spacing);
 						convertToPdf(btnSavePDF, panel_PDF_Preview);
@@ -342,7 +342,7 @@ public class GUI_Main {
 				useCustomSubtitle = false;
 				if (isInputProvided == true) {
 					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
+						output = new OutputDrawer(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
 								subtitle, spacing);
 						convertToPdf(btnSavePDF, panel_PDF_Preview);
@@ -373,7 +373,7 @@ public class GUI_Main {
 				}
 				if (isInputProvided == true) {
 					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
+						output = new OutputDrawer(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
 								subtitle, spacing);
 						convertToPdf(btnSavePDF, panel_PDF_Preview);
@@ -389,7 +389,7 @@ public class GUI_Main {
 			public void actionPerformed(ActionEvent e) {
 				dest = saveFile();
 				try {
-					output = new DrawOutput(src, dest, useCustomTitle,
+					output = new OutputDrawer(src, dest, useCustomTitle,
 							useCustomSubtitle, useCustomSpacing, title,
 							subtitle, spacing);
 					output.createPdf(false);
@@ -411,7 +411,7 @@ public class GUI_Main {
 				}
 				if (isInputProvided == true) {
 					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
+						output = new OutputDrawer(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
 								subtitle, spacing);
 						convertToPdf(btnSavePDF, panel_PDF_Preview);
@@ -433,7 +433,7 @@ public class GUI_Main {
 					}
 					if (isInputProvided == true) {
 						try {
-							output = new DrawOutput(src, dest, useCustomTitle,
+							output = new OutputDrawer(src, dest, useCustomTitle,
 									useCustomSubtitle, useCustomSpacing, title,
 									subtitle, spacing);
 							convertToPdf(btnSavePDF, panel_PDF_Preview);
@@ -455,7 +455,7 @@ public class GUI_Main {
 				}
 				if (isInputProvided == true) {
 					try {
-						output = new DrawOutput(src, dest, useCustomTitle,
+						output = new OutputDrawer(src, dest, useCustomTitle,
 								useCustomSubtitle, useCustomSpacing, title,
 								subtitle, spacing);
 						convertToPdf(btnSavePDF, panel_PDF_Preview);
@@ -477,7 +477,7 @@ public class GUI_Main {
 					}
 					if (isInputProvided == true) {
 						try {
-							output = new DrawOutput(src, dest, useCustomTitle,
+							output = new OutputDrawer(src, dest, useCustomTitle,
 									useCustomSubtitle, useCustomSpacing, title,
 									subtitle, spacing);
 							convertToPdf(btnSavePDF, panel_PDF_Preview);

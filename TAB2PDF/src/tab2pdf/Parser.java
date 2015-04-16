@@ -57,7 +57,28 @@ public class Parser {
 					spacing = new Float(line.split("=")[1]);
 				}
 				
+				Pattern preRegexPattern = Pattern.compile("(\\|\\|\\|)|(\\|\\d)|(\\*\\|\\|)|(\\|\\|\\*)|(\\|\\|)|(\\|)");
+				Matcher preRegexmatcher = preRegexPattern.matcher(line);
+
+				// the loop finds how many segments are in the line and adds
+				// them to the vLines arraylist
+				int tempLastBarPosition = 0;
+				while (preRegexmatcher.find()) {
+					String s = preRegexmatcher.group();
+
+					//System.out.printf("%s %d %d\n", line, preRegexmatcher.start(), preRegexmatcher.end());
+					tempLastBarPosition = preRegexmatcher.end();
+				}
+				
+				//System.out.printf("%s %d %d\n", line, line.length(), tempLastBarPosition);
+				if (tempLastBarPosition > 0){
+					line = line.substring(0, tempLastBarPosition);
+				}
+				
+				
 				if (line.matches(regex)) {
+					System.out.println(line);
+					
 					//vLines ArrayList stores the vertical lines that exist in the current line
 					ArrayList<String> vLines = new ArrayList<String>();
 					
@@ -83,7 +104,7 @@ public class Parser {
 					// them to the vLines arraylist
 					while (mtr.find()) {
 						String s = mtr.group();
-						//System.out.println(s);
+						//System.out.printf("%s %d %d\n", line, mtr.start(), mtr.end());
 						vLines.add(s);
 					}
 					
@@ -137,7 +158,7 @@ public class Parser {
 							
 							//diff variable keeps track of the amount of times the tempLine was downsized to not lose track
 							int diff = 0;
-							
+					
 							//the following loop goes through each segment's second line and compares its length to the corresponding line's length in the first segment that was previously added
 							//every iteration it puts each segment's first line into the tempLine variable
 							//if the first line's segment is the same length as the second line's corresponding segment, then it stores the first line's segment in an Array (temp[])
@@ -186,13 +207,19 @@ public class Parser {
 							}
 							
 							
-						
+							//System.out.println(vLinesTempList.size());
 							
 							
 							//after clearing the space, correctly add the first line by feeding in the usual vLines array, then the temp arrayList and the fullLine we built earlier
 							this.addToTempList(vLines, temp, fullLine);
-							prevLine = fullLine;
-							prevSegmentAmount = tempList.size();
+							
+							/**for (int i = 0; i < vLinesTempList.size(); i++){
+								System.out.println(vLinesTempList.get(i).get(0));
+								System.out.println(vLinesTempList.get(i).get(1));
+								System.out.println("flag");
+							}*/
+							//prevLine = fullLine;
+							//prevSegmentAmount = tempList.size();
 							
 							//add the next(second) line to the segment
 							this.addToTempList(vLines, lineAfterSplit, line);
@@ -215,6 +242,7 @@ public class Parser {
 					}
 					// System.out.println("");
 				} else {
+					
 					// if the first segment in the temporary list is 6 lines
 					// long, add it to the input arraylist (the main arraylist)
 					this.addToFullList();

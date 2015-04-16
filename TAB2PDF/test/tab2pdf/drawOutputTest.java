@@ -34,10 +34,10 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of getters and setters */
 	public void testGetterAndSetter() throws Exception {
-		DrawOutput d;
+		OutputDrawer d;
 		// the exception part here is supposed to be handled in the gui so we do
 		// not test it here.
-		d = new DrawOutput(inURL1, outURL);
+		d = new OutputDrawer(inURL1, outURL);
 		// test on parser
 		d.setParser(p1);
 		assertSame(p1, d.getParser());
@@ -48,7 +48,7 @@ public class drawOutputTest {
 		d.setCurrY(10f);
 		assertEquals(10.0, d.getCurrY(), 0.0001);
 
-		d = new DrawOutput(inURL2, outURL);
+		d = new OutputDrawer(inURL2, outURL);
 		// test on parser
 		d.setParser(p1);
 		assertSame(p1, d.getParser());
@@ -70,7 +70,7 @@ public class drawOutputTest {
 		}
 
 		// Init new pdf file
-		DrawOutput d = new DrawOutput(p1, outURL);
+		OutputDrawer d = new OutputDrawer(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitles(canvas);
@@ -84,7 +84,7 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.resetXY() */
 	public void testResetXY() {
-		DrawOutput d = new DrawOutput(outURL);
+		OutputDrawer d = new OutputDrawer(outURL);
 		d.resetXY();
 		assertEquals(d.LINEY, d.getCurrY(), 0.0001);
 		assertEquals(d.BEGINX, d.getCurrX(), 0.0001);
@@ -94,7 +94,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.checkNewLine() */
 	public void testCheckNewLine() throws FileNotFoundException,
 			DocumentException {
-		DrawOutput d = new DrawOutput(p1, outURL);
+		OutputDrawer d = new OutputDrawer(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 
@@ -115,7 +115,7 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.checkNewPage() */
 	public void testCheckNewPage() throws DocumentException, IOException {
-		DrawOutput d = new DrawOutput(p1, outURL);
+		OutputDrawer d = new OutputDrawer(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 
@@ -147,7 +147,7 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawTitles() */
 	public void testDrawTitles() throws DocumentException, IOException {
-		DrawOutput d = new DrawOutput(p1, outURL);
+		OutputDrawer d = new OutputDrawer(p1, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitles(canvas);
@@ -173,7 +173,7 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawVerticalBar() */
 	public void testDrawVerticalBar() throws DocumentException, IOException { // t3.txt
-		DrawOutput d = new DrawOutput(p3, outURL);
+		OutputDrawer d = new OutputDrawer(p3, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitles(canvas);
@@ -199,7 +199,7 @@ public class drawOutputTest {
 	@Test
 	/* Test the functionality of drawOuput.DrawSegment() */
 	public void testDrawSegment() throws DocumentException, IOException {
-		DrawOutput d = new DrawOutput(p3, outURL);
+		OutputDrawer d = new OutputDrawer(p3, outURL);
 		PdfContentByte canvas = d.initPDF(true);
 		d.resetXY();
 		d.DrawTitles(canvas);
@@ -223,7 +223,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.createPdf() */
 	public void testCreatePdf() throws DocumentException, IOException {
 		Parser p = p3;
-		DrawOutput d = new DrawOutput(inURL2, outURL);
+		OutputDrawer d = new OutputDrawer(inURL2, outURL);
 		d.createPdf(true);
 
 		// Get expect value of x and y
@@ -236,7 +236,7 @@ public class drawOutputTest {
 				ex = d.BEGINX + p.input.get(i).get(0).length() * p.spacing;
 				// update y to move to next line
 				ey += d.LINEY * 2;
-				if (ey > DrawOutput.NEW_PAGE_THRESHOLD) { // need update y for
+				if (ey > OutputDrawer.NEW_PAGE_THRESHOLD) { // need update y for
 															// new page
 					ey = d.LINEY;
 				}

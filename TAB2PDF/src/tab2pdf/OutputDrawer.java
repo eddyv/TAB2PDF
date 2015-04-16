@@ -22,7 +22,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
 
-public class DrawOutput
+public class OutputDrawer
 {
 	
 	/**
@@ -47,7 +47,7 @@ public class DrawOutput
 	 * Constructors 
 	 */
 	/* create new drawOutput object using path string of the txt file */
-	public DrawOutput(String src, String dest, boolean customTitle, boolean customSubtitle, boolean customSpacing, String title, String subtitle, float spacing) throws IOException
+	public OutputDrawer(String src, String dest, boolean customTitle, boolean customSubtitle, boolean customSpacing, String title, String subtitle, float spacing) throws IOException
 	{
 		Parser p = new Parser(src);
 		this.dest = dest;
@@ -67,19 +67,19 @@ public class DrawOutput
 	}
 	
 	/* create new drawOutput object using Parser */
-	public DrawOutput(Parser p, String dest){
+	public OutputDrawer(Parser p, String dest){
 		this.setParser(p);	
 		this.dest=dest;
 	}
 	
 	/* create an empty drawOutput object without parser */
-	public DrawOutput(String dest){
+	public OutputDrawer(String dest){
 		this.setParser(null);
 		this.dest = dest;
 	}
 	
 	/* create new drawOutput object using path string of the txt file, does not use any custom features*/
-	public DrawOutput(String src, String dest) throws IOException{
+	public OutputDrawer(String src, String dest) throws IOException{
 		Parser p = new Parser(src);
 		this.dest=dest;
 		this.setParser(p);
