@@ -8,6 +8,7 @@ package tab2pdf;
  * 
  */
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class OutputDrawer
 	private float currX;	// value of current X coordinate on the pdf document
 	private float currY;	// value of current Y coordinate on the pdf document
 	private String dest;
-	private String localDest = "result.pdf"; //if dest isn't provided we should use the local one!
+	private static String localDest = "result.pdf"; //if dest isn't provided we should use the local one!
 	
 	/**
 	 * Constructors 
@@ -121,9 +122,9 @@ public class OutputDrawer
 	{
 		return this.dest;
 	}
-	public String getLocalDest()
+	public static String getLocalDest()
 	{
-		return this.localDest;
+		return localDest;
 	}
 	
 	/**
