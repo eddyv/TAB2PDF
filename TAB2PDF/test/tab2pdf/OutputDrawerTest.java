@@ -18,7 +18,7 @@ import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
 import com.itextpdf.text.pdf.parser.SimpleTextExtractionStrategy;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 
-public class drawOutputTest {
+public class OutputDrawerTest {
 	String inURL1 = "sample1.txt"; // url to a input test file
 	String inURL2 = "sample2.txt";
 	String outURL = "test.pdf"; // url to a output test file
@@ -27,7 +27,7 @@ public class drawOutputTest {
 	@Before
 	public void setUp() throws Exception {
 		p1 = new Parser("t1.txt");
-		p2 = new Parser("t2.txt");
+		p2 = new Parser("t2.txt");	
 		p3 = new Parser("t3.txt");
 	}
 
@@ -47,17 +47,28 @@ public class drawOutputTest {
 		// test on currY
 		d.setCurrY(10f);
 		assertEquals(10.0, d.getCurrY(), 0.0001);
+		
+		assertEquals("Moonlight Sonata",d.getTitle());
+		assertEquals("Ludwig van Beethoven",d.getSubtitle());
+		assertEquals(5,d.getSpacing(),0.0001);
+		assertEquals(outURL,d.getDest());
 
 		d = new OutputDrawer(inURL2, outURL);
-		// test on parser
-		d.setParser(p1);
-		assertSame(p1, d.getParser());
 		// test on currX
 		d.setCurrX(180f);
 		assertEquals(180.0, d.getCurrX(), 0.0001);
 		// test on currY
 		d.setCurrY(10f);
 		assertEquals(10.0, d.getCurrY(), 0.0001);
+		
+		assertEquals("Remembering Rain",d.getTitle());
+		assertEquals("Jim Matheos",d.getSubtitle());
+		assertEquals(4.4,d.getSpacing(),0.0001);
+		assertEquals(outURL,d.getDest());
+		
+		d.resetXY();
+		assertEquals(d.LINEY, d.getCurrY(), 0.0001);
+		assertEquals(d.BEGINX, d.getCurrX(), 0.0001);
 	}
 
 	@Test
@@ -71,7 +82,7 @@ public class drawOutputTest {
 
 		// Init new pdf file
 		OutputDrawer d = new OutputDrawer(p1, outURL);
-		PdfContentByte canvas = d.initPDF(true);
+		PdfContentByte canvas = d.initPDF(false);
 		d.resetXY();
 		d.DrawTitles(canvas);
 		canvas.getPdfDocument().close();
@@ -80,16 +91,6 @@ public class drawOutputTest {
 		fileTemp = new File(outURL);
 		assertTrue(fileTemp.exists());
 	}
-
-	@Test
-	/* Test the functionality of drawOuput.resetXY() */
-	public void testResetXY() {
-		OutputDrawer d = new OutputDrawer(outURL);
-		d.resetXY();
-		assertEquals(d.LINEY, d.getCurrY(), 0.0001);
-		assertEquals(d.BEGINX, d.getCurrX(), 0.0001);
-	}
-
 	@Test
 	/* Test the functionality of drawOuput.checkNewLine() */
 	public void testCheckNewLine() throws FileNotFoundException,
@@ -116,7 +117,7 @@ public class drawOutputTest {
 	/* Test the functionality of drawOuput.checkNewPage() */
 	public void testCheckNewPage() throws DocumentException, IOException {
 		OutputDrawer d = new OutputDrawer(p1, outURL);
-		PdfContentByte canvas = d.initPDF(true);
+		PdfContentByte canvas = d.initPDF(false);
 		d.resetXY();
 
 		// test on new page is required
@@ -192,12 +193,10 @@ public class drawOutputTest {
 		assertEquals(beforeTestY, d.getCurrY(), 0.0001);
 		assertEquals(beforeTestX, d.getCurrX(), 0.0001);
 
-		// TODO
-		// test on the position of actual vertical bar in the PDF file
 	}
 
 	@Test
-	/* Test the functionality of drawOuput.DrawSegment() */
+	/* Test the functionality of drawOuput.DrawSegment(x) */
 	public void testDrawSegment() throws DocumentException, IOException {
 		OutputDrawer d = new OutputDrawer(p3, outURL);
 		PdfContentByte canvas = d.initPDF(true);
@@ -215,8 +214,6 @@ public class drawOutputTest {
 				beforeTestX + p3.input.get(i).get(0).length() * p3.spacing,
 				d.getCurrX(), 0.0001);
 
-		// TODO
-		// test on the position of actual segment lines in the PDF file
 	}
 
 	@Test
@@ -224,7 +221,8 @@ public class drawOutputTest {
 	public void testCreatePdf() throws DocumentException, IOException {
 		Parser p = p3;
 		OutputDrawer d = new OutputDrawer(inURL2, outURL);
-		d.createPdf(true);
+		d.setParser(p3);
+		d.createPdf(false);
 
 		// Get expect value of x and y
 		float ex = d.BEGINX, ey = d.LINEY * 3f;

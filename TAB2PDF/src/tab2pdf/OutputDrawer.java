@@ -240,7 +240,7 @@ public class OutputDrawer
 	}
 	
 	/*
-	 * Draw vertical bars on desired position and return the upated vCounter parameter
+	 * Draw vertical bars on desired position and return the updated vCounter parameter
 	 */
 	public int DrawVerticalBar(int i, int j, PdfContentByte canvas, float currX, float currY, int vCounter) throws DocumentException, IOException
 	{

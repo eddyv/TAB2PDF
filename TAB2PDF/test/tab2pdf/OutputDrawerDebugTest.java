@@ -8,7 +8,7 @@ import java.io.PrintStream;
 import org.junit.Before;
 import org.junit.Test;
 
-public class DrawOutputDebugTest {
+public class OutputDrawerDebugTest {
 
 	OutputDrawer draw1;
 	OutputDrawer draw2;
@@ -17,12 +17,12 @@ public class DrawOutputDebugTest {
 	@Before
 	public void setUp() throws Exception {
 		draw1 = new OutputDrawer("t1.txt", "test1.pdf");
-		draw1.createPdf(true);
+		draw1.createPdf(false);
 		//draw1.initPdf("test1.pdf");
 		draw2 = new OutputDrawer("t2.txt", "test2.pdf");
-		draw2.createPdf(true);
+		draw2.createPdf(false);
 		draw3 = new OutputDrawer("t3.txt", "test3.pdf");
-		draw3.createPdf(true);
+		draw3.createPdf(false);
 	}
 
 	@Test
@@ -117,14 +117,5 @@ public class DrawOutputDebugTest {
 		assertEquals(test2.toString(), outContent4.toString());
 	}
 
-	@Test
-	/*
-	 * Test the functionality of createPDF()
-	 */
-	public void testCreatePDF() {
-
-	}
-	// TODO:
-	// 1. test two constructor generate same pdf
 
 }
