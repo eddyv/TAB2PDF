@@ -58,6 +58,8 @@ public class Main {
 	private boolean useCustomSubtitle = false;
 	private boolean useCustomSpacing = false;
 	private boolean isInputProvided = false;
+	private boolean acceptOverwrite = false;
+	private boolean loadingFile = true;
 	private String title = "";
 	private String originalTitle = "";
 	private String subtitle = "";
@@ -88,11 +90,12 @@ public class Main {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * This and some parts of setActionListeners are auto generated code from WindowBuilder.
 	 */
 	private void initialize() {
 		try {
 			aboutPdf = new URL(
-					"http://www.cse.yorku.ca/~eddyv/2311/team4/User_Manual.pdf");
+					"http://www.cse.yorku.ca/~eddyv/2311/team4/about.pdf");
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -221,16 +224,18 @@ public class Main {
 		panel_Text_Component.add(panel_SliderSpacing, gbc_panel_SliderSpacing);
 		panel_SliderSpacing.setLayout(new BorderLayout(0, 0));
 
-		final JLabel lblSpacing = new JLabel("Spacing=" + spacing);
+		final JLabel lblSpacing = new JLabel("Spacing=6.0");
 		lblSpacing.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_SliderSpacing.add(lblSpacing, BorderLayout.NORTH);
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
-		labelTable.put(new Integer(0), new JLabel("0.0"));
+		labelTable.put(new Integer(20), new JLabel("2.0"));
 		labelTable.put(new Integer(100), new JLabel("10.0"));
 
 		JButton btnResetSpacing = new JButton("Reset Spacing");
 		panel_SliderSpacing.add(btnResetSpacing, BorderLayout.SOUTH);
 		final JSlider sldrSpacing = new JSlider();
+		sldrSpacing.setValue(60);
+		sldrSpacing.setMinimum(20);
 		panel_SliderSpacing.add(sldrSpacing);
 		sldrSpacing.setMaximum(100);
 		sldrSpacing.setLabelTable(labelTable);
@@ -274,44 +279,78 @@ public class Main {
 			JButton btnResetTitle) {
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//opens the about pdf
 				openPdf(aboutPdf);
 			}
 		});
 
 		mntmUserManual.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//abouts the user manual
 				openPdf(userManualDest);
 			}
 		});
 
 		btnLoadTextFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//sets this to true so that the other actionlisteners wont create a new output instance.
+				loadingFile = true;
+				//gets the src
 				src = openFile();
-				isInputProvided = true;
-				setDefaultValues(btnSavePDF, sldrSpacing, lblSpacing, lblTitle,
-						lblSubtitle, txtTitle, txtSubtitle);
-				setButtons(btnSavePDF);
-				try {
-					useCustomSpacing = false;
-					output = new OutputDrawer(src, dest, useCustomTitle,
-							useCustomSubtitle, useCustomSpacing, title,
-							subtitle, spacing);
-					subtitle = output.getSubtitle();
-					title = output.getTitle();
-					originalTitle = title;
-					originalSubtitle = subtitle;
-					txtSubtitle.setText(subtitle);
-					txtTitle.setText(title);
-					spacing = output.getSpacing();
-					originalSpacing = spacing;
-					lblSpacing.setText("Spacing=" + spacing);
-					sldrSpacing.setValue((int) (spacing * 10));
-					convertToPdf(btnSavePDF, panel_PDF_Preview);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-					JOptionPane.showMessageDialog(null,
-							"You have unsuccessfully loaded the file at: "
-									+ src);
+				if (!src.equals("")) {
+					isInputProvided = true;
+				} else {
+					isInputProvided = false;
+				}
+				//if the input was provided we can reset the values in the button, and enable the save button
+				if (isInputProvided == true) {
+					setDefaultValues(btnSavePDF, sldrSpacing, lblSpacing,
+							lblTitle, lblSubtitle, txtTitle, txtSubtitle);
+					setButtons(btnSavePDF);
+					try {
+						//if the user has accepted the overwrite previously we will continue to overwrite the file. and not need to check this step.
+						if (acceptOverwrite == false) {
+							File file = new File(OutputDrawer.getLocalDest());
+							if (file.exists()) {
+								// prompt user if he wants to overwrite the
+								// file.
+								int response = JOptionPane.showConfirmDialog(
+										null,
+										"We use a temporary file named "
+												+ OutputDrawer.getLocalDest()
+												+ " To display a preview of the pdf file. We have detected that you already have a file that is in the same folder. Are you sure you want to continue?");
+								if (response == JOptionPane.YES_OPTION) {
+									acceptOverwrite = true;
+								} else {
+									acceptOverwrite = false;
+								}
+							}
+						}
+						//setting some values and default values here.
+						if (acceptOverwrite == true) {
+							useCustomSpacing = false;
+							output = new OutputDrawer(src, dest,
+									useCustomTitle, useCustomSubtitle,
+									useCustomSpacing, title, subtitle, spacing);
+							subtitle = output.getSubtitle();
+							title = output.getTitle();
+							originalTitle = title;
+							originalSubtitle = subtitle;
+							txtSubtitle.setText(subtitle);
+							txtTitle.setText(title);
+							spacing = output.getSpacing();
+							originalSpacing = spacing;
+							sldrSpacing.setValue((int) (spacing * 10));
+							lblSpacing.setText("Spacing=" + originalSpacing);
+							convertToPdf(btnSavePDF, panel_PDF_Preview);
+							loadingFile = false;
+						}
+					} catch (IOException e1) {
+						e1.printStackTrace();
+						JOptionPane.showMessageDialog(null,
+								"You have unsuccessfully loaded the file at: "
+										+ src);
+					}
 				}
 			}
 		});
@@ -323,10 +362,14 @@ public class Main {
 				useCustomTitle = false;
 				if (isInputProvided == true) {
 					try {
-						output = new OutputDrawer(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
+						if (acceptOverwrite == true) {
+							loadingFile=true;
+							output = new OutputDrawer(src, dest,
+									useCustomTitle, useCustomSubtitle,
+									useCustomSpacing, title, subtitle, spacing);
+							convertToPdf(btnSavePDF, panel_PDF_Preview);
+							loadingFile=false;
+						}
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -342,10 +385,14 @@ public class Main {
 				useCustomSubtitle = false;
 				if (isInputProvided == true) {
 					try {
-						output = new OutputDrawer(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
+						if (acceptOverwrite == true) {
+							loadingFile=true;
+							output = new OutputDrawer(src, dest,
+									useCustomTitle, useCustomSubtitle,
+									useCustomSpacing, title, subtitle, spacing);
+							convertToPdf(btnSavePDF, panel_PDF_Preview);
+							loadingFile=false;
+						}
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -357,8 +404,8 @@ public class Main {
 		btnResetSpacing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				spacing = originalSpacing;
-				lblSpacing.setText("Spacing=" + spacing);
 				sldrSpacing.setValue((int) (spacing * 10));
+				lblSpacing.setText("Spacing=" + originalSpacing);
 				useCustomSpacing = false;
 
 			}
@@ -371,15 +418,21 @@ public class Main {
 				if (useCustomSpacing == false) {
 					useCustomSpacing = true;
 				}
-				if (isInputProvided == true) {
-					try {
-						output = new OutputDrawer(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				if (loadingFile == false) {
+					if (isInputProvided == true) {
+						try {
+							if (acceptOverwrite == true) {
+								loadingFile=true;
+								output = new OutputDrawer(src, dest,
+										useCustomTitle, useCustomSubtitle,
+										useCustomSpacing, title, subtitle, spacing);
+								convertToPdf(btnSavePDF, panel_PDF_Preview);
+								loadingFile=false;
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -409,15 +462,21 @@ public class Main {
 				if (useCustomTitle == false) {
 					useCustomTitle = true;
 				}
-				if (isInputProvided == true) {
-					try {
-						output = new OutputDrawer(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+				if (loadingFile == false) {
+					if (isInputProvided == true) {
+						try {
+							if (acceptOverwrite == true) {
+								loadingFile=true;
+								output = new OutputDrawer(src, dest,
+										useCustomTitle, useCustomSubtitle,
+										useCustomSpacing, title, subtitle, spacing);
+								convertToPdf(btnSavePDF, panel_PDF_Preview);
+								loadingFile=false;
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -425,43 +484,54 @@ public class Main {
 		txtTitle.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				{
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					title = txtTitle.getText();
 					if (useCustomTitle == false) {
 						useCustomTitle = true;
 					}
-					if (isInputProvided == true) {
-						try {
-							output = new OutputDrawer(src, dest, useCustomTitle,
-									useCustomSubtitle, useCustomSpacing, title,
-									subtitle, spacing);
-							convertToPdf(btnSavePDF, panel_PDF_Preview);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+					if (loadingFile == false) {
+						if (isInputProvided == true) {
+							try {
+								if (acceptOverwrite == true) {
+									loadingFile=true;
+									output = new OutputDrawer(src, dest,
+											useCustomTitle, useCustomSubtitle,
+											useCustomSpacing, title, subtitle, spacing);
+									convertToPdf(btnSavePDF, panel_PDF_Preview);
+									loadingFile=false;
+								}
+							} catch (IOException ioe) {
+								// TODO Auto-generated catch block
+								ioe.printStackTrace();
+							}
 						}
 					}
 				}
 			}
 		});
-		
-		txtSubtitle.addFocusListener(new FocusAdapter(){
+
+		txtSubtitle.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				subtitle = txtSubtitle.getText();
 				if (useCustomSubtitle == false) {
 					useCustomSubtitle = true;
 				}
-				if (isInputProvided == true) {
-					try {
-						output = new OutputDrawer(src, dest, useCustomTitle,
-								useCustomSubtitle, useCustomSpacing, title,
-								subtitle, spacing);
-						convertToPdf(btnSavePDF, panel_PDF_Preview);
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+				if (loadingFile == false) {
+					if (isInputProvided == true) {
+						try {
+							if (acceptOverwrite == true) {
+								loadingFile=true;
+								output = new OutputDrawer(src, dest,
+										useCustomTitle, useCustomSubtitle,
+										useCustomSpacing, title, subtitle, spacing);
+								convertToPdf(btnSavePDF, panel_PDF_Preview);
+								loadingFile=false;
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -469,21 +539,26 @@ public class Main {
 		txtSubtitle.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				{
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					subtitle = txtSubtitle.getText();
 					if (useCustomSubtitle == false) {
 						useCustomSubtitle = true;
 					}
-					if (isInputProvided == true) {
-						try {
-							output = new OutputDrawer(src, dest, useCustomTitle,
-									useCustomSubtitle, useCustomSpacing, title,
-									subtitle, spacing);
-							convertToPdf(btnSavePDF, panel_PDF_Preview);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+					if (loadingFile == false) {
+						if (isInputProvided == true) {
+							try {
+								if (acceptOverwrite == true) {
+									loadingFile=true;
+									output = new OutputDrawer(src, dest,
+											useCustomTitle, useCustomSubtitle,
+											useCustomSpacing, title, subtitle, spacing);
+									convertToPdf(btnSavePDF, panel_PDF_Preview);
+									loadingFile=false;
+								}
+							} catch (IOException ioe) {
+								// TODO Auto-generated catch block
+								ioe.printStackTrace();
+							}
 						}
 					}
 				}
@@ -519,6 +594,8 @@ public class Main {
 		panel_PDF_Preview.add(viewerComponentPanel, BorderLayout.CENTER);
 		// Now that the GUI is all in place, we can try opening a PDF
 		controller.openDocument(localDest);
+		File file = new File(localDest);
+		file.delete();
 	}
 
 	public void openPdf(URL dest) {
@@ -559,6 +636,8 @@ public class Main {
 		File in = null;
 		if (status == JFileChooser.APPROVE_OPTION) {
 			in = fc.getSelectedFile();
+		} else {
+			in = new File(OutputDrawer.getLocalDest());
 		}
 		return in.getPath() + ".pdf";
 	}
@@ -572,17 +651,21 @@ public class Main {
 		if (status == JFileChooser.APPROVE_OPTION) {
 			out = fc.getSelectedFile();
 			// DoStuff();
+		} else {
+			return "";
 		}
 		return out.getPath();
 	}
 
-	public void setDefaultValues(JButton btnSave, JSlider sliderSpacing,JLabel lblSpacing, JLabel lblTitle, JLabel lblSubtitle,JTextField txtTitle, JTextField txtSubtitle) {
+	public void setDefaultValues(JButton btnSave, JSlider sliderSpacing,
+			JLabel lblSpacing, JLabel lblTitle, JLabel lblSubtitle,
+			JTextField txtTitle, JTextField txtSubtitle) {
 		useCustomTitle = false;
 		useCustomSubtitle = false;
 		useCustomSpacing = false;
 		spacing = (float) (sliderSpacing.getValue() / 10.0f);
 		sliderSpacing.setValue(50);// default value;
-		lblSpacing.setText("Spacing= ");
+		lblSpacing.setText("Spacing=6.0");
 		txtTitle.setText("<insert title here>");
 		txtSubtitle.setText("<insert subtitle here>");
 	}
@@ -600,7 +683,7 @@ public class Main {
 		try {
 			output.createPdf(true);
 			setButtons(btnSavePDF);
-			openPdf(output.getLocalDest(), panel_PDF_Preview);
+			openPdf(OutputDrawer.getLocalDest(), panel_PDF_Preview);
 
 		} catch (IOException e1) {
 			e1.printStackTrace();
