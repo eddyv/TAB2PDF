@@ -73,12 +73,6 @@ public class OutputDrawer
 		this.dest=dest;
 	}
 	
-	/* create an empty drawOutput object without parser */
-	public OutputDrawer(String dest){
-		this.setParser(null);
-		this.dest = dest;
-	}
-	
 	/* create new drawOutput object using path string of the txt file, does not use any custom features*/
 	public OutputDrawer(String src, String dest) throws IOException{
 		Parser p = new Parser(src);
