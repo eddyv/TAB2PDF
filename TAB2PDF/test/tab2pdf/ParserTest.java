@@ -7,11 +7,11 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ParserTest
-{
-	Parser p1,p2,p3,p4,p5,p6,p7,p8;
+public class ParserTest {
+	Parser p1, p2, p3, p4, p5, p6, p7, p8;
+
 	@Before
-	public void setUp() throws Exception{
+	public void setUp() throws Exception {
 		p1 = new Parser("parser1.txt");
 		p2 = new Parser("parser2.txt");
 		p3 = new Parser("parser3.txt");
@@ -21,10 +21,9 @@ public class ParserTest
 		p7 = new Parser("parser7.txt");
 		p8 = new Parser("parser8.txt");
 	}
-	
+
 	@Test
-	public void testFile1() throws IOException
-	{
+	public void testFile1() throws IOException {
 		Parser p = new Parser("test1.txt");
 		// test title
 		assertEquals("Moonlight Sonata", p.title);
@@ -33,13 +32,12 @@ public class ParserTest
 		// test space
 		assertEquals(5.0, p.spacing, 0.0001);
 		// test segments
-		assertEquals("-2-----2-----2-----2-----", p.input.get(0).get(3));	// input 
-		assertEquals("|", p.vLinesInput.get(0).get(0));					// vertical input
+		assertEquals("-2-----2-----2-----2-----", p.input.get(0).get(3)); // input
+		assertEquals("|", p.vLinesInput.get(0).get(0)); // vertical input
 	}
-	
+
 	@Test
-	public void testFile2() throws IOException
-	{
+	public void testFile2() throws IOException {
 		Parser p = new Parser("test2.txt");
 		// test title
 		assertEquals("Remembering Rain", p.title);
@@ -48,13 +46,13 @@ public class ParserTest
 		// test space
 		assertEquals(4.4, p.spacing, 0.0001);
 		// test segments
-		assertEquals("-------------------------------<12>-----------", p.input.get(0).get(0));	// input 				  
-		assertEquals("*||", p.vLinesInput.get(2).get(7));	// vertical input
+		assertEquals("-------------------------------<12>-----------", p.input
+				.get(0).get(0)); // input
+		assertEquals("*||", p.vLinesInput.get(2).get(7)); // vertical input
 	}
-	
+
 	@Test
-	public void testFile3() throws IOException
-	{
+	public void testFile3() throws IOException {
 		Parser p = new Parser("test3.txt");
 		// test title
 		assertEquals("This is 3rd test", p.title);
@@ -63,54 +61,38 @@ public class ParserTest
 		// test space
 		assertEquals(2.45, p.spacing, 0.0001);
 		// test segments
-		assertEquals("-3-----3-----3-----3------2-----2-----2-----0-----", p.input.get(0).get(3));	// input 
-		assertEquals("|", p.vLinesInput.get(0).get(11));	// vertical input
+		assertEquals("-3-----3-----3-----3------2-----2-----2-----0-----",
+				p.input.get(0).get(3)); // input
+		assertEquals("|", p.vLinesInput.get(0).get(11)); // vertical input
 	}
-	
+
+	// this tests the scenerio where the input has a number where a vertical bar
+	// should be. it will replace it with a vertical bar
 	@Test
-	public void testFile4() throws IOException
-	{
-		Parser p = new Parser("sample3.txt");
-		// test segments
-		assertEquals("-3-----3-----3-----3------2-----2-----2-----0-----", p.input.get(0).get(3));	// input 
-		assertEquals("--------------------------------------------------", p.input.get(1).get(0));
-		assertEquals("|", p.vLinesInput.get(0).get(11));	// vertical input
-	}
-	
-	// this tests the scenerio where the input has a number where a vertical bar should be. it will replace it with a vertical bar
-	@Test
-	public void testP1() throws IOException
-	{
+	public void testP1() throws IOException {
 		String[] line = new String[6];
-		String[] vline = new String [12];
-		for(int i = 0 ; i < 12; i++)
-		{
-			vline[i]="||";
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "||";
 		}
-		line[0]="1------------1-2------------";
-		line[1]="-----------0-1-1---------1--";
-		line[2]="---------2---1---------0----";
-		line[3]="-----0-3-----1-------2------";
-		line[4]="---3---------1-----3--------";
-		line[5]="-1-----------1-0-3----------";
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p1.input.get(0).get(i));
+		line[0] = "1------------1-2------------";
+		line[1] = "-----------0-1-1---------1--";
+		line[2] = "---------2---1---------0----";
+		line[3] = "-----0-3-----1-------2------";
+		line[4] = "---3---------1-----3--------";
+		line[5] = "-1-----------1-0-3----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p1.input.get(0).get(i));
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p1.vLinesInput.get(0).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p1.vLinesInput.get(0).get(i));
 		}
-		
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="||";
-			}
-			else
-			{
-				vline[i]="|";
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
 			}
 		}
 		line[0] = "-3-------------";
@@ -119,15 +101,13 @@ public class ParserTest
 		line[3] = "-----3---------";
 		line[4] = "---2-----------";
 		line[5] = "-3-------------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p1.input.get(1).get(i));
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p1.input.get(1).get(i));
 
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p1.vLinesInput.get(1).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p1.vLinesInput.get(1).get(i));
 		}
 		line[0] = "-0-----------";
 		line[1] = "---1---1-----";
@@ -135,69 +115,47 @@ public class ParserTest
 		line[3] = "---------2---";
 		line[4] = "-3-----------";
 		line[5] = "-------------";
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="|";
-			}
-			else
-			{
-				vline[i]="||";
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
 			}
 		}
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p1.input.get(2).get(i));
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p1.input.get(2).get(i));
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p1.vLinesInput.get(2).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p1.vLinesInput.get(2).get(i));
 		}
-		
-		
+
 	}
-	
+
 	@Test
-	public void testP4()
-	{
+	public void testP2() {
 		String[] line = new String[6];
-		String[] vline = new String [12];
-		for(int i = 0 ; i < 12; i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="||";
-			}
-			else
-			{
-				vline[i]="|";
-			}
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "||";
 		}
-		line[0]="1------------";
-		line[1]="-----------0-";
-		line[2]="---------2---";
-		line[3]="-----0-3-----";
-		line[4]="---3---------";
-		line[5]="-1-----------";
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p4.input.get(0).get(i));
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p2.input.get(0).get(i));
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p4.vLinesInput.get(0).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p2.vLinesInput.get(0).get(i));
 		}
-		
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="|";
-			}
-			else
-			{
-				vline[i]="||";
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
 			}
 		}
 		line[0] = "-2------------";
@@ -206,201 +164,128 @@ public class ParserTest
 		line[3] = "-------2------";
 		line[4] = "-----3--------";
 		line[5] = "-0-3----------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p4.input.get(1).get(i));
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p2.input.get(1).get(i));
 
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p4.vLinesInput.get(1).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p2.vLinesInput.get(1).get(i));
 		}
-		line[0] = "-3-------------";
-		line[1] = "-3-------0-3---";
-		line[2] = "-------0-------";
-		line[3] = "-----3---------";
-		line[4] = "---2-----------";
-		line[5] = "-3-------------";
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="||";
-			}
-			else
-			{
-				vline[i]="|";
+		line[0] = "-3-------------1-0-----------";
+		line[1] = "-3-------0-3---1---1---1-----";
+		line[2] = "-------0-------1-----0----0--";
+		line[3] = "-----3---------1---------2---";
+		line[4] = "---2-----------1-3-----------";
+		line[5] = "-3-------------1-------------";
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
 			}
 		}
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p4.input.get(2).get(i));
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p2.input.get(2).get(i));
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p4.vLinesInput.get(2).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p2.vLinesInput.get(2).get(i));
 		}
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="|";
-			}
-			else
-			{
-				vline[i]="||";
-			}
-		}
-		line[0] = "-0----------";
-		line[1] = "---1---1----";
-		line[2] = "-----0----0-";
-		line[3] = "---------2--";
-		line[4] = "-3----------";
-		line[5] = "------------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p4.input.get(3).get(i));
 
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p4.vLinesInput.get(3).get(i));
-		}
-		
-	}	
-	@Test
-	public void testP6()
-	{
-		String[] line = new String[6];
-		String[] vline = new String [12];
-		for(int i = 0 ; i < 12; i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="||";
-			}
-			else
-			{
-				vline[i]="|";
-			}
-		}
-		line[0]="1------------";
-		line[1]="-----------0-";
-		line[2]="---------2---";
-		line[3]="-----0-3-----";
-		line[4]="---3---------";
-		line[5]="-1-----------";
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p6.input.get(0).get(i));
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p6.vLinesInput.get(0).get(i));
-		}
-		
-		for(int i = 0; i < 12;i++)
-		{
-				vline[i]="|";
-		}
-		line[0] = "-2------------";
-		line[1] = "-1---------1--";
-		line[2] = "---------0----";
-		line[3] = "-------2------";
-		line[4] = "-----3--------";
-		line[5] = "-0-3----------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p6.input.get(1).get(i));
-
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p6.vLinesInput.get(1).get(i));
-		}
-		line[0] = "-3-------------";
-		line[1] = "-3-------0-3---";
-		line[2] = "-------0-------";
-		line[3] = "-----3---------";
-		line[4] = "---2-----------";
-		line[5] = "-3-------------";
-		for(int i = 0; i < 12;i++)
-		{
-			vline[i]="|";
-		}
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p6.input.get(2).get(i));
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p6.vLinesInput.get(2).get(i));
-		}
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="|";
-			}
-			else
-			{
-				vline[i]="||";
-			}
-		}
-		line[0] = "-0----------";
-		line[1] = "---1---1----";
-		line[2] = "-----0----0-";
-		line[3] = "---------2--";
-		line[4] = "-3----------";
-		line[5] = "------------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p6.input.get(3).get(i));
-
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p6.vLinesInput.get(3).get(i));
-		}
-		
 	}
+
 	@Test
-	public void testP7()
-	{
+	public void testP3() {
 		String[] line = new String[6];
-		String[] vline = new String [12];
-		for(int i = 0 ; i < 12; i++)
-		{
-			vline[i]="||";	
-		}
-		line[0]="1------------";
-		line[1]="-----------0-";
-		line[2]="---------2---";
-		line[3]="-----0-3-----";
-		line[4]="---3---------";
-		line[5]="-1-----------";
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p7.input.get(0).get(i));
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p7.vLinesInput.get(0).get(i));
-		}
-		
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="||";
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
 			}
-			else
-			{
-				vline[i]="|";
+		}
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p3.input.get(0).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p3.vLinesInput.get(0).get(i));
+		}
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
+			}
+		}
+		line[0] = "-2------------1-3-------------";
+		line[1] = "-1---------1--1-3-------0-3---";
+		line[2] = "---------0----1-------0-------";
+		line[3] = "-------2------1-----3---------";
+		line[4] = "-----3--------1---2-----------";
+		line[5] = "-0-3----------1-3-------------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p3.input.get(1).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p3.vLinesInput.get(1).get(i));
+		}
+		line[0] = "-0-----------";
+		line[1] = "---1---1-----";
+		line[2] = "-----0----0--";
+		line[3] = "---------2---";
+		line[4] = "-3-----------";
+		line[5] = "-------------";
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "||";
+		}
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p3.input.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p3.vLinesInput.get(2).get(i));
+		}
+
+	}
+
+	@Test
+	public void testP4() {
+		String[] line = new String[6];
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
+			}
+		}
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p4.input.get(0).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p4.vLinesInput.get(0).get(i));
+		}
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
 			}
 		}
 		line[0] = "-2------------";
@@ -409,15 +294,13 @@ public class ParserTest
 		line[3] = "-------2------";
 		line[4] = "-----3--------";
 		line[5] = "-0-3----------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p7.input.get(1).get(i));
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p4.input.get(1).get(i));
 
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p7.vLinesInput.get(1).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p4.vLinesInput.get(1).get(i));
 		}
 		line[0] = "-3-------------";
 		line[1] = "-3-------0-3---";
@@ -425,27 +308,24 @@ public class ParserTest
 		line[3] = "-----3---------";
 		line[4] = "---2-----------";
 		line[5] = "-3-------------";
-		for(int i = 0; i < 12;i++)
-		{
-			vline[i]="|";
-		}
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p7.input.get(2).get(i));
-		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p7.vLinesInput.get(2).get(i));
-		}
-		for(int i = 0; i < 12;i++)
-		{
-			if(i % 2==0)
-			{
-				vline[i]="|";
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
 			}
-			else
-			{
-				vline[i]="||";
+		}
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p4.input.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p4.vLinesInput.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
 			}
 		}
 		line[0] = "-0----------";
@@ -454,16 +334,334 @@ public class ParserTest
 		line[3] = "---------2--";
 		line[4] = "-3----------";
 		line[5] = "------------";
-				
-		for(int i=0; i < 6; i++)
-		{
-			assertEquals(line[i],p7.input.get(3).get(i));
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p4.input.get(3).get(i));
 
 		}
-		for(int i=0; i < 12; i++)
-		{
-			assertEquals(vline[i],p7.vLinesInput.get(3).get(i));
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p4.vLinesInput.get(3).get(i));
 		}
-		
+
+	}
+
+	@Test
+	public void testP5() {
+		String[] line = new String[6];
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "||";
+		}
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p5.input.get(0).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p5.vLinesInput.get(0).get(i));
+		}
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
+			}
+		}
+		line[0] = "-2------------";
+		line[1] = "-1---------1--";
+		line[2] = "---------0----";
+		line[3] = "-------2------";
+		line[4] = "-----3--------";
+		line[5] = "-0-3----------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p5.input.get(1).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p5.vLinesInput.get(1).get(i));
+		}
+		line[0] = "-3-------------";
+		line[1] = "-3-------0-3---";
+		line[2] = "-------0-------";
+		line[3] = "-----3---------";
+		line[4] = "---2-----------";
+		line[5] = "-3-------------";
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "|";
+		}
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p5.input.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p5.vLinesInput.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
+			}
+		}
+		line[0] = "-0----------";
+		line[1] = "---1---1----";
+		line[2] = "-----0----0-";
+		line[3] = "---------2--";
+		line[4] = "-3----------";
+		line[5] = "------------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p5.input.get(3).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p5.vLinesInput.get(3).get(i));
+		}
+
+	}
+
+	@Test
+	public void testP6() {
+		String[] line = new String[6];
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
+			}
+		}
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p6.input.get(0).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p6.vLinesInput.get(0).get(i));
+		}
+
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "|";
+		}
+		line[0] = "-2------------";
+		line[1] = "-1---------1--";
+		line[2] = "---------0----";
+		line[3] = "-------2------";
+		line[4] = "-----3--------";
+		line[5] = "-0-3----------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p6.input.get(1).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p6.vLinesInput.get(1).get(i));
+		}
+		line[0] = "-3-------------";
+		line[1] = "-3-------0-3---";
+		line[2] = "-------0-------";
+		line[3] = "-----3---------";
+		line[4] = "---2-----------";
+		line[5] = "-3-------------";
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "|";
+		}
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p6.input.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p6.vLinesInput.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
+			}
+		}
+		line[0] = "-0----------";
+		line[1] = "---1---1----";
+		line[2] = "-----0----0-";
+		line[3] = "---------2--";
+		line[4] = "-3----------";
+		line[5] = "------------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p6.input.get(3).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p6.vLinesInput.get(3).get(i));
+		}
+
+	}
+
+	@Test
+	public void testP7() {
+		String[] line = new String[6];
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "||";
+		}
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p7.input.get(0).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p7.vLinesInput.get(0).get(i));
+		}
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
+			}
+		}
+		line[0] = "-2------------";
+		line[1] = "-1---------1--";
+		line[2] = "---------0----";
+		line[3] = "-------2------";
+		line[4] = "-----3--------";
+		line[5] = "-0-3----------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p7.input.get(1).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p7.vLinesInput.get(1).get(i));
+		}
+		line[0] = "-3-------------";
+		line[1] = "-3-------0-3---";
+		line[2] = "-------0-------";
+		line[3] = "-----3---------";
+		line[4] = "---2-----------";
+		line[5] = "-3-------------";
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "|";
+		}
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p7.input.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p7.vLinesInput.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
+			}
+		}
+		line[0] = "-0----------";
+		line[1] = "---1---1----";
+		line[2] = "-----0----0-";
+		line[3] = "---------2--";
+		line[4] = "-3----------";
+		line[5] = "------------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p7.input.get(3).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p7.vLinesInput.get(3).get(i));
+		}
+
+	}
+
+	@Test
+	public void testP8() {
+		String[] line = new String[6];
+		String[] vline = new String[12];
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "||";
+		}
+		line[0] = "1------------";
+		line[1] = "-----------0-";
+		line[2] = "---------2---";
+		line[3] = "-----0-3-----";
+		line[4] = "---3---------";
+		line[5] = "-1-----------";
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p8.input.get(0).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p8.vLinesInput.get(0).get(i));
+		}
+
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "||";
+			} else {
+				vline[i] = "|";
+			}
+		}
+		line[0] = "-2------------";
+		line[1] = "-1---------1--";
+		line[2] = "---------0----";
+		line[3] = "-------2------";
+		line[4] = "-----3--------";
+		line[5] = "-0-3----------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p8.input.get(1).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p8.vLinesInput.get(1).get(i));
+		}
+		line[0] = "-3---1--";
+		line[1] = "-3------";
+		line[2] = "-------0";
+		line[3] = "-----3--";
+		line[4] = "---2----";
+		line[5] = "-3------";
+		for (int i = 0; i < 12; i++) {
+			vline[i] = "|";
+		}
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p8.input.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p8.vLinesInput.get(2).get(i));
+		}
+		for (int i = 0; i < 12; i++) {
+			if (i % 2 == 0) {
+				vline[i] = "|";
+			} else {
+				vline[i] = "||";
+			}
+		}
+		line[0] = "-0----------";
+		line[1] = "---1---1----";
+		line[2] = "-----0----0-";
+		line[3] = "---------2--";
+		line[4] = "-3----------";
+		line[5] = "------------";
+
+		for (int i = 0; i < 6; i++) {
+			assertEquals(line[i], p8.input.get(4).get(i));
+
+		}
+		for (int i = 0; i < 12; i++) {
+			assertEquals(vline[i], p8.vLinesInput.get(4).get(i));
+		}
+
 	}
 }

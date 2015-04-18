@@ -318,12 +318,16 @@ public class Main {
 										null,
 										"We use a temporary file named "
 												+ OutputDrawer.getLocalDest()
-												+ " To display a preview of the pdf file. We have detected that you already have a file that is in the same folder. Are you sure you want to continue?");
+												+ " To display a preview of the pdf file. We have detected that you already have an existing file that is in the same folder. Are you sure you want to overwrite this file?");
 								if (response == JOptionPane.YES_OPTION) {
 									acceptOverwrite = true;
 								} else {
 									acceptOverwrite = false;
 								}
+							}
+							else
+							{
+								acceptOverwrite=true;
 							}
 						}
 						//setting some values and default values here.
@@ -581,7 +585,7 @@ public class Main {
 	public void openPdf(String localDest, JPanel panel_PDF_Preview) {
 		panel_PDF_Preview.removeAll();
 		// build a component controller
-		SwingController controller = new SwingController();
+		final SwingController controller = new SwingController();
 		controller.setIsEmbeddedComponent(true);
 
 		SwingViewBuilder factory = new SwingViewBuilder(controller);
@@ -594,8 +598,22 @@ public class Main {
 		panel_PDF_Preview.add(viewerComponentPanel, BorderLayout.CENTER);
 		// Now that the GUI is all in place, we can try opening a PDF
 		controller.openDocument(localDest);
-		File file = new File(localDest);
-		file.delete();
+		//File file = new File(localDest);
+		//file.delete();
+		frmTabpdf.addWindowListener(new java.awt.event.WindowAdapter() {
+		    @Override
+		    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+		        if(acceptOverwrite==true)
+		        {
+		        	controller.closeDocument();
+		        	File f = new File(OutputDrawer.getLocalDest());
+		        	if(f.exists())
+		        	{
+		        		f.delete();
+		        	}
+		        }
+		    }
+		});
 	}
 
 	public void openPdf(URL dest) {
