@@ -69,6 +69,14 @@ public class OutputDrawerTest {
 		d.resetXY();
 		assertEquals(d.LINEY, d.getCurrY(), 0.0001);
 		assertEquals(d.BEGINX, d.getCurrX(), 0.0001);
+		
+		d.setTitle("Remember");
+		d.setSubtitle("Jim");
+		d.setSpacing(5f);
+		assertEquals("Remember", d.getTitle());
+		assertEquals("Jim", d.getSubtitle());
+		assertEquals(5f, d.getSpacing(), 0.0001);
+		
 	}
 
 	@Test
