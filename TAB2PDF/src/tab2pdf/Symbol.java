@@ -109,17 +109,6 @@ public class Symbol {
         canvas.lineTo(x + length, SIZEY - y);
 	}
     
-	public void createStar (PdfContentByte canvas, float x, float y, float length, boolean nextCharBar) {
-		//PdfContentByte canvas = writer.getDirectContent();
-		if (nextCharBar) {
-			canvas.circle(x + (length - 5), SIZEY - y, 7/5f);
-		}
-		else {
-			canvas.circle(x - (length - 5), SIZEY - y, 7/5f);
-		}
-		canvas.fillStroke();
-	}
-	
 	public void createDiamond(PdfContentByte canvas, float x, float y, float size)
 	{
 		canvas.setLineWidth(0.5f);

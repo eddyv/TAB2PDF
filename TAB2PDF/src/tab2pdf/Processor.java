@@ -96,37 +96,6 @@ public class Processor
 		}
 	}
 	
-	public void displayInfo()
-	{
-		int i = 0;
-		System.out.println("# of segments " + inputSegments.size());
-		while (i < inputSegments.size())
-		{
-			int j = 0;
-			System.out.println("Size of segment " + inputSegments.get(i).size());
-			while (j < inputSegments.get(i).size())
-			{
-				System.out.printf("%d %s\n", i, inputSegments.get(i).get(j));
-				j++;
-			}
-			System.out.println("");
-			i++;
-		}
-	}
-
-	public void displayVerticalBars()
-	{	
-		System.out.println(vLinesSegments.size());
-		for (int i = 0; i < vLinesSegments.size(); i++)
-		{
-			System.out.println(vLinesSegments.get(i).size());
-			for (int j = 0; j < vLinesSegments.get(i).size(); j++)
-			{
-				System.out.println(vLinesSegments.get(i).get(j));
-			}
-		}
-	}
-	
 	public void checkParseInfo()
 	{
 		//System.out.println("Title " + title);

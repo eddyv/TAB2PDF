@@ -1,5 +1,12 @@
 package tab2pdf;
-
+/**
+ *Author: Edward Vaisman
+ *Team: team4
+ *Project: TAB2PDF
+ *Class:Main
+ *Description: This class is ment to be the graphical interface for the user. it will be used to edit pdfs on the fly, convert text guitar tableture into pdf guitar tableture 
+ *and have a usermanual ready for the user provided they have an internet connect(for the newest version)
+ */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
