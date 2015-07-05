@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="#0099cc" tools:context=".MainPage">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/backLayout"
+        android:clickable="true">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="109dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="#ffff0917"
+            android:id="@+id/genderBox">
+
+            <RadioButton
+                android:layout_width="129dp"
+                android:layout_height="wrap_content"
+                android:text="Female"
+                android:id="@+id/femaleB"
+                android:layout_gravity="right|center_vertical"
+                android:checked="false"
+                android:onClick="changeOutfit"
+                android:textSize="25dp"
+                android:textColor="#ff000000" />
+
+            <RadioButton
+                android:layout_width="141dp"
+                android:layout_height="wrap_content"
+                android:text="Male"
+                android:id="@+id/maleB"
+                android:layout_gravity="left|center_vertical"
+                android:checked="false"
+                android:textColor="#ff000000"
+                android:textSize="25dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="153dp"
+            android:layout_height="202dp"
+            android:layout_gravity="center_horizontal|top"
+            android:id="@+id/Outfit2"
+            android:background="@drawable/Polo_Shirt_Basic_Pattern" >
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="137dp"
+            android:layout_height="202dp"
+            android:layout_gravity="right|top"
+            android:id="@+id/Outfit3"
+            android:background="@drawable/Running-shorts-black" />
+
+        <FrameLayout
+            android:layout_width="153dp"
+            android:layout_height="202dp"
+            android:layout_gravity="left|top"
+            android:id="@+id/Outfit1"
+            android:background="">
+        </FrameLayout>
+
+    </FrameLayout>
+</LinearLayout>
